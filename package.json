@@ -5,13 +5,21 @@
   "description": "Users can browse through a vast range of products, view detailed descriptions, add their favorite items to the basket, and proceed to checkout. It includes features such as user registration and login, product search, product categorization, and sorting to make the shopping experience more streamlined and convenient.",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/binary-apple/e-commerce.git"
   },
-  "keywords": ["e-commerce","react","redux"],
+  "keywords": [
+    "e-commerce",
+    "react",
+    "redux"
+  ],
   "author": "Breaking Code",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^6.3.3"
+  }
 }

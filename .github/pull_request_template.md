@@ -17,3 +17,11 @@ Name reasons of the proposed changes.
 
 - Fixes Issue #...
 - Closes task #...
+
+## Screenshot (optional)
+
+**BEFORE**:
+[insert screenshot here]
+
+**AFTER**:
+[insert screenshot here]

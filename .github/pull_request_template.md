@@ -16,9 +16,3 @@ Name reasons of the proposed changes.
 
 - Fixes Issue #...
 - Closes task #...
-
-### Checklist
-- [ ] Linter and Prettier pass
-- [ ] New and existing tests pass
-- [ ] I have performed a self-review of my code
-- [ ] I have removed unused code and debugging logs

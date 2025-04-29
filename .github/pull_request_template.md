@@ -3,8 +3,9 @@
 - [ ] 🚀 Feature
 - [ ] 🧹 Refactor
 - [ ] 🪲 Bug Fix
-- [ ] 📝Tests
+- [ ] 📝 Tests
 - [ ] 📖 Docs update
+- [ ] 🛠️ Chore
 
 ## Description
 Briefly describe the proposed changes.

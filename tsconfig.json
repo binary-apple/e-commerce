@@ -16,6 +16,10 @@
 
     /* Linting and strict checks */
     "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
     "forceConsistentCasingInFileNames": true,
   },
   "include": [

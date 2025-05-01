@@ -1,12 +1,14 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import tslint from 'typescript-eslint'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import tslint from 'typescript-eslint';
+import reactRefresh from 'eslint-plugin-react-refresh';
 import unicornPlugin from 'eslint-plugin-unicorn';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 
 export default tslint.config(
-  { ignores: ['node_modules','dist'] },
+  { ignores: ['node_modules', 'dist'] },
   {
     extends: [js.configs.recommended, ...tslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -18,6 +20,7 @@ export default tslint.config(
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       unicorn: unicornPlugin,
+      prettier: eslintPluginPrettier,
     },
     linterOptions: {
       noInlineConfig: true,
@@ -32,7 +35,7 @@ export default tslint.config(
       'no-alert': 'error',
       'max-lines-per-function': ['error', 40],
       'no-console': 'warn',
-      "no-duplicate-imports": "error",
+      'no-duplicate-imports': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
       '@typescript-eslint/consistent-type-imports': 'error',
@@ -62,6 +65,8 @@ export default tslint.config(
           },
         },
       ],
+      'prettier/prettier': 'error',
     },
   },
-)
+  prettierConfig,
+);

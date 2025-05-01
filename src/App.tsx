@@ -1,12 +1,10 @@
-import React from "react";
+import React from 'react';
 
 export default function App() {
   const message: string = 'React + TypeScript + Eslint installed! 🚀';
   return (
     <>
-      <div>
-        {message}
-      </div>
+      <div>{message}</div>
     </>
-  )
+  );
 }

@@ -21,7 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react"
+    "jsx": "react-jsx"
   },
   "include": [
     "src",

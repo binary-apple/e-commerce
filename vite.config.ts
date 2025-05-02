@@ -8,4 +8,13 @@ export default defineConfig({
     port: 8080,
     open: true,
   },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text'],
+      include: ['src/**/*.{ts,tsx}'],
+    },
+  },
 });

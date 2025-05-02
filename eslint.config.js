@@ -23,7 +23,6 @@ export default tslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      unicorn: unicornPlugin,
       prettier: eslintPluginPrettier,
     },
     linterOptions: {
@@ -51,6 +50,15 @@ export default tslint.config(
       'no-magic-numbers': 'off',
       '@typescript-eslint/no-magic-numbers': ['error', { 'ignore': [0, 1] }],
       'class-methods-use-this': 'error',
+      'unicorn/filename-case': [
+        'error',
+        {
+          'cases': {
+            'camelCase': true,
+            'pascalCase': true,
+          },
+        },
+      ],
       'unicorn/better-regex': 'warn',
       'unicorn/no-array-callback-reference': 'off',
       'unicorn/no-array-for-each': 'off',

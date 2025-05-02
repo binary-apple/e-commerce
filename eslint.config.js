@@ -48,9 +48,16 @@ export default tslint.config(
         { accessibility: 'explicit', overrides: { constructors: 'off' } },
       ],
       '@typescript-eslint/member-ordering': 'error',
-      "no-magic-numbers": "off",
-      '@typescript-eslint/no-magic-numbers': ["error", { "ignore": [0, 1] }],
+      'no-magic-numbers': 'off',
+      '@typescript-eslint/no-magic-numbers': ['error', { 'ignore': [0, 1] }],
       'class-methods-use-this': 'error',
+      'unicorn/better-regex': 'warn',
+      'unicorn/no-array-callback-reference': 'off',
+      'unicorn/no-array-for-each': 'off',
+      'unicorn/no-array-reduce': 'off',
+      'unicorn/no-null': 'off',
+      'unicorn/number-literal-case': 'off',
+      'unicorn/numeric-separators-style': 'off',
       'unicorn/prevent-abbreviations': [
         'error',
         {

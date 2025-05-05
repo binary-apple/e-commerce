@@ -43,3 +43,26 @@ Key pages in the application include:
 3. Navigate to the project directory: `cd e-commerce`
 4. Install dependencies: `npm install`
 5. Start the development server: `npm run dev`
+
+## NPM Scripts
+
+- `npm run dev`: Starts the Vite development server.
+- `npm run build`: Builds the project using Vite.
+- `npm run preview`: Serves the production build locally using Vite.
+- `npm run format`: Formats the entire codebase using Prettier.
+- `npm run lint`: Checks the code for linting issues using ESLint.
+- `npm run lint:fix`: Fixes linting issues automatically using ESLint.
+- `npm run stylelint`: Checks `.scss` files for style issues using Stylelint.
+- `npm run stylelint:fix`: Automatically fixes style issues in `.scss` files using Stylelint.
+- `npm run test`: Runs unit tests using Vitest.
+- `npm run test:watch`: Runs tests in watch mode using Vitest.
+- `npm run test:coverage`: Runs tests and generates a coverage report using Vitest.
+- `npm run prepare`: Initializes Git hooks using Husky.
+
+## Project team
+
+The application is developed by a team of three 👩‍💻👨‍💻👩‍💻 :
+
+- [Anna](https://github.com/binary-apple)
+- [Alexey](https://github.com/montaana01)
+- [Tatiana](https://github.com/tanykos)

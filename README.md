@@ -31,3 +31,15 @@ Key pages in the application include:
 - 🚀 Vitest
 - 🎨 MUI
 - 💅 SCSS
+
+## Setup instructions
+
+1. Make sure [git](https://git-scm.com/) and [Node.js](https://nodejs.org/en) are installed.
+2. Clone project repository using HTTPS or SSH:
+
+- **HTTPS:** `git clone https://github.com/binary-apple/e-commerce.git`
+- **SSH:** `git clone git@github.com:binary-apple/e-commerce.git`
+
+3. Navigate to the project directory: `cd e-commerce`
+4. Install dependencies: `npm install`
+5. Start the development server: `npm run dev`

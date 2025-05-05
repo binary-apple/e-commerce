@@ -1,7 +1,7 @@
 ---
-name: RSS-ECOMM-# short description
+name: RSS-ECOMM template
 about: Template for tasks
-title: ''
+title: 'RSS-ECOMM-# short description'
 labels: ''
 assignees: ''
 

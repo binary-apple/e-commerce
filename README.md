@@ -34,7 +34,7 @@ Key pages in the application include:
 
 ## Setup instructions
 
-1. Make sure [git](https://git-scm.com/) and [Node.js](https://nodejs.org/en) are installed.
+1. Make sure [git](https://git-scm.com/) and [Node.js](https://nodejs.org/en)(version 20 or higher) are installed.
 2. Clone project repository using HTTPS or SSH:
 
 - **HTTPS:** `git clone https://github.com/binary-apple/e-commerce.git`

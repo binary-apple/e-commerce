@@ -1,0 +1,3 @@
+echo "Husky pre-push tests start"
+npm run test:coverage
+echo "Husky pre-push tests finished!"

@@ -1,4 +1,4 @@
-import { createTheme, type ThemeOptions } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes, type ThemeOptions } from '@mui/material/styles';
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -32,4 +32,4 @@ const themeOptions: ThemeOptions = {
   },
 };
 
-export const theme = createTheme(themeOptions);
+export const theme = responsiveFontSizes(createTheme(themeOptions));

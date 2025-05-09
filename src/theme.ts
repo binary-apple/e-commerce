@@ -5,6 +5,7 @@ const themeOptions: ThemeOptions = {
     mode: 'light',
     background: {
       default: '#ebe3cc',
+      paper: '#FBF2DA',
     },
     primary: {
       main: '#ed5c01',
@@ -29,6 +30,22 @@ const themeOptions: ThemeOptions = {
   },
   typography: {
     fontFamily: 'Manrope, Roboto, sans-serif',
+    h1: {
+      fontSize: '6rem',
+      fontWeight: 400,
+      lineHeight: 1.167,
+    },
+    h2: {
+      fontSize: '2.875rem',
+      fontWeight: 500,
+      letterSpacing: '2.76px',
+      lineHeight: 1.3,
+    },
+    h3: {
+      fontSize: '1.625rem',
+      fontWeight: 500,
+      lineHeight: 1.4,
+    },
   },
 };
 

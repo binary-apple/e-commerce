@@ -1,0 +1,61 @@
+import { Paper, Box, Grid, Button } from '@mui/material';
+import type { FormEventHandler, ReactNode } from 'react';
+import type { AuthFormData } from './types';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import arrowCurly from '../../assets/images/ArrowCurly.svg';
+import Title from '../Title/Title';
+
+type FormContainerProps = {
+  data: AuthFormData;
+  children: ReactNode;
+  onSubmit: FormEventHandler<HTMLFormElement>;
+};
+
+export function AuthForm({ data, children, onSubmit }: FormContainerProps) {
+  return (
+    <Paper
+      sx={{
+        padding: {
+          xs: '1rem',
+          sm: '2rem',
+        },
+        marginY: {
+          xs: '1rem',
+          sm: '2rem',
+        },
+      }}
+    >
+      <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
+        <Box
+          component="img"
+          src={arrowCurly}
+          alt=""
+          width={62}
+          height={48}
+          sx={{ objectFit: 'contain' }}
+        />
+        <Title title={data.titleForm} />
+      </Box>
+      <Box component="form" onSubmit={onSubmit}>
+        <Grid container spacing={1}>
+          {children}
+          {/* TODO replase loading={false} with actual value and add it to type { AuthFormData } from './types'; */}
+          <Button
+            color="primary"
+            size="large"
+            loading={false}
+            loadingPosition="start"
+            startIcon={<ExitToAppIcon />}
+            variant="contained"
+            fullWidth
+            sx={{
+              marginTop: 3,
+            }}
+          >
+            {data.titleButton}
+          </Button>
+        </Grid>
+      </Box>
+    </Paper>
+  );
+}

@@ -1,14 +1,13 @@
 import { Container } from '@mui/material';
 import RegistrationForm from './components/RegistrationForm/RegistrationForm';
+import loopBg from '../../assets/images/LoopBg.svg';
+
+import styles from './RegistrationPage.module.scss';
 
 export default function RegistrationPage() {
   return (
     <Container
       sx={{
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
         paddingX: {
           xs: '16px',
           sm: '150px',
@@ -17,7 +16,9 @@ export default function RegistrationPage() {
           xs: '30px',
           sm: '60px',
         },
+        backgroundImage: `url(${loopBg})`,
       }}
+      className={styles.container}
     >
       <RegistrationForm />
     </Container>

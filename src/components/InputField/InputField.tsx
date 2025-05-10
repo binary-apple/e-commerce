@@ -15,7 +15,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     const [showPassword, setShowPassword] = useState(false);
 
     const isPassword = type === 'password';
-    const inputType = isPassword && !showPassword ? 'password' : 'text';
+    const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
 
     return (
       <TextField
@@ -31,6 +31,9 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
                 <PasswordAction showPassword={showPassword} setShowPassword={setShowPassword} />
               </InputAdornment>
             ) : undefined,
+          },
+          inputLabel: {
+            shrink: true,
           },
         }}
         variant="outlined"

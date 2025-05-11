@@ -3,6 +3,9 @@ import type { FieldSection } from '../../../../types/form';
 export const formData = {
   titleForm: 'Registration',
   titleButton: 'Sign Up',
+  titleBottomBox: 'Do you already have an account?',
+  titleBottomButton: 'Sign In',
+  bottomButtonPath: '/login',
 };
 
 export const fieldsConfig: FieldSection[] = [

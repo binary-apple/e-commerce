@@ -52,9 +52,12 @@ export function AuthForm({ data, children, onSubmit }: FormContainerProps) {
             loadingPosition="start"
             startIcon={<ExitToAppIcon />}
             variant="contained"
-            fullWidth
             sx={{
+              width: '50%',
+              minWidth: '180px',
               marginTop: 3,
+              marginLeft: 'auto',
+              marginRight: 'auto',
             }}
           >
             {data.titleButton}

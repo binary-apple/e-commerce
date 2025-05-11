@@ -47,6 +47,24 @@ const themeOptions: ThemeOptions = {
       lineHeight: 1.4,
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '1.25rem',
+          lineHeight: '2.375rem',
+          letterSpacing: '0.1125rem',
+          borderRadius: '190px',
+          padding: '0.75rem 2rem',
+          textTransform: 'none',
+        },
+        outlined: {
+          lineHeight: '2.125rem',
+          borderWidth: '2px',
+        },
+      },
+    },
+  },
 };
 
 export const theme = responsiveFontSizes(createTheme(themeOptions));

@@ -1,4 +1,5 @@
-import { Paper, Box, Grid, Button } from '@mui/material';
+import { Paper, Box, Grid, Button, Divider } from '@mui/material';
+import { Link } from 'react-router';
 import type { FormEventHandler, ReactNode } from 'react';
 import type { AuthFormData } from './types';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -64,6 +65,30 @@ export function AuthForm({ data, children, onSubmit }: FormContainerProps) {
           </Button>
         </Grid>
       </Box>
+      <Grid size={{ xs: 12 }}>
+        <Divider sx={{ marginY: 3 }}>{data.titleBottomBox}</Divider>
+        <Box display="flex" justifyContent="center">
+          <Button
+            component={Link}
+            to={data.bottomButtonPath}
+            color="primary"
+            size="large"
+            loading={false}
+            loadingPosition="start"
+            startIcon={<ExitToAppIcon />}
+            variant="contained"
+            sx={{
+              width: '50%',
+              minWidth: '180px',
+              marginTop: 3,
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
+            {data.titleBottomButton}
+          </Button>
+        </Box>
+      </Grid>
     </Paper>
   );
 }

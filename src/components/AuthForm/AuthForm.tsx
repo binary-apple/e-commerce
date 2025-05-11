@@ -29,10 +29,15 @@ export function AuthForm({ data, children, onSubmit }: FormContainerProps) {
         <Box
           component="img"
           src={arrowCurly}
-          alt=""
-          width={62}
-          height={48}
-          sx={{ objectFit: 'contain' }}
+          alt={`${data.titleForm}`}
+          sx={{
+            width: {
+              xs: '40px',
+              sm: '50px',
+              md: '62px',
+            },
+            height: 'auto',
+          }}
         />
         <Title title={data.titleForm} />
       </Box>

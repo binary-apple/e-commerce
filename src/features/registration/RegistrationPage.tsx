@@ -10,7 +10,8 @@ export default function RegistrationPage() {
       sx={{
         paddingX: {
           xs: '16px',
-          sm: '150px',
+          sm: '100px',
+          md: '150px',
         },
         paddingY: {
           xs: '30px',

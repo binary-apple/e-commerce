@@ -13,7 +13,7 @@ type DateInputProps = {
 } & Omit<TextFieldProps, 'value' | 'onChange'>;
 
 const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
-  ({ label, value, onChange, error, helperText, ...rest }, reference) => {
+  ({ label, value, onChange, error, helperText = ' ', ...rest }, reference) => {
     const dateValue = typeof value === 'string' ? (value ? new Date(value) : null) : value;
 
     return (
@@ -30,22 +30,12 @@ const DateInput = forwardRef<HTMLInputElement, DateInputProps>(
               size: 'small',
               error,
               helperText,
-              margin: 'dense',
               ...rest,
               InputLabelProps: {
                 shrink: true,
               },
               InputProps: {
                 notched: true,
-              },
-              sx: {
-                paddingBottom: '20px',
-                position: 'relative',
-                '& .MuiFormHelperText-root': {
-                  position: 'absolute',
-                  bottom: 0,
-                },
-                ...rest.sx,
               },
             },
           }}

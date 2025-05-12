@@ -11,7 +11,7 @@ type TextInputProps = {
 } & Omit<TextFieldProps, 'type'>;
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  ({ id, label, type = 'text', fullWidth = true, error, helperText, ...rest }, reference) => {
+  ({ id, label, type = 'text', fullWidth = true, error, helperText = ' ', ...rest }, reference) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const isPassword = type === 'password';
@@ -23,7 +23,6 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         label={label}
         type={inputType}
         fullWidth={fullWidth}
-        margin="dense"
         inputRef={reference}
         slotProps={{
           input: {
@@ -41,14 +40,9 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         variant="outlined"
         size="small"
         sx={{
-          position: 'relative',
-          paddingBottom: '20px',
+          paddingBottom: '8px',
           '& input:-webkit-autofill': {
             WebkitBoxShadow: '0 0 0 100px #FBF2DA inset',
-          },
-          '& .MuiFormHelperText-root': {
-            position: 'absolute',
-            bottom: 0,
           },
         }}
         error={error}

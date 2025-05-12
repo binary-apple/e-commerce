@@ -3,14 +3,42 @@ import { AuthForm } from '../../../../components/AuthForm/AuthForm';
 import { fieldsConfig, formData } from './constants';
 import { TextInput } from '../../../../components/InputField/InputField';
 import { Fragment } from 'react/jsx-runtime';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { registrationSchema } from '../../../../utils/validationSchema';
 
-const onSubmit = () => {
-  // TODO
+const defaultValues = {
+  email: '',
+  password: '',
+  firstName: '',
+  lastName: '',
+  dob: '',
+  street: '',
+  city: '',
+  postalCode: '',
+  country: '',
 };
 
+const onSubmit = () => {
+  //TODO
+};
+// const onSubmit = (data: RegistrationData) => {
+//   console.log('valid form:', data);
+// };
+
 export default function RegistrationForm() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues,
+    resolver: yupResolver(registrationSchema),
+    mode: 'onChange',
+  });
+
   return (
-    <AuthForm data={formData} onSubmit={onSubmit}>
+    <AuthForm data={formData} onSubmit={handleSubmit(onSubmit)}>
       {fieldsConfig.map(({ section, fields }) => (
         <Fragment key={section}>
           <Grid size={{ xs: 12 }}>
@@ -18,7 +46,21 @@ export default function RegistrationForm() {
           </Grid>
           {fields.map(({ id, label, type = 'text' }) => (
             <Grid key={id} size={{ xs: 12, md: 6 }}>
-              <TextInput id={id} label={label} type={type} />
+              <Controller
+                name={id}
+                control={control}
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    id={id}
+                    label={label}
+                    type={type}
+                    error={Boolean(errors[id])}
+                    helperText={errors[id]?.message}
+                    required
+                  />
+                )}
+              />
             </Grid>
           ))}
         </Fragment>

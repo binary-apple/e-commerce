@@ -3,11 +3,12 @@ import { AuthForm } from '../../../../components/AuthForm/AuthForm';
 import { fieldsConfig, formData } from './constants';
 import { TextInput } from '../../../../components/TextInput/TextInput';
 import { Fragment } from 'react/jsx-runtime';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registrationSchema } from '../../../../utils/validationSchema';
 import { DateInput } from '../../../../components/DateInput/DateInput';
 import { SelectInput } from '../../../../components/SelectInput/SelectInput';
+import { useEffect, useRef } from 'react';
 
 const defaultValues = {
   email: '',
@@ -17,8 +18,8 @@ const defaultValues = {
   dob: '',
   street: '',
   city: '',
-  postalCode: '',
   country: '',
+  postalCode: '',
 };
 
 const onSubmit = () => {
@@ -32,12 +33,24 @@ export default function RegistrationForm() {
   const {
     control,
     handleSubmit,
+    trigger,
     formState: { errors, isValid, isSubmitting },
   } = useForm({
     defaultValues,
     resolver: yupResolver(registrationSchema),
     mode: 'onChange',
   });
+  const selectedCountry = useWatch({ control, name: 'country' });
+
+  const hasSelectedCountry = useRef(false);
+
+  useEffect(() => {
+    if (selectedCountry && hasSelectedCountry.current) {
+      trigger('postalCode');
+    } else if (selectedCountry) {
+      hasSelectedCountry.current = true;
+    }
+  }, [selectedCountry, trigger]);
 
   const disableButton = !isValid || isSubmitting;
 

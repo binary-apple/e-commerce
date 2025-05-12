@@ -1,11 +1,12 @@
 import { Divider, Grid } from '@mui/material';
 import { AuthForm } from '../../../../components/AuthForm/AuthForm';
 import { fieldsConfig, formData } from './constants';
-import { TextInput } from '../../../../components/InputField/InputField';
+import { TextInput } from '../../../../components/TextInput/TextInput';
 import { Fragment } from 'react/jsx-runtime';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registrationSchema } from '../../../../utils/validationSchema';
+import { DateInput } from '../../../../components/DateInput/DateInput';
 
 const defaultValues = {
   email: '',
@@ -46,21 +47,41 @@ export default function RegistrationForm() {
           </Grid>
           {fields.map(({ id, label, type = 'text' }) => (
             <Grid key={id} size={{ xs: 12, md: 6 }}>
-              <Controller
-                name={id}
-                control={control}
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    id={id}
-                    label={label}
-                    type={type}
-                    error={Boolean(errors[id])}
-                    helperText={errors[id]?.message}
-                    required
-                  />
-                )}
-              />
+              {type === 'date' && (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <DateInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      type={type}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                      sx={{ shrink: 'true' }}
+                    />
+                  )}
+                />
+              )}
+              {type !== 'date' && (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <TextInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      type={type}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                    />
+                  )}
+                />
+              )}
             </Grid>
           ))}
         </Fragment>

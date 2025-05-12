@@ -12,6 +12,7 @@ export type FieldProps = {
   id: FieldId;
   label: string;
   type?: FieldType;
+  options?: { value: string; label: string }[];
 };
 
 export type FieldSection = {

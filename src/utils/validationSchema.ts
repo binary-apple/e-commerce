@@ -19,6 +19,12 @@ const passwordSchema = yup
   .matches(/[a-z]/, 'Must include at least one lowercase Latin letter')
   .matches(/\d/, 'Must include at least one number');
 
+const postalCodeRegexMap: Record<string, RegExp> = {
+  GB: /^[A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2}$/,
+  DE: /^\d{5}$/,
+  IE: /^[A-Z]\d{2}\s?[\dA-Z]{4}$/,
+};
+
 export const registrationSchema = yup.object({
   email: emailSchema,
   password: passwordSchema,
@@ -40,9 +46,14 @@ export const registrationSchema = yup.object({
     }),
   street: yup.string().required('Street is required'),
   city: yup.string().required('City is required'),
+  country: yup.string().required('Country is required'),
   postalCode: yup
     .string()
     .required('Postal code is required')
-    .matches(/^(\d{5}|[A-Z]\d[A-Z] ?\d[A-Z]\d)$/, 'Invalid postal code format'),
-  country: yup.string().required('Country is required'),
+    .test('is-valid-postal-code', 'Invalid postal code format', function (value) {
+      const { country } = this.parent;
+      const regex = postalCodeRegexMap[country];
+      if (!regex) return true;
+      return regex.test(value || '');
+    }),
 });

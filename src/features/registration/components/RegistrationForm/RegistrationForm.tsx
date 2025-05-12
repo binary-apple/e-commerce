@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registrationSchema } from '../../../../utils/validationSchema';
 import { DateInput } from '../../../../components/DateInput/DateInput';
+import { SelectInput } from '../../../../components/SelectInput/SelectInput';
 
 const defaultValues = {
   email: '',
@@ -45,9 +46,9 @@ export default function RegistrationForm() {
           <Grid size={{ xs: 12 }}>
             <Divider sx={{ marginY: 3 }}>{section}</Divider>
           </Grid>
-          {fields.map(({ id, label, type = 'text' }) => (
+          {fields.map(({ id, label, type = 'text', options }) => (
             <Grid key={id} size={{ xs: 12, md: 6 }}>
-              {type === 'date' && (
+              {type === 'date' ? (
                 <Controller
                   name={id}
                   control={control}
@@ -64,8 +65,23 @@ export default function RegistrationForm() {
                     />
                   )}
                 />
-              )}
-              {type !== 'date' && (
+              ) : type === 'select' ? (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <SelectInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      options={options || []}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                    />
+                  )}
+                />
+              ) : (
                 <Controller
                   name={id}
                   control={control}

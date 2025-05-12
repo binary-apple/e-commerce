@@ -32,15 +32,17 @@ export default function RegistrationForm() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid, isSubmitting },
   } = useForm({
     defaultValues,
     resolver: yupResolver(registrationSchema),
     mode: 'onChange',
   });
 
+  const disableButton = !isValid || isSubmitting;
+
   return (
-    <AuthForm data={formData} onSubmit={handleSubmit(onSubmit)}>
+    <AuthForm data={formData} onSubmit={handleSubmit(onSubmit)} disableButton={disableButton}>
       {fieldsConfig.map(({ section, fields }) => (
         <Fragment key={section}>
           <Grid size={{ xs: 12 }}>

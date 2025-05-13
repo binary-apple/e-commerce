@@ -6,6 +6,7 @@ const PASSWORD_LENGTH = 8;
 const emailSchema = yup
   .string()
   .required('Email is required')
+  .trim()
   .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {
     message: 'Invalid email format',
     excludeEmptyString: true,
@@ -14,6 +15,7 @@ const emailSchema = yup
 const passwordSchema = yup
   .string()
   .required('Password is required')
+  .test('no-spaces', 'Password must not contain spaces', (value) => !/\s/.test(value || ''))
   .min(PASSWORD_LENGTH, `Must be at least ${PASSWORD_LENGTH} characters long`)
   .matches(/[A-Z]/, 'Must include at least one uppercase Latin letter')
   .matches(/[a-z]/, 'Must include at least one lowercase Latin letter')
@@ -44,8 +46,21 @@ export const registrationSchema = yup.object({
       if (!value) return false;
       return checkAge(new Date(value));
     }),
-  street: yup.string().required('Street is required'),
-  city: yup.string().required('City is required'),
+  street: yup
+    .string()
+    .required('Street is required')
+    .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, {
+      message: 'Only Latin letters and single spaces are allowed',
+      excludeEmptyString: true,
+    }),
+  city: yup
+    .string()
+    .required('City is required')
+    .trim()
+    .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, {
+      message: 'Only Latin letters and single spaces are allowed',
+      excludeEmptyString: true,
+    }),
   country: yup.string().required('Country is required'),
   postalCode: yup
     .string()

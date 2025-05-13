@@ -1,14 +1,19 @@
 import { ThemeProvider } from '@mui/material';
-import Button from '@mui/material/Button';
 import { theme } from './theme';
+import { Layout } from './layouts/Layout';
+import { BrowserRouter, Routes, Route } from 'react-router';
 
 export default function App() {
-  const message: string = 'React + TypeScript + Eslint installed! 🚀';
   return (
     <>
       <ThemeProvider theme={theme}>
-        <div>{message}</div>
-        <Button variant="contained">Click</Button>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<div>MAIN</div>} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </ThemeProvider>
     </>
   );

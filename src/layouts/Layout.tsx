@@ -1,3 +1,4 @@
+import Footer from './components/Footer/Footer';
 import { Outlet } from 'react-router';
 import { Box, CssBaseline } from '@mui/material';
 
@@ -9,7 +10,7 @@ export function Layout() {
       <Box component="main" flexGrow={1}>
         <Outlet />
       </Box>
-      <div>Footer</div>
+      <Footer />
     </>
   );
 }

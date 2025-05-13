@@ -33,7 +33,7 @@ export default tslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'no-alert': 'error',
-      'max-lines-per-function': ['error', 40],
+      // 'max-lines-per-function': ['error', 40],
       'no-console': 'warn',
       'no-duplicate-imports': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],

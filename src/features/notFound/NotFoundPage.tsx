@@ -18,7 +18,7 @@ export default function NotFoundPage() {
       </Typography>
       <Button
         component={Link}
-        to="/catalog"
+        to="/"
         color="primary"
         variant="contained"
         sx={{

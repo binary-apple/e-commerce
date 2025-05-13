@@ -30,6 +30,19 @@ const themeOptions: ThemeOptions = {
   typography: {
     fontFamily: 'Manrope, Roboto, sans-serif',
   },
+  components: {
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          textDecoration: 'none',
+          fontFamily: 'Josefin Sans',
+          cursor: 'pointer',
+          fontSize: '1rem',
+          fontWeight: 600,
+        },
+      },
+    },
+  },
 };
 
 export const theme = responsiveFontSizes(createTheme(themeOptions));

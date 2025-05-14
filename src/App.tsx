@@ -1,13 +1,13 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from './theme';
-import RegistrationPage from './features/registration/RegistrationPage';
+import Router from './Router';
 
 export default function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <RegistrationPage />
+        <Router />
       </ThemeProvider>
     </>
   );

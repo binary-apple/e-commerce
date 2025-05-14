@@ -1,6 +1,6 @@
 import { getClientToken } from '../services/serviceToken';
 import type { RegistrationDataApi } from '../types/auth';
-import { ApiError } from '../utils/ApiError';
+import { CustomError } from '../utils/CustomError';
 import { responseCodes } from './constants';
 
 export async function createCustomer(data: RegistrationDataApi) {
@@ -25,10 +25,13 @@ export async function createCustomer(data: RegistrationDataApi) {
       response.status === responseCodes.error400 &&
       responseBody?.errors?.[0]?.code === 'DuplicateField'
     ) {
-      throw new ApiError(responseCodes.error409, responseBody.message || 'Email already exists.');
+      throw new CustomError(
+        responseCodes.error409,
+        responseBody.message || 'Email already exists.',
+      );
     }
 
-    throw new ApiError(response.status, responseBody.message || 'Failed to create customer.');
+    throw new CustomError(response.status, responseBody.message || 'Failed to create customer.');
   }
   return responseBody;
 }

@@ -14,7 +14,7 @@ import { loginCustomer } from '../../../../api/auth';
 import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
 import { responseCodes } from '../../../../api/constants';
-import { ApiError } from '../../../../utils/ApiError';
+import { CustomError } from '../../../../utils/CustomError';
 
 const defaultValues = {
   email: '',
@@ -80,7 +80,7 @@ export default function RegistrationForm() {
       // TODO redirect here
       // navigate('/main');
     } catch (error) {
-      if (error instanceof ApiError) {
+      if (error instanceof CustomError) {
         if (error.status === responseCodes.error409) {
           enqueueSnackbar(`${error.message} Please log in or use another email address.`, {
             variant: 'error',

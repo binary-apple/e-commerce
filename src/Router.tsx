@@ -17,10 +17,10 @@ export default function Router() {
         >
           <Route path="/" element={<div>Main Page</div>} />
           <Route path="catalog" element={<div>Catalog Page</div>} />
+          <Route path="registration" element={<RegistrationPage />} />
+          <Route path="login" element={<div>Log In</div>} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
-        <Route path="registration" element={<RegistrationPage />} />
-        <Route path="login" element={<div>Log In</div>} />
       </Routes>
     </>
   );

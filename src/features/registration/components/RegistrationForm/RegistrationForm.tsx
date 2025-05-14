@@ -25,6 +25,9 @@ const defaultValues = {
   country: '',
   postalCode: '',
 };
+// const onSubmit = (data: RegistrationData) => {
+//   console.log('valid form:', data);
+// };
 
 export default function RegistrationForm() {
   const {

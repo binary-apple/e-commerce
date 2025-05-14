@@ -1,24 +1,118 @@
 import { Divider, Grid } from '@mui/material';
 import { AuthForm } from '../../../../components/AuthForm/AuthForm';
 import { fieldsConfig, formData } from './constants';
-import { TextInput } from '../../../../components/InputField/InputField';
+import { TextInput } from '../../../../components/TextInput/TextInput';
 import { Fragment } from 'react/jsx-runtime';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { registrationSchema } from '../../../../utils/validationSchema';
+import { DateInput } from '../../../../components/DateInput/DateInput';
+import { SelectInput } from '../../../../components/SelectInput/SelectInput';
+import { useEffect, useRef } from 'react';
 
-const onSubmit = () => {
-  // TODO
+const defaultValues = {
+  email: '',
+  password: '',
+  firstName: '',
+  lastName: '',
+  dob: '',
+  street: '',
+  city: '',
+  country: '',
+  postalCode: '',
 };
 
+const onSubmit = () => {
+  //TODO
+};
+// const onSubmit = (data: RegistrationData) => {
+//   console.log('valid form:', data);
+// };
+
 export default function RegistrationForm() {
+  const {
+    control,
+    handleSubmit,
+    trigger,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm({
+    defaultValues,
+    resolver: yupResolver(registrationSchema),
+    mode: 'onChange',
+  });
+  const selectedCountry = useWatch({ control, name: 'country' });
+
+  const hasSelectedCountry = useRef(false);
+
+  useEffect(() => {
+    if (selectedCountry && hasSelectedCountry.current) {
+      trigger('postalCode');
+    } else if (selectedCountry) {
+      hasSelectedCountry.current = true;
+    }
+  }, [selectedCountry, trigger]);
+
+  const disableButton = !isValid || isSubmitting;
+
   return (
-    <AuthForm data={formData} onSubmit={onSubmit}>
+    <AuthForm data={formData} onSubmit={handleSubmit(onSubmit)} disableButton={disableButton}>
       {fieldsConfig.map(({ section, fields }) => (
         <Fragment key={section}>
           <Grid size={{ xs: 12 }}>
             <Divider sx={{ marginY: 3 }}>{section}</Divider>
           </Grid>
-          {fields.map(({ id, label, type = 'text' }) => (
+          {fields.map(({ id, label, type = 'text', options }) => (
             <Grid key={id} size={{ xs: 12, md: 6 }}>
-              <TextInput id={id} label={label} type={type} />
+              {type === 'date' ? (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <DateInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      type={type}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                      sx={{ shrink: 'true' }}
+                    />
+                  )}
+                />
+              ) : type === 'select' ? (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <SelectInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      options={options || []}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                    />
+                  )}
+                />
+              ) : (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <TextInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      type={type}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                    />
+                  )}
+                />
+              )}
             </Grid>
           ))}
         </Fragment>

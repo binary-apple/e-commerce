@@ -21,8 +21,17 @@ export const fieldsConfig: FieldSection[] = [
     fields: [
       { id: 'street', label: 'Street' },
       { id: 'city', label: 'City' },
+      {
+        id: 'country',
+        label: 'Country',
+        type: 'select',
+        options: [
+          { value: 'GB', label: 'United Kingdom' },
+          { value: 'DE', label: 'Germany' },
+          { value: 'IE', label: 'Ireland' },
+        ],
+      },
       { id: 'postalCode', label: 'Postal code' },
-      { id: 'country', label: 'Country' },
     ],
   },
 ];

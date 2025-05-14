@@ -8,7 +8,7 @@ export function Layout() {
     <>
       <CssBaseline />
       <Header />
-      <Box component="main" flexGrow={1}>
+      <Box component="main" flexGrow={1} display="flex" justifyContent="center" alignItems="center">
         <Outlet />
       </Box>
       <Footer />

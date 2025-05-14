@@ -1,19 +1,13 @@
-import { ThemeProvider } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from './theme';
-import { Layout } from './layouts/Layout';
-import { BrowserRouter, Routes, Route } from 'react-router';
+import Router from './Router';
 
 export default function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<div>MAIN</div>} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <CssBaseline />
+        <Router />
       </ThemeProvider>
     </>
   );

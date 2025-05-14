@@ -3,10 +3,68 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 
 import headerBg from '../../../assets/images/HeaderBg.svg';
+import { useState } from 'react';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+
+const navItems = ['Main', 'About us', 'Catalog'];
+const customIconHoverOpacity = 0.3;
+// TODO: get isAuthenticated from localStorage or state
+const isAuthenticated = false;
 
 export default function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileMenuOpen((previousState) => !previousState);
+  };
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item} disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemText primary={item} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {isAuthenticated && (
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemText primary="Log out" />
+            </ListItemButton>
+          </ListItem>
+        )}
+        {!isAuthenticated && (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton sx={{ textAlign: 'center' }}>
+                <ListItemText primary="Log in" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton sx={{ textAlign: 'center' }}>
+                <ListItemText primary="Sign up" />
+              </ListItemButton>
+            </ListItem>
+          </>
+        )}
+      </List>
+    </Box>
+  );
+
   return (
     <Box
       component="header"
@@ -30,9 +88,9 @@ export default function Header() {
             top: 0,
             right: 0,
             width: {
-              lg: 'calc(50% - 1108px * 0.3)',
-              md: 'calc(50% - 850px * 0.3)',
-              xs: 'calc(50% - 350px * 0.3)',
+              lg: 'calc(50% - 1108px * 0.1)',
+              md: 'calc(50% - 850px * 0.1)',
+              xs: 'calc(50% - 350px * 0.1)',
             },
             bgcolor: 'secondary.main',
             zIndex: -1,
@@ -44,9 +102,9 @@ export default function Header() {
             width: '130px',
             top: 0,
             right: {
-              lg: 'calc(50% - 1108px * 0.39)',
-              md: 'calc(50% - 850px * 0.36)',
-              xs: 'calc(50% - 350px * 0.5)',
+              lg: 'calc(50% - 1108px * 0.18)',
+              md: 'calc(50% - 850px * 0.18)',
+              xs: 'calc(50% - 350px * 0.37)',
             },
             backgroundImage: `url("${headerBg}")`,
             zIndex: -1,
@@ -55,8 +113,8 @@ export default function Header() {
       >
         <Stack
           direction="row"
-          spacing={{ md: 23, xs: 8 }}
-          sx={{ width: '100%', alignItems: 'center' }}
+          spacing={{ lg: 23, xs: 8 }}
+          sx={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}
         >
           <Link href="/">
             <Typography
@@ -73,16 +131,33 @@ export default function Header() {
               Pet-First
             </Typography>
           </Link>
-          <Stack
-            direction="row"
-            sx={{ justifyContent: 'space-between', width: '100%', alignItems: 'center' }}
+          <IconButton
+            aria-label="open drawer"
+            onClick={handleDrawerToggle}
+            sx={{
+              display: { md: 'none' },
+              color: 'secondary.contrastText',
+              '&:hover': {
+                backgroundColor: 'secondary.contrastText' + customIconHoverOpacity,
+              },
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Box
+            sx={{
+              display: { md: 'flex', xs: 'none' },
+              justifyContent: 'space-between',
+              width: '100%',
+              alignItems: 'center',
+            }}
           >
             <Stack direction="row" spacing={5.5}>
               <Link color="text.primary">Main</Link>
               <Link color="text.primary">Catalog</Link>
               <Link color="text.primary">About us</Link>
             </Stack>
-            <Stack direction="row" spacing={5.5}>
+            <Stack direction="row" spacing={4}>
               <Button
                 variant="outlined"
                 sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
@@ -106,9 +181,25 @@ export default function Header() {
                 Log out
               </Button>
             </Stack>
-          </Stack>
+          </Box>
         </Stack>
       </Box>
+      <SwipeableDrawer
+        anchor="right"
+        variant="temporary"
+        open={mobileMenuOpen}
+        onOpen={handleDrawerToggle}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{
+          display: { sm: 'block', md: 'none' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+        }}
+      >
+        {drawer}
+      </SwipeableDrawer>
     </Box>
   );
 }

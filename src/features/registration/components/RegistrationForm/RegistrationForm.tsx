@@ -13,6 +13,8 @@ import { createCustomer } from '../../../../api/customers';
 import { loginCustomer } from '../../../../api/auth';
 import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
+import { responseCodes } from '../../../../api/constants';
+import { ApiError } from '../../../../utils/ApiError';
 
 const defaultValues = {
   email: '',
@@ -78,7 +80,19 @@ export default function RegistrationForm() {
       // TODO redirect here
       // navigate('/main');
     } catch (error) {
-      enqueueSnackbar(`Registration failed! ${error}`, { variant: 'error' });
+      if (error instanceof ApiError) {
+        if (error.status === responseCodes.error409) {
+          enqueueSnackbar(`${error.message} Please log in or use another email address.`, {
+            variant: 'error',
+          });
+        } else {
+          enqueueSnackbar(`Registration failed! ${error.message}`, {
+            variant: 'error',
+          });
+        }
+      } else {
+        enqueueSnackbar(`Something went wrong... Please try again later.`, { variant: 'error' });
+      }
     }
   };
 

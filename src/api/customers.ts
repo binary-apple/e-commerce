@@ -1,7 +1,7 @@
 import { getClientToken } from '../services/serviceToken';
 import type { RegistrationDataApi } from '../types/auth';
 import { CustomError } from '../utils/CustomError';
-import { responseCodes } from './constants';
+import { ResponseCodes } from './constants';
 
 export async function createCustomer(data: RegistrationDataApi) {
   const token = await getClientToken();
@@ -22,11 +22,11 @@ export async function createCustomer(data: RegistrationDataApi) {
 
   if (!response.ok) {
     if (
-      response.status === responseCodes.error400 &&
+      response.status === ResponseCodes.BAD_REQUEST &&
       responseBody?.errors?.[0]?.code === 'DuplicateField'
     ) {
       throw new CustomError(
-        responseCodes.error409,
+        ResponseCodes.CONFLICT,
         responseBody.message || 'Email already exists.',
       );
     }

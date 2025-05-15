@@ -1,4 +1,4 @@
-export const responseCodes = {
-  error400: 400,
-  error409: 409,
-};
+export const enum ResponseCodes {
+  BAD_REQUEST = 400,
+  CONFLICT = 409,
+}

@@ -13,7 +13,7 @@ import { createCustomer } from '../../../../api/customers';
 import { loginCustomer } from '../../../../api/auth';
 import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
-import { responseCodes } from '../../../../api/constants';
+import { ResponseCodes } from '../../../../api/constants';
 import { CustomError } from '../../../../utils/CustomError';
 
 const defaultValues = {
@@ -81,7 +81,7 @@ export default function RegistrationForm() {
       // navigate('/main');
     } catch (error) {
       if (error instanceof CustomError) {
-        if (error.status === responseCodes.error409) {
+        if (error.status === ResponseCodes.CONFLICT) {
           enqueueSnackbar(`${error.message} Please log in or use another email address.`, {
             variant: 'error',
           });

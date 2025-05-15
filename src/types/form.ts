@@ -1,8 +1,9 @@
 import type { InputProps } from '@mui/material';
-import type { registrationSchema } from '../utils/validationSchema';
+import type { loginSchema, registrationSchema } from '../utils/validationSchema';
 import type { InferType } from 'yup';
 
 export type RegistrationData = InferType<typeof registrationSchema>;
+export type LoginData = InferType<typeof loginSchema>;
 
 type FieldId = keyof RegistrationData;
 
@@ -18,4 +19,12 @@ export type FieldProps = {
 export type FieldSection = {
   section: string;
   fields: FieldProps[];
+};
+
+type LoginFieldId = keyof LoginData;
+
+export type LoginFieldProps = {
+  id: LoginFieldId;
+  label: string;
+  type?: 'email' | 'password';
 };

@@ -78,3 +78,8 @@ export const registrationSchema = yup.object({
       return regex.test(value || '');
     }),
 });
+
+export const loginSchema = yup.object({
+  email: emailSchema,
+  password: passwordSchema,
+});

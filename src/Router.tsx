@@ -1,8 +1,8 @@
-import { Routes, Route, Outlet, BrowserRouter } from 'react-router';
+import { Routes, Route, BrowserRouter } from 'react-router';
+import { Layout } from './layouts/Layout';
 import { Paths } from './types/paths';
 import RegistrationPage from './features/registration/RegistrationPage';
 import NotFoundPage from './features/notFound/NotFoundPage';
-// Todo: remove import outlet after creating main layout
 import LoginPage from './features/login/LoginPage';
 
 export default function Router() {
@@ -10,14 +10,7 @@ export default function Router() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route
-            element={
-              <>
-                <div>Layout of website</div>
-                <Outlet />
-              </>
-            }
-          >
+          <Route element={<Layout />}>
             <Route path={Paths.HOME} element={<div>Main Page</div>} />
             <Route path={Paths.CATALOG} element={<div>Catalog Page</div>} />
             <Route path={Paths.REGISTRATION} element={<RegistrationPage />} />

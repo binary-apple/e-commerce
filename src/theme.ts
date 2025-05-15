@@ -64,6 +64,17 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          textDecoration: 'none',
+          fontFamily: 'Josefin Sans',
+          cursor: 'pointer',
+          fontSize: '1rem',
+          fontWeight: 600,
+        },
+      },
+    },
   },
 };
 

@@ -11,7 +11,7 @@ type TextInputProps = {
 } & Omit<TextFieldProps, 'type'>;
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  ({ id, label, type = 'text', fullWidth = true, ...rest }, reference) => {
+  ({ id, label, type = 'text', fullWidth = true, error, helperText = ' ', ...rest }, reference) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const isPassword = type === 'password';
@@ -34,16 +34,19 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           },
           inputLabel: {
             shrink: true,
+            required: rest.required,
           },
         }}
         variant="outlined"
         size="small"
         sx={{
-          paddingBottom: '20px',
+          paddingBottom: '8px',
           '& input:-webkit-autofill': {
             WebkitBoxShadow: '0 0 0 100px #FBF2DA inset',
           },
         }}
+        error={error}
+        helperText={helperText}
         {...rest}
       />
     );

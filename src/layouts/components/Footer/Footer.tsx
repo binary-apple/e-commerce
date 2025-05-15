@@ -47,7 +47,7 @@ export default function Footer() {
             pb: { md: '0', xs: '50px' },
           }}
         >
-          Pet-First
+          FurEver
         </Typography>
         <Typography
           component="div"

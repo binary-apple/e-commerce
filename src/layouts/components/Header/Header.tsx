@@ -84,7 +84,7 @@ export default function Header() {
                 whiteSpace: 'nowrap',
               }}
             >
-              Pet-First
+              FurEver
             </Typography>
           </Link>
           <IconButton

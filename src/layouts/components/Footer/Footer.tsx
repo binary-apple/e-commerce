@@ -5,9 +5,9 @@ import Typography from '@mui/material/Typography';
 import spotsBg from '../../../assets/images/SpotsBg.svg';
 
 import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import XIcon from '@mui/icons-material/X';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import Link from '@mui/material/Link';
+import SchoolIcon from '../RSScoolLogoIcon/SchoolLogoIcon';
 
 export default function Footer() {
   return (
@@ -56,39 +56,55 @@ export default function Footer() {
           fontWeight={600}
         >
           <Stack direction={{ md: 'column', xs: 'row' }} spacing={{ md: 4, xs: 8 }}>
-            {/* //TODO: move footer links to a separate component */}
-            <Stack direction={{ md: 'row', xs: 'column' }} spacing={4}>
-              <Link color="secondary.contrastText">About</Link>
-              <Link color="secondary.contrastText">Project</Link>
-              <Link color="secondary.contrastText">Service</Link>
-              <Link color="secondary.contrastText">Client</Link>
-              <Link color="secondary.contrastText">Team</Link>
-              <Link color="secondary.contrastText">Blog</Link>
-              <Link color="secondary.contrastText">Contact</Link>
+            <Stack direction={{ md: 'row', xs: 'column' }} spacing={{ md: 4, xs: 2 }}>
+              <Typography variant="inherit">Developed by:</Typography>
+              <Stack direction={{ md: 'row', xs: 'column' }} spacing={4} alignItems="center">
+                <Link
+                  href="https://github.com/tanykos"
+                  target="_blank"
+                  color="secondary.contrastText"
+                >
+                  <Typography variant="inherit">tanykos</Typography>
+                </Link>
+                <Link
+                  href="https://github.com/montaana01"
+                  target="_blank"
+                  color="secondary.contrastText"
+                >
+                  <Typography variant="inherit">montaana01</Typography>
+                </Link>
+                <Link
+                  href="https://github.com/binary-apple"
+                  target="_blank"
+                  color="secondary.contrastText"
+                >
+                  <Typography variant="inherit">binary-apple</Typography>
+                </Link>
+              </Stack>
             </Stack>
             <Stack
               direction={{ md: 'row', xs: 'column' }}
               spacing={{ md: 4, xs: 2 }}
               alignItems="center"
             >
-              <div>Follow:</div>
+              <Typography variant="inherit">Follow RS School:</Typography>
               <Stack direction={{ md: 'row', xs: 'column' }} spacing={1.5}>
+                <Link href="https://rs.school/" target="_blank">
+                  <SchoolIcon fontSize="large" color="secondary" />
+                </Link>
                 <Link
-                  href="https://www.facebook.com/"
+                  href="https://www.linkedin.com/company/the-rolling-scopes-school/"
+                  target="_blank"
+                  color="secondary.contrastText"
+                >
+                  <LinkedInIcon fontSize="large"></LinkedInIcon>
+                </Link>
+                <Link
+                  href="https://www.facebook.com/rsschoolEN"
                   target="_blank"
                   color="secondary.contrastText"
                 >
                   <FacebookIcon fontSize="large"></FacebookIcon>
-                </Link>
-                <Link
-                  href="https://www.instagram.com/"
-                  target="_blank"
-                  color="secondary.contrastText"
-                >
-                  <InstagramIcon fontSize="large"></InstagramIcon>
-                </Link>
-                <Link href="https://x.com/" target="_blank" color="secondary.contrastText">
-                  <XIcon fontSize="large"></XIcon>
                 </Link>
               </Stack>
             </Stack>

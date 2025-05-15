@@ -9,6 +9,10 @@ import { registrationSchema } from '../../../../utils/validationSchema';
 import { DateInput } from '../../../../components/DateInput/DateInput';
 import { SelectInput } from '../../../../components/SelectInput/SelectInput';
 import { useEffect, useRef } from 'react';
+import { createCustomer } from '../../../../api/customers';
+import { loginCustomer } from '../../../../api/auth';
+import type { RegistrationData } from '../../../../types/form';
+import { useSnackbar } from 'notistack';
 
 const defaultValues = {
   email: '',
@@ -20,10 +24,6 @@ const defaultValues = {
   city: '',
   country: '',
   postalCode: '',
-};
-
-const onSubmit = () => {
-  //TODO
 };
 // const onSubmit = (data: RegistrationData) => {
 //   console.log('valid form:', data);
@@ -43,6 +43,7 @@ export default function RegistrationForm() {
   const selectedCountry = useWatch({ control, name: 'country' });
 
   const hasSelectedCountry = useRef(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (selectedCountry && hasSelectedCountry.current) {
@@ -53,6 +54,36 @@ export default function RegistrationForm() {
   }, [selectedCountry, trigger]);
 
   const disableButton = !isValid || isSubmitting;
+
+  const onSubmit = async (data: RegistrationData) => {
+    try {
+      await createCustomer({
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: new Date(data.dob).toISOString().split('T')[0],
+        addresses: [
+          {
+            streetName: data.street,
+            city: data.city,
+            country: data.country,
+            postalCode: data.postalCode,
+          },
+        ],
+      });
+
+      const token = await loginCustomer(data.email, data.password);
+
+      localStorage.setItem('userToken', token);
+
+      enqueueSnackbar('Successful Registration!', { variant: 'success' });
+      // TODO redirect here
+      // navigate('/main');
+    } catch (error) {
+      enqueueSnackbar(`Registration failed! ${error}`, { variant: 'error' });
+    }
+  };
 
   return (
     <AuthForm data={formData} onSubmit={handleSubmit(onSubmit)} disableButton={disableButton}>

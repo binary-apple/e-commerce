@@ -46,11 +46,11 @@ export default tslint.config(
       '@typescript-eslint/member-ordering': 'error',
       'no-magic-numbers': 'off',
       '@typescript-eslint/no-magic-numbers': [
-        'error', 
-        { 
-          "ignoreEnums": true, 
-          ignore: [0, 1] 
-        }
+        'error',
+        {
+          ignoreEnums: true,
+          ignore: [0, 1],
+        },
       ],
       'class-methods-use-this': 'error',
       'unicorn/filename-case': [

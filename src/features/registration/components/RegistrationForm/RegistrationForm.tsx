@@ -101,60 +101,10 @@ export default function RegistrationForm() {
       {fieldsConfig.map(({ section, fields }) => (
         <Fragment key={section}>
           <Grid size={{ xs: 12 }}>
-            <Divider sx={{ marginY: 3 }}>{section}</Divider>
+            <Divider sx={{ marginBottom: 3 }}>{section}</Divider>
           </Grid>
           {fields.map(({ id, label, type = 'text', options }) => (
             <Grid key={id} size={{ xs: 12, md: 6 }}>
-              {type === 'date' ? (
-                <Controller
-                  name={id}
-                  control={control}
-                  render={({ field }) => (
-                    <DateInput
-                      {...field}
-                      id={id}
-                      label={label}
-                      type={type}
-                      error={Boolean(errors[id])}
-                      helperText={errors[id]?.message}
-                      required
-                      sx={{ shrink: 'true' }}
-                    />
-                  )}
-                />
-              ) : type === 'select' ? (
-                <Controller
-                  name={id}
-                  control={control}
-                  render={({ field }) => (
-                    <SelectInput
-                      {...field}
-                      id={id}
-                      label={label}
-                      options={options || []}
-                      error={Boolean(errors[id])}
-                      helperText={errors[id]?.message}
-                      required
-                    />
-                  )}
-                />
-              ) : (
-                <Controller
-                  name={id}
-                  control={control}
-                  render={({ field }) => (
-                    <TextInput
-                      {...field}
-                      id={id}
-                      label={label}
-                      type={type}
-                      error={Boolean(errors[id])}
-                      helperText={errors[id]?.message}
-                      required
-                    />
-                  )}
-                />
-              )}
               {type === 'date' ? (
                 <Controller
                   name={id}

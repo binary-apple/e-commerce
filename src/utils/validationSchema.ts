@@ -6,16 +6,22 @@ const PASSWORD_LENGTH = 8;
 const emailSchema = yup
   .string()
   .required('Email is required')
-  .trim()
-  .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {
-    message: 'Invalid email format',
-    excludeEmptyString: true,
-  });
+  .matches(
+    /^(([^\s"(),.:;<>@[\\\]]+(\.[^\s"(),.:;<>@[\\\]]+)*)|(".+"))@((\[(?:\d{1,3}\.){3}\d{1,3}])|(([\dA-Za-z-]+\.)+[A-Za-z]{2,}))$/,
+    {
+      message: 'Invalid email format',
+      excludeEmptyString: true,
+    },
+  );
 
 const passwordSchema = yup
   .string()
   .required('Password is required')
-  .test('no-spaces', 'Password must not contain spaces', (value) => !/\s/.test(value || ''))
+  .test(
+    'no-trim-spaces',
+    'Password must not contain leading or trailing whitespace.',
+    (value) => value === value?.trim(),
+  )
   .min(PASSWORD_LENGTH, `Must be at least ${PASSWORD_LENGTH} characters long`)
   .matches(/[A-Z]/, 'Must include at least one uppercase Latin letter')
   .matches(/[a-z]/, 'Must include at least one lowercase Latin letter')
@@ -49,16 +55,16 @@ export const registrationSchema = yup.object({
   street: yup
     .string()
     .required('Street is required')
-    .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, {
-      message: 'Only Latin letters and single spaces are allowed',
+    .matches(/^[\d './A-Z[^a-z-]+$/, {
+      message: "Only Latin letters, numbers, dots, ', - and spaces allowed",
       excludeEmptyString: true,
     }),
   city: yup
     .string()
     .required('City is required')
     .trim()
-    .matches(/^[A-Za-z]+(?: [A-Za-z]+)*$/, {
-      message: 'Only Latin letters and single spaces are allowed',
+    .matches(/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/, {
+      message: 'Only Latin letters, single spaces and hyphens allowed',
       excludeEmptyString: true,
     }),
   country: yup.string().required('Country is required'),
@@ -71,4 +77,9 @@ export const registrationSchema = yup.object({
       if (!regex) return true;
       return regex.test(value || '');
     }),
+});
+
+export const loginSchema = yup.object({
+  email: emailSchema,
+  password: passwordSchema,
 });

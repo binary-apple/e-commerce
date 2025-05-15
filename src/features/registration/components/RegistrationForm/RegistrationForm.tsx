@@ -155,6 +155,56 @@ export default function RegistrationForm() {
                   )}
                 />
               )}
+              {type === 'date' ? (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <DateInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      type={type}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                      sx={{ shrink: 'true' }}
+                    />
+                  )}
+                />
+              ) : type === 'select' ? (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <SelectInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      options={options || []}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                    />
+                  )}
+                />
+              ) : (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <TextInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      type={type}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                    />
+                  )}
+                />
+              )}
             </Grid>
           ))}
         </Fragment>

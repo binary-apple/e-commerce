@@ -1,6 +1,6 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from './theme';
-import RegistrationPage from './features/registration/RegistrationPage';
+import Router from './Router';
 import { SnackbarProvider } from 'notistack';
 
 export default function App() {
@@ -9,7 +9,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={3}>
           <CssBaseline />
-          <RegistrationPage />
+          <Router />
         </SnackbarProvider>
       </ThemeProvider>
     </>

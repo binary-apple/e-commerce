@@ -5,6 +5,8 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import arrowCurly from '../../assets/images/ArrowCurly.svg';
 import Title from '../Title/Title';
 
+import styles from './AuthForm.module.scss';
+
 type FormContainerProps = {
   data: AuthFormData;
   children: ReactNode;
@@ -26,7 +28,13 @@ export function AuthForm({ data, children, onSubmit, disableButton }: FormContai
         },
       }}
     >
-      <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        gap={2}
+        className={styles.title}
+      >
         <Box
           component="img"
           src={arrowCurly}

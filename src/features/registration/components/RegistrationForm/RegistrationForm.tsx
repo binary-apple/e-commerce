@@ -13,6 +13,8 @@ import { createCustomer } from '../../../../api/customers';
 import { loginCustomer } from '../../../../api/auth';
 import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
+import { ResponseCodes } from '../../../../api/constants';
+import { CustomError } from '../../../../utils/CustomError';
 
 const defaultValues = {
   email: '',
@@ -25,9 +27,6 @@ const defaultValues = {
   country: '',
   postalCode: '',
 };
-// const onSubmit = (data: RegistrationData) => {
-//   console.log('valid form:', data);
-// };
 
 export default function RegistrationForm() {
   const {
@@ -81,7 +80,19 @@ export default function RegistrationForm() {
       // TODO redirect here
       // navigate('/main');
     } catch (error) {
-      enqueueSnackbar(`Registration failed! ${error}`, { variant: 'error' });
+      if (error instanceof CustomError) {
+        if (error.status === ResponseCodes.CONFLICT) {
+          enqueueSnackbar(`${error.message} Please log in or use another email address.`, {
+            variant: 'error',
+          });
+        } else {
+          enqueueSnackbar(`Registration failed! ${error.message}`, {
+            variant: 'error',
+          });
+        }
+      } else {
+        enqueueSnackbar(`Something went wrong... Please try again later.`, { variant: 'error' });
+      }
     }
   };
 
@@ -94,6 +105,56 @@ export default function RegistrationForm() {
           </Grid>
           {fields.map(({ id, label, type = 'text', options }) => (
             <Grid key={id} size={{ xs: 12, md: 6 }}>
+              {type === 'date' ? (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <DateInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      type={type}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                      sx={{ shrink: 'true' }}
+                    />
+                  )}
+                />
+              ) : type === 'select' ? (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <SelectInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      options={options || []}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                    />
+                  )}
+                />
+              ) : (
+                <Controller
+                  name={id}
+                  control={control}
+                  render={({ field }) => (
+                    <TextInput
+                      {...field}
+                      id={id}
+                      label={label}
+                      type={type}
+                      error={Boolean(errors[id])}
+                      helperText={errors[id]?.message}
+                      required
+                    />
+                  )}
+                />
+              )}
               {type === 'date' ? (
                 <Controller
                   name={id}

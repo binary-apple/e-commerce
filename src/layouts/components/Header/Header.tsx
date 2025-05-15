@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -8,15 +9,13 @@ import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-
-import headerBg from '../../../assets/images/HeaderBg.svg';
-import { useState } from 'react';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const navItems = ['Main', 'About us', 'Catalog'];
-const customIconHoverOpacity = 0.3;
+import headerBg from '../../../assets/images/HeaderBg.svg';
+import { navItems, customIconHoverOpacity } from './constants';
+
 // TODO: get isAuthenticated from localStorage or state
 const isAuthenticated = false;
 
@@ -137,7 +136,7 @@ export default function Header() {
             sx={{
               display: { md: 'none' },
               color: 'secondary.contrastText',
-              '&:hover': {
+              '&:active': {
                 backgroundColor: 'secondary.contrastText' + customIconHoverOpacity,
               },
             }}

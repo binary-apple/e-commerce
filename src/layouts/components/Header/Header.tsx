@@ -15,6 +15,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { navItems, customIconHoverOpacity } from './constants';
 import classes from './Header.module.scss';
+import { Paths } from '../../../types/paths';
+import { NavLink } from 'react-router';
 
 // TODO: get isAuthenticated from localStorage or state
 const isAuthenticated = false;
@@ -29,10 +31,10 @@ export default function Header() {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
+        {Object.entries(navItems).map(([key, value], i) => (
+          <ListItem key={i} disablePadding>
+            <ListItemButton component={NavLink} to={key} sx={{ textAlign: 'center' }}>
+              <ListItemText primary={value} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -49,12 +51,16 @@ export default function Header() {
         {!isAuthenticated && (
           <>
             <ListItem disablePadding>
-              <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemButton component={NavLink} to={Paths.AUTH} sx={{ textAlign: 'center' }}>
                 <ListItemText primary="Log in" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemButton
+                component={NavLink}
+                to={Paths.REGISTRATION}
+                sx={{ textAlign: 'center' }}
+              >
                 <ListItemText primary="Sign up" />
               </ListItemButton>
             </ListItem>
@@ -72,7 +78,7 @@ export default function Header() {
           spacing={{ lg: 23, xs: 8 }}
           sx={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}
         >
-          <Link href="/">
+          <Link component={NavLink} to="/">
             <Typography
               component="h1"
               sx={{
@@ -109,20 +115,24 @@ export default function Header() {
             }}
           >
             <Stack direction="row" spacing={5.5}>
-              {navItems.map((item) => (
-                <Link key={item} color="text.primary">
-                  {item}
+              {Object.entries(navItems).map(([key, value], i) => (
+                <Link key={i} component={NavLink} to={key} color="text.primary">
+                  {value}
                 </Link>
               ))}
             </Stack>
             <Stack direction="row" spacing={4}>
               <Button
+                component={NavLink}
+                to={Paths.AUTH}
                 variant="outlined"
                 sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
               >
                 Log in
               </Button>
               <Button
+                component={NavLink}
+                to={Paths.REGISTRATION}
                 variant="outlined"
                 sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
               >

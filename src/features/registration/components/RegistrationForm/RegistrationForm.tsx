@@ -15,6 +15,7 @@ import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
 import { ResponseCodes } from '../../../../api/constants';
 import { CustomError } from '../../../../utils/CustomError';
+import { AuthViews } from '../../../../types/authViews';
 
 const defaultValues = {
   email: '',
@@ -97,7 +98,12 @@ export default function RegistrationForm() {
   };
 
   return (
-    <AuthForm data={formData} onSubmit={handleSubmit(onSubmit)} disableButton={disableButton}>
+    <AuthForm
+      data={formData}
+      onSubmit={handleSubmit(onSubmit)}
+      disableButton={disableButton}
+      view={AuthViews.registration}
+    >
       {fieldsConfig.map(({ section, fields }) => (
         <Fragment key={section}>
           <Grid size={{ xs: 12 }}>

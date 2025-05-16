@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router';
 import { redirectionConfig } from './constants';
 
 type AuthRedirectProps = {
-  view: 'login';
+  view: 'login' | 'registration';
 };
 
 export default function AuthRedirect({ view }: AuthRedirectProps) {

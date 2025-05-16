@@ -6,5 +6,10 @@ export const redirectionConfig = {
     button: 'Registration',
     url: Paths.REGISTRATION,
   },
-  //todo: implement here config for registration page
+  registration: {
+    //todo: implement here config for registration page
+    title: 'title',
+    button: 'button',
+    url: 'url',
+  },
 };

@@ -4,6 +4,8 @@ import type { AuthFormData } from './types';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import arrowCurly from '../../assets/images/ArrowCurly.svg';
 import Title from '../Title/Title';
+import AuthRedirect from './components/AuthRedirect/AuthRedirect.tsx';
+import type { AuthViews } from '../../types/authViews.ts';
 
 import styles from './AuthForm.module.scss';
 
@@ -12,9 +14,10 @@ type FormContainerProps = {
   children: ReactNode;
   onSubmit: FormEventHandler<HTMLFormElement>;
   disableButton: boolean;
+  view: AuthViews;
 };
 
-export function AuthForm({ data, children, onSubmit, disableButton }: FormContainerProps) {
+export function AuthForm({ data, children, onSubmit, disableButton, view }: FormContainerProps) {
   return (
     <Paper
       sx={{
@@ -28,27 +31,24 @@ export function AuthForm({ data, children, onSubmit, disableButton }: FormContai
         },
       }}
     >
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        gap={2}
-        className={styles.title}
-      >
-        <Box
-          component="img"
-          src={arrowCurly}
-          alt={`${data.titleForm}`}
-          sx={{
-            width: {
-              xs: '40px',
-              sm: '50px',
-              md: '62px',
-            },
-            height: 'auto',
-          }}
-        />
-        <Title title={data.titleForm} />
+      <Box display="flex" flexDirection="column" gap={1} className={styles.title}>
+        <Box display="flex" alignItems="center" justifyContent="center" gap={2}>
+          <Box
+            component="img"
+            src={arrowCurly}
+            alt={`${data.titleForm}`}
+            sx={{
+              width: {
+                xs: '40px',
+                sm: '50px',
+                md: '62px',
+              },
+              height: 'auto',
+            }}
+          />
+          <Title title={data.titleForm} />
+        </Box>
+        <AuthRedirect view={view} />
       </Box>
       <Box component="form" onSubmit={onSubmit} noValidate>
         <Grid container spacing={1}>

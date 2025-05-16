@@ -7,9 +7,8 @@ export const redirectionConfig = {
     url: Paths.REGISTRATION,
   },
   registration: {
-    //todo: implement here config for registration page
-    title: 'title',
-    linkLabel: 'label',
-    url: 'url',
+    title: 'Do you already have account?',
+    linkLabel: 'Sign in',
+    url: Paths.AUTH,
   },
 };

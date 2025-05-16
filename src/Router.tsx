@@ -15,6 +15,7 @@ export default function Router() {
             <Route path={Paths.CATALOG} element={<div>Catalog Page</div>} />
             <Route path={Paths.REGISTRATION} element={<RegistrationPage />} />
             <Route path={Paths.AUTH} element={<LoginPage />} />
+            <Route path={Paths.ABOUT} element={<div>About Page</div>} />
             <Route path={Paths.NOT_FOUND} element={<NotFoundPage />} />
           </Route>
         </Routes>

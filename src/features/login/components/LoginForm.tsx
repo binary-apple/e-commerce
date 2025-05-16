@@ -37,7 +37,7 @@ export default function LoginForm() {
       data={formData}
       onSubmit={handleSubmit(onSubmit)}
       disableButton={disableButton}
-      view={AuthViews.login}
+      view={AuthViews.LOGIN}
     >
       {fields.map(({ id, label, type = 'text' }) => (
         <Grid key={id} size={{ xs: 12 }}>

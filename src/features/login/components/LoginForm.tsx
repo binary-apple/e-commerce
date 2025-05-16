@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from '../../../utils/validationSchema';
 import { AuthForm } from '../../../components/AuthForm/AuthForm';
 import { TextInput } from '../../../components/TextInput/TextInput';
+import { AuthViews } from '../../../types/authViews';
 
 const defaultValues = {
   email: '',
@@ -32,7 +33,12 @@ export default function LoginForm() {
   const disableButton = !isValid || isSubmitting;
 
   return (
-    <AuthForm data={formData} onSubmit={handleSubmit(onSubmit)} disableButton={disableButton}>
+    <AuthForm
+      data={formData}
+      onSubmit={handleSubmit(onSubmit)}
+      disableButton={disableButton}
+      view={AuthViews.login}
+    >
       {fields.map(({ id, label, type = 'text' }) => (
         <Grid key={id} size={{ xs: 12 }}>
           <Controller

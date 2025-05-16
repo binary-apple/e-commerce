@@ -1,9 +1,10 @@
 import { Box, Typography, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router';
 import { redirectionConfig } from './constants';
+import type { AuthViews } from '../../../../types/authViews.ts';
 
 type AuthRedirectProps = {
-  view: 'login' | 'registration';
+  view: AuthViews;
 };
 
 export default function AuthRedirect({ view }: AuthRedirectProps) {

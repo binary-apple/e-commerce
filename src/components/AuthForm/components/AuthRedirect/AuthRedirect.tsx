@@ -21,7 +21,7 @@ export default function AuthRedirect({ view }: AuthRedirectProps) {
         {redirectionConfig[view].title}
       </Typography>
       <Link component={RouterLink} to={redirectionConfig[view].url}>
-        {redirectionConfig[view].button}
+        {redirectionConfig[view].linkLabel}
       </Link>
     </Box>
   );

@@ -3,7 +3,7 @@ import { Paths } from '../../../../types/paths';
 export const redirectionConfig = {
   login: {
     title: "Don't have account?",
-    linkLabel: 'Registration',
+    linkLabel: 'Sign up',
     url: Paths.REGISTRATION,
   },
   registration: {

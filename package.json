@@ -13,8 +13,8 @@
     "lint:fix": "eslint --fix .",
     "stylelint": "stylelint \"**/*.scss\"",
     "stylelint:fix": "stylelint \"**/*.scss\" --fix",
-    "test": "vitest",
-    "test:watch": "vitest run --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "prepare": "husky"
   },

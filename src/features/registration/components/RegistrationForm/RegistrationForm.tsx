@@ -9,12 +9,18 @@ import { registrationSchema } from '../../../../utils/validationSchema';
 import { DateInput } from '../../../../components/DateInput/DateInput';
 import { SelectInput } from '../../../../components/SelectInput/SelectInput';
 import { useEffect, useRef } from 'react';
-import { createCustomer } from '../../../../api/customers';
-import { loginCustomer } from '../../../../api/auth';
+// import { createCustomer } from '../../../../api/customers';
+// import { loginCustomer } from '../../../../api/auth';
 import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
 import { ResponseCodes } from '../../../../api/constants';
 import { CustomError } from '../../../../utils/CustomError';
+import { useNavigate } from 'react-router';
+import { Paths } from '../../../../types/paths';
+import { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } from '../../../../api/auth';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '../../../../store/slices/authSlice';
+import { useAuth } from '../../../../hooks/useAuth';
 
 const defaultValues = {
   email: '',
@@ -43,6 +49,12 @@ export default function RegistrationForm() {
 
   const hasSelectedCountry = useRef(false);
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [register] = useRegisterMutation();
+  const [login] = useLoginMutation();
+  const [getMe] = useLazyGetMeQuery();
+  const { saveToken } = useAuth();
 
   useEffect(() => {
     if (selectedCountry && hasSelectedCountry.current) {
@@ -56,7 +68,7 @@ export default function RegistrationForm() {
 
   const onSubmit = async (data: RegistrationData) => {
     try {
-      await createCustomer({
+      await register({
         email: data.email,
         password: data.password,
         firstName: data.firstName,
@@ -70,15 +82,26 @@ export default function RegistrationForm() {
             postalCode: data.postalCode,
           },
         ],
-      });
+      }).unwrap();
 
-      const token = await loginCustomer(data.email, data.password);
+      const loginResult = await login({ email: data.email, password: data.password }).unwrap();
 
-      localStorage.setItem('userToken', token);
+      // Save token to localStorage
+      saveToken(loginResult.access_token);
+
+      // Get user data
+      const meResp = await getMe(loginResult.access_token).unwrap();
+
+      // Update Redux state
+      dispatch(
+        setAuth({
+          accessToken: loginResult.access_token,
+          email: meResp.email,
+        }),
+      );
 
       enqueueSnackbar('Successful Registration!', { variant: 'success' });
-      // TODO redirect here
-      // navigate('/main');
+      navigate(Paths.HOME);
     } catch (error) {
       if (error instanceof CustomError) {
         if (error.status === ResponseCodes.CONFLICT) {

@@ -1,4 +1,4 @@
 export enum AuthViews {
-  login = 'login',
-  registration = 'registration',
+  LOGIN = 'LOGIN',
+  REGISTRATION = 'REGISTRATION',
 }

@@ -1,15 +1,16 @@
+import type { AuthViews } from '../../../../types/authViews';
+import type { redirectOptions } from '../../../../types/redirectOptions';
 import { Paths } from '../../../../types/paths';
 
-export const redirectionConfig = {
-  login: {
+export const redirectionConfig: Record<AuthViews, redirectOptions> = {
+  LOGIN: {
     title: "Don't have account?",
     linkLabel: 'Sign up',
     url: Paths.REGISTRATION,
   },
-  registration: {
-    //todo: implement here config for registration page
-    title: 'title',
-    linkLabel: 'label',
-    url: 'url',
+  REGISTRATION: {
+    title: 'Already have account?',
+    linkLabel: 'Log in',
+    url: Paths.AUTH,
   },
 };

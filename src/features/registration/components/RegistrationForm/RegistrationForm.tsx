@@ -102,7 +102,7 @@ export default function RegistrationForm() {
       data={formData}
       onSubmit={handleSubmit(onSubmit)}
       disableButton={disableButton}
-      view={AuthViews.registration}
+      view={AuthViews.REGISTRATION}
     >
       {fieldsConfig.map(({ section, fields }) => (
         <Fragment key={section}>

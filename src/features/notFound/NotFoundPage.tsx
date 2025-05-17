@@ -1,33 +1,46 @@
-import { Box, Button, Typography } from '@mui/material';
-import { Link } from 'react-router';
+import { Container, Box, Link, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router';
+import OopsBox from './components/OopsBox';
+import { NotFoundConstants } from './constants.ts';
 
 export default function NotFoundPage() {
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      gap="20px"
+    <Container
+      sx={{
+        paddingX: {
+          xs: '16px',
+          sm: '100px',
+          md: '150px',
+        },
+        paddingY: {
+          xs: '30px',
+          sm: '60px',
+        },
+      }}
     >
-      <Typography variant="h2" gutterBottom>
-        404
-      </Typography>
-      <Typography variant="body1" gutterBottom>
-        Page not found
-      </Typography>
-      <Button
-        component={Link}
-        to="/"
-        color="primary"
-        variant="contained"
-        sx={{
-          minWidth: '180px',
-          textTransform: 'none',
-        }}
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        gap="1rem"
       >
-        Go to the main page
-      </Button>
-    </Box>
+        <OopsBox />
+        <Typography component="h3" variant="h6" textAlign="center">
+          {NotFoundConstants.mainMessage}
+        </Typography>
+        <Link
+          component={RouterLink}
+          variant="body2"
+          to="/"
+          color="primary"
+          sx={{
+            textDecoration: 'underline',
+          }}
+        >
+          {NotFoundConstants.linkLabel}
+        </Link>
+      </Box>
+    </Container>
   );
 }

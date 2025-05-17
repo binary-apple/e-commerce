@@ -6,7 +6,7 @@ import classes from './whyWeCareSection.module.scss';
 
 export default function WhyWeCareSection() {
   return (
-    <Box component="section" className={classes.section}>
+    <Box component="section" className={classes.section} id="why-we-care">
       <Box
         component="div"
         sx={{

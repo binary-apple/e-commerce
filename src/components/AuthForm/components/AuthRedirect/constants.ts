@@ -9,8 +9,8 @@ export const redirectionConfig: Record<AuthViews, redirectOptions> = {
     url: Paths.REGISTRATION,
   },
   REGISTRATION: {
-    title: 'Do you already have account?',
-    linkLabel: 'Sign in',
+    title: 'Already have account?',
+    linkLabel: 'Log in',
     url: Paths.AUTH,
   },
 };

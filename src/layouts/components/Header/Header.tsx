@@ -16,13 +16,31 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { navItems, customIconHoverOpacity } from './constants';
 import classes from './Header.module.scss';
 import { Paths } from '../../../types/paths';
-import { NavLink } from 'react-router';
-
-// TODO: get isAuthenticated from localStorage or state
-const isAuthenticated = false;
+import { NavLink, useNavigate } from 'react-router';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from '../../../store/store';
+import { logout } from '../../../store/slices/authSlice';
+import { useSnackbar } from 'notistack';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const userEmail = useSelector((state: RootState) => state.auth.email);
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // TODO Clear token from localStorage
+    // const { clearAuthTokenLS } = useAuth();
+    // clearAuthTokenLS();
+
+    dispatch(logout());
+
+    enqueueSnackbar('Logged out successfully', { variant: 'success' });
+
+    navigate(Paths.AUTH);
+  };
 
   const handleDrawerToggle = () => {
     setMobileMenuOpen((previousState) => !previousState);
@@ -42,11 +60,23 @@ export default function Header() {
       <Divider />
       <List>
         {isAuthenticated && (
-          <ListItem disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary="Log out" />
-            </ListItemButton>
-          </ListItem>
+          <>
+            <ListItem disablePadding>
+              <ListItemText
+                sx={{ textAlign: 'center', padding: '8px' }}
+                slotProps={{
+                  primary: { className: classes['user-info'] },
+                }}
+              >
+                {userEmail}
+              </ListItemText>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleLogout} sx={{ textAlign: 'center' }}>
+                <ListItemText primary="Log out" />
+              </ListItemButton>
+            </ListItem>
+          </>
         )}
         {!isAuthenticated && (
           <>
@@ -122,32 +152,46 @@ export default function Header() {
               ))}
             </Stack>
             <Stack direction="row" spacing={4}>
-              <Button
-                component={NavLink}
-                to={Paths.AUTH}
-                variant="outlined"
-                sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
-              >
-                Log in
-              </Button>
-              <Button
-                component={NavLink}
-                to={Paths.REGISTRATION}
-                variant="outlined"
-                sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
-              >
-                Sign up
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{
-                  color: 'secondary.contrastText',
-                  borderColor: 'secondary.contrastText',
-                  display: 'none',
-                }}
-              >
-                Log out
-              </Button>
+              {isAuthenticated ? (
+                <>
+                  <Typography
+                    sx={{
+                      color: 'secondary.contrastText',
+                      alignSelf: 'center',
+                      marginRight: 2,
+                    }}
+                    className={classes['user-info']}
+                  >
+                    {userEmail}
+                  </Typography>
+                  <Button
+                    onClick={handleLogout}
+                    variant="outlined"
+                    sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
+                  >
+                    Log out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    component={NavLink}
+                    to={Paths.AUTH}
+                    variant="outlined"
+                    sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
+                  >
+                    Log in
+                  </Button>
+                  <Button
+                    component={NavLink}
+                    to={Paths.REGISTRATION}
+                    variant="outlined"
+                    sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
+                  >
+                    Sign up
+                  </Button>
+                </>
+              )}
             </Stack>
           </Box>
         </Stack>

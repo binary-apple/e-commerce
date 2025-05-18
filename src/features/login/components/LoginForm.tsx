@@ -5,19 +5,19 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from '../../../utils/validationSchema';
 import { AuthForm } from '../../../components/AuthForm/AuthForm';
 import { TextInput } from '../../../components/TextInput/TextInput';
+import { useLoginMutation, useLazyGetMeQuery } from '../../../api/authApi';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '../../../store/slices/authSlice';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router';
+import { Paths } from '../../../types/paths';
+import type { LoginData } from '../../../types/form';
 import { AuthViews } from '../../../types/authViews';
 
 const defaultValues = {
   email: '',
   password: '',
 };
-
-const onSubmit = () => {
-  //TODO
-};
-// const onSubmit = (data: LoginData) => {
-//   console.log('valid form:', data);
-// };
 
 export default function LoginForm() {
   const {
@@ -30,7 +30,44 @@ export default function LoginForm() {
     mode: 'onChange',
   });
 
-  const disableButton = !isValid || isSubmitting;
+  const [login, { isLoading }] = useLoginMutation();
+  const [getMe] = useLazyGetMeQuery();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: LoginData) => {
+    try {
+      const loginResult = await login({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+
+      // TODO Save token to localStorage
+      // const { saveAuthToken } = useAuth();
+      // saveAuthToken(loginResult.access_token);
+
+      const meResp = await getMe(loginResult.access_token).unwrap();
+
+      dispatch(
+        setAuth({
+          accessToken: loginResult.access_token,
+          email: meResp.email,
+        }),
+      );
+
+      enqueueSnackbar('Login successful!', { variant: 'success' });
+      navigate(Paths.HOME);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+
+      enqueueSnackbar(errorMessage, {
+        variant: 'error',
+      });
+    }
+  };
+
+  const disableButton = !isValid || isSubmitting || isLoading;
 
   return (
     <AuthForm

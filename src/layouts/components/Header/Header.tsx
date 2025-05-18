@@ -153,8 +153,17 @@ export default function Header() {
                   to={key}
                   color="text.primary"
                   sx={{
+                    '&:hover': {
+                      transition: 'all 0.4s ease-in-out',
+                      color: theme.palette.primary.main,
+                    },
                     '&.active': {
                       position: 'relative',
+                      color: theme.palette.primary.contrastText,
+                      '&:hover': {
+                        transition: 'all 0.4s ease-in-out',
+                        color: theme.palette.text.primary,
+                      },
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -167,7 +176,6 @@ export default function Header() {
                         backgroundSize: 150,
                         zIndex: -1,
                       },
-                      color: theme.palette.primary.contrastText,
                     },
                   }}
                 >

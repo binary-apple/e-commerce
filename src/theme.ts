@@ -61,6 +61,9 @@ const themeOptions: ThemeOptions = {
         outlined: {
           lineHeight: '2.125rem',
           borderWidth: '2px',
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+          },
         },
       },
     },

@@ -57,10 +57,18 @@ const themeOptions: ThemeOptions = {
           borderRadius: '190px',
           padding: '0.75rem 2rem',
           textTransform: 'none',
+          '&:hover': {
+            backgroundColor: '#ed5c01',
+            transition: 'all 0.3s ease-in-out',
+          },
         },
         outlined: {
           lineHeight: '2.125rem',
           borderWidth: '2px',
+          '&:hover': {
+            color: '#224453',
+            transition: 'all 0.3s ease-in-out',
+          },
         },
       },
     },

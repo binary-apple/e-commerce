@@ -20,7 +20,6 @@ import { NavLink, useNavigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import { logout } from '../../../store/slices/authSlice';
-import { useAuth } from '../../../hooks/useAuth';
 import { useSnackbar } from 'notistack';
 
 export default function Header() {
@@ -28,24 +27,20 @@ export default function Header() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const userEmail = useSelector((state: RootState) => state.auth.email);
   const dispatch = useDispatch();
-  const { clearToken } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear token from localStorage
-    clearToken();
+    // TODO Clear token from localStorage
+    // const { clearAuthTokenLS } = useAuth();
+    // clearAuthTokenLS();
 
-    // Update Redux state
     dispatch(logout());
 
-    // Show success message
     enqueueSnackbar('Logged out successfully', { variant: 'success' });
 
-    // Navigate to home page
     navigate(Paths.AUTH);
 
-    // Close mobile menu if open
     if (mobileMenuOpen) {
       setMobileMenuOpen(false);
     }

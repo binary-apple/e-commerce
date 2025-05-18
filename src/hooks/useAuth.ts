@@ -1,17 +1,23 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { logout, setAuth } from '../store/slices/authSlice';
-import { useLazyGetMeQuery } from '../api/auth';
+import { useLazyGetMeQuery } from '../api/authApi';
+
+// TODO Future for Sprint 3 (for restore User session)
 
 const AUTH_TOKEN_KEY = 'auth_token';
 
 // Helper functions for auth management
-const saveToken = (token: string): void => {
+export const saveAuthTokenToLS = (token: string): void => {
   localStorage.setItem(AUTH_TOKEN_KEY, token);
 };
 
-const clearToken = (): void => {
+export const clearAuthTokenLS = (): void => {
   localStorage.removeItem(AUTH_TOKEN_KEY);
+};
+
+export const getAuthTokenFromLS = (): string | null => {
+  return localStorage.getItem(AUTH_TOKEN_KEY);
 };
 
 export const useAuth = () => {
@@ -21,20 +27,17 @@ export const useAuth = () => {
   useEffect(() => {
     async function checkSession() {
       try {
-        // Check if there's a token in localStorage
-        const token = localStorage.getItem(AUTH_TOKEN_KEY);
+        const token = getAuthTokenFromLS();
 
         if (!token) {
           dispatch(logout());
           return;
         }
 
-        // Fetch user data with the token
         const meResp = await getMe(token).unwrap();
         dispatch(setAuth({ accessToken: token, email: meResp.email }));
-      } catch (error) {
-        console.error('Session restore error:', error);
-        clearToken();
+      } catch {
+        clearAuthTokenLS();
         dispatch(logout());
       }
     }
@@ -42,5 +45,5 @@ export const useAuth = () => {
     checkSession();
   }, [dispatch, getMe]);
 
-  return { saveToken, clearToken };
+  return { saveAuthTokenToLS, clearAuthTokenLS };
 };

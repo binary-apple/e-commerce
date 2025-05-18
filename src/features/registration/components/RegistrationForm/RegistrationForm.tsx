@@ -9,18 +9,15 @@ import { registrationSchema } from '../../../../utils/validationSchema';
 import { DateInput } from '../../../../components/DateInput/DateInput';
 import { SelectInput } from '../../../../components/SelectInput/SelectInput';
 import { useEffect, useRef } from 'react';
-// import { createCustomer } from '../../../../api/customers';
-// import { loginCustomer } from '../../../../api/auth';
 import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
 import { ResponseCodes } from '../../../../api/constants';
 import { CustomError } from '../../../../utils/CustomError';
 import { useNavigate } from 'react-router';
 import { Paths } from '../../../../types/paths';
-import { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } from '../../../../api/auth';
+import { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } from '../../../../api/authApi';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../../../store/slices/authSlice';
-import { useAuth } from '../../../../hooks/useAuth';
 
 const defaultValues = {
   email: '',
@@ -54,7 +51,6 @@ export default function RegistrationForm() {
   const [register] = useRegisterMutation();
   const [login] = useLoginMutation();
   const [getMe] = useLazyGetMeQuery();
-  const { saveToken } = useAuth();
 
   useEffect(() => {
     if (selectedCountry && hasSelectedCountry.current) {
@@ -86,13 +82,12 @@ export default function RegistrationForm() {
 
       const loginResult = await login({ email: data.email, password: data.password }).unwrap();
 
-      // Save token to localStorage
-      saveToken(loginResult.access_token);
+      // TODO Save token to localStorage
+      // const { saveAuthTokenToLS } = useAuth();
+      // saveAuthTokenToLS(loginResult.access_token);
 
-      // Get user data
       const meResp = await getMe(loginResult.access_token).unwrap();
 
-      // Update Redux state
       dispatch(
         setAuth({
           accessToken: loginResult.access_token,

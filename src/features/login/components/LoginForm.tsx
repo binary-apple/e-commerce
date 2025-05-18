@@ -5,13 +5,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { loginSchema } from '../../../utils/validationSchema';
 import { AuthForm } from '../../../components/AuthForm/AuthForm';
 import { TextInput } from '../../../components/TextInput/TextInput';
-import { useLoginMutation, useLazyGetMeQuery } from '../../../api/auth';
+import { useLoginMutation, useLazyGetMeQuery } from '../../../api/authApi';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../../store/slices/authSlice';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router';
 import { Paths } from '../../../types/paths';
-import { useAuth } from '../../../hooks/useAuth';
 import type { LoginData } from '../../../types/form';
 
 const defaultValues = {
@@ -35,23 +34,20 @@ export default function LoginForm() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const { saveToken } = useAuth();
 
   const onSubmit = async (data: LoginData) => {
     try {
-      // Login the user
       const loginResult = await login({
         email: data.email,
         password: data.password,
       }).unwrap();
 
-      // Save token to localStorage
-      saveToken(loginResult.access_token);
+      // TODO Save token to localStorage
+      // const { saveAuthToken } = useAuth();
+      // saveAuthToken(loginResult.access_token);
 
-      // Get user data
       const meResp = await getMe(loginResult.access_token).unwrap();
 
-      // Update Redux state
       dispatch(
         setAuth({
           accessToken: loginResult.access_token,
@@ -62,8 +58,9 @@ export default function LoginForm() {
       enqueueSnackbar('Login successful!', { variant: 'success' });
       navigate(Paths.HOME);
     } catch (error) {
-      console.error('Login error:', error);
-      enqueueSnackbar('Login failed. Please check your credentials and try again.', {
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+
+      enqueueSnackbar(errorMessage, {
         variant: 'error',
       });
     }

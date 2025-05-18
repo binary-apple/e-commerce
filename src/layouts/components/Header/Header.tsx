@@ -40,10 +40,6 @@ export default function Header() {
     enqueueSnackbar('Logged out successfully', { variant: 'success' });
 
     navigate(Paths.AUTH);
-
-    if (mobileMenuOpen) {
-      setMobileMenuOpen(false);
-    }
   };
 
   const handleDrawerToggle = () => {

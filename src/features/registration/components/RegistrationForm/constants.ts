@@ -17,7 +17,7 @@ export const fieldsConfig: FieldSection[] = [
     ],
   },
   {
-    section: 'Address',
+    section: 'Shipping Address',
     fields: [
       { id: 'street', label: 'Street' },
       { id: 'city', label: 'City' },

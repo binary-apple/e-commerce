@@ -66,7 +66,14 @@ export default function Header() {
         {isAuthenticated && (
           <>
             <ListItem disablePadding>
-              <ListItemText sx={{ textAlign: 'center', padding: '8px' }}>{userEmail}</ListItemText>
+              <ListItemText
+                sx={{ textAlign: 'center', padding: '8px' }}
+                slotProps={{
+                  primary: { className: classes['user-info'] },
+                }}
+              >
+                {userEmail}
+              </ListItemText>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton onClick={handleLogout} sx={{ textAlign: 'center' }}>
@@ -157,6 +164,7 @@ export default function Header() {
                       alignSelf: 'center',
                       marginRight: 2,
                     }}
+                    className={classes['user-info']}
                   >
                     {userEmail}
                   </Typography>

@@ -18,6 +18,7 @@ import { Paths } from '../../../../types/paths';
 import { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } from '../../../../api/authApi';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../../../store/slices/authSlice';
+import { AuthViews } from '../../../../types/authViews';
 
 const defaultValues = {
   email: '',
@@ -115,7 +116,12 @@ export default function RegistrationForm() {
   };
 
   return (
-    <AuthForm data={formData} onSubmit={handleSubmit(onSubmit)} disableButton={disableButton}>
+    <AuthForm
+      data={formData}
+      onSubmit={handleSubmit(onSubmit)}
+      disableButton={disableButton}
+      view={AuthViews.REGISTRATION}
+    >
       {fieldsConfig.map(({ section, fields }) => (
         <Fragment key={section}>
           <Grid size={{ xs: 12 }}>

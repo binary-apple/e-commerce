@@ -12,6 +12,7 @@ import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router';
 import { Paths } from '../../../types/paths';
 import type { LoginData } from '../../../types/form';
+import { AuthViews } from '../../../types/authViews';
 
 const defaultValues = {
   email: '',
@@ -69,7 +70,12 @@ export default function LoginForm() {
   const disableButton = !isValid || isSubmitting || isLoading;
 
   return (
-    <AuthForm data={formData} onSubmit={handleSubmit(onSubmit)} disableButton={disableButton}>
+    <AuthForm
+      data={formData}
+      onSubmit={handleSubmit(onSubmit)}
+      disableButton={disableButton}
+      view={AuthViews.LOGIN}
+    >
       {fields.map(({ id, label, type = 'text' }) => (
         <Grid key={id} size={{ xs: 12 }}>
           <Controller

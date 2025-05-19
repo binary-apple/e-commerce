@@ -10,7 +10,9 @@ import classes from './detailsCard.module.scss';
 
 export default function DetailsCard({ title, imgUrl, text, isBg: bgImg }: DetailsCardProps) {
   return (
-    <Card sx={{ maxWidth: 345, borderRadius: 8, py: 3, px: 1, position: 'relative' }}>
+    <Card
+      sx={{ maxWidth: 345, borderRadius: 8, py: 3, px: 1, position: 'relative', flex: '1 1 360px' }}
+    >
       {bgImg && <Box className={classes['card-background']}></Box>}
       <CardMedia>
         <Avatar alt={`${title} icon`} src={imgUrl} sx={{ width: 111, height: 111 }} />

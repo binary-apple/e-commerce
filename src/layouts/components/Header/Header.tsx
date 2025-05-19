@@ -22,6 +22,8 @@ import type { RootState } from '../../../store/store';
 import { logout } from '../../../store/slices/authSlice';
 import { useSnackbar } from 'notistack';
 import { useAuth } from '../../../hooks/useAuth';
+import { theme } from '../../../theme';
+
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -148,7 +150,36 @@ export default function Header() {
           >
             <Stack direction="row" spacing={5.5}>
               {Object.entries(navItems).map(([key, value], i) => (
-                <Link key={i} component={NavLink} to={key} color="text.primary">
+                <Link
+                  key={i}
+                  component={NavLink}
+                  to={key}
+                  color="text.primary"
+                  sx={{
+                    transition: 'all 0.6s ease-in-out',
+                    '&:hover': {
+                      transition: 'all 0.4s ease-in-out',
+                      color: theme.palette.primary.main,
+                    },
+                    '&.active': {
+                      position: 'relative',
+                      color: theme.palette.primary.contrastText,
+                      cursor: 'default',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: '70%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 150,
+                        height: 60,
+                        background: "url('/svg/active/active-link.svg') center/cover no-repeat",
+                        backgroundSize: 150,
+                        zIndex: -1,
+                      },
+                    },
+                  }}
+                >
                   {value}
                 </Link>
               ))}

@@ -108,6 +108,7 @@ export default function Header() {
         <Stack
           direction="row"
           spacing={{ lg: 23, xs: 8 }}
+          minHeight={62}
           sx={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}
         >
           <Link component={NavLink} to="/">

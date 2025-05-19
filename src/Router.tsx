@@ -8,9 +8,13 @@ import LoginPage from './features/login/LoginPage';
 import MainPage from './features/main/MainPage';
 import { useSelector } from 'react-redux';
 import type { RootState } from './store/store';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function PublicRoute({ children }: { children: ReactNode }) {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const { isAuthenticated, isInitialized } = useSelector((state: RootState) => state.auth);
+  if (!isInitialized) {
+    return <CircularProgress size="3rem" />;
+  }
   if (isAuthenticated) {
     return <Navigate to={Paths.HOME} replace />;
   }
@@ -19,12 +23,6 @@ function PublicRoute({ children }: { children: ReactNode }) {
 }
 
 export default function Router() {
-  const { isInitialized } = useSelector((state: RootState) => state.auth);
-
-  if (!isInitialized) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <>
       <BrowserRouter>

@@ -1,4 +1,4 @@
-import { Divider, Grid } from '@mui/material';
+import { Divider, Grid, Switch, FormControlLabel } from '@mui/material';
 import { AuthForm } from '../../../../components/AuthForm/AuthForm';
 import { fieldsConfig, formData } from './constants';
 import { TextInput } from '../../../../components/TextInput/TextInput';
@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { registrationSchema } from '../../../../utils/validationSchema';
 import { DateInput } from '../../../../components/DateInput/DateInput';
 import { SelectInput } from '../../../../components/SelectInput/SelectInput';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
 import { ResponseCodes } from '../../../../api/constants';
@@ -19,6 +19,7 @@ import { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } from '../../
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../../../store/slices/authSlice';
 import { AuthViews } from '../../../../types/authViews';
+import { useAuth } from '../../../../hooks/useAuth';
 
 const defaultValues = {
   email: '',
@@ -30,9 +31,12 @@ const defaultValues = {
   city: '',
   country: '',
   postalCode: '',
+  defaultShipping: false,
 };
 
 export default function RegistrationForm() {
+  const [defaultShipping, setDefaultShipping] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -52,6 +56,7 @@ export default function RegistrationForm() {
   const [register] = useRegisterMutation();
   const [login] = useLoginMutation();
   const [getMe] = useLazyGetMeQuery();
+  const { saveAuthTokenToLS } = useAuth();
 
   useEffect(() => {
     if (selectedCountry && hasSelectedCountry.current) {
@@ -79,13 +84,12 @@ export default function RegistrationForm() {
             postalCode: data.postalCode,
           },
         ],
+        defaultShippingAddress: defaultShipping ? 0 : undefined,
       }).unwrap();
 
       const loginResult = await login({ email: data.email, password: data.password }).unwrap();
 
-      // TODO Save token to localStorage
-      // const { saveAuthTokenToLS } = useAuth();
-      // saveAuthTokenToLS(loginResult.access_token);
+      saveAuthTokenToLS(loginResult.access_token);
 
       const meResp = await getMe(loginResult.access_token).unwrap();
 
@@ -113,6 +117,10 @@ export default function RegistrationForm() {
         enqueueSnackbar(`Something went wrong... Please try again later.`, { variant: 'error' });
       }
     }
+  };
+
+  const handleDefaultShipping = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDefaultShipping(event.target.checked);
   };
 
   return (
@@ -181,6 +189,21 @@ export default function RegistrationForm() {
               )}
             </Grid>
           ))}
+          {section === 'Shipping Address' && (
+            <Grid size={{ xs: 6 }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    name="defaultShipping"
+                    checked={defaultShipping}
+                    onChange={handleDefaultShipping}
+                    slotProps={{ input: { 'aria-label': 'controlled' } }}
+                  />
+                }
+                label="Set as default shipping address"
+              />
+            </Grid>
+          )}
         </Fragment>
       ))}
     </AuthForm>

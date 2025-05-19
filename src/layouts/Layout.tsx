@@ -7,7 +7,14 @@ export function Layout() {
   return (
     <>
       <Header />
-      <Box component="main" flexGrow={1} display="flex" justifyContent="center" alignItems="center">
+      <Box
+        component="main"
+        flexGrow={1}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Outlet />
       </Box>
       <Footer />

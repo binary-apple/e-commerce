@@ -3,11 +3,8 @@ import { useDispatch } from 'react-redux';
 import { logout, setAuth } from '../store/slices/authSlice';
 import { useLazyGetMeQuery } from '../api/authApi';
 
-// TODO Future for Sprint 3 (for restore User session)
-
 const AUTH_TOKEN_KEY = 'auth_token';
 
-// Helper functions for auth management
 export const saveAuthTokenToLS = (token: string): void => {
   localStorage.setItem(AUTH_TOKEN_KEY, token);
 };

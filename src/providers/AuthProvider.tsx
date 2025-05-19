@@ -1,5 +1,5 @@
 import { useAuth } from '../hooks/useAuth';
-// TODO Future for Sprint 3 (for restore User session)
+
 type AuthProviderProps = {
   children: React.ReactNode;
 };

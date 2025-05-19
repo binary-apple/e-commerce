@@ -7,6 +7,7 @@ export type RegistrationDataApi = {
   lastName: string;
   dateOfBirth: string;
   addresses: AddressApi[];
+  defaultShippingAddress?: number;
 };
 
 export type LoginResponse = {

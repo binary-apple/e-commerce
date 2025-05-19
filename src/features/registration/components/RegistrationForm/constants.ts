@@ -34,4 +34,22 @@ export const fieldsConfig: FieldSection[] = [
       { id: 'postalCode', label: 'Postal code' },
     ],
   },
+  {
+    section: 'Billing Address',
+    fields: [
+      { id: 'streetBill', label: 'Street' },
+      { id: 'cityBill', label: 'City' },
+      {
+        id: 'countryBill',
+        label: 'Country',
+        type: 'select',
+        options: [
+          { value: 'GB', label: 'United Kingdom' },
+          { value: 'DE', label: 'Germany' },
+          { value: 'IE', label: 'Ireland' },
+        ],
+      },
+      { id: 'postalCodeBill', label: 'Postal code' },
+    ],
+  },
 ];

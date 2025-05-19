@@ -2,7 +2,7 @@
   position: relative;
   overflow: clip;
   background: url('../../../../assets/images/LoopBg.svg') top right no-repeat;
-  background-size: contain;
+  background-size: 22%;
 
   @media (width >=900px) {
     background-size: auto;
@@ -11,15 +11,15 @@
 
 .section-wrapper {
   display: flex;
-  align-items: 'center';
-  justify-content: 'space-between';
+  align-items: center;
+  justify-content: space-between;
 
   max-width: 90%;
   margin: auto;
   padding: 28px 0;
 
-  background: url('../../../../assets/images/SpotsBgPrimary.svg') 65% 45% no-repeat;
-  background-size: 32%;
+  background: url('../../../../assets/images/SpotsBgPrimary.svg') 65% 36% no-repeat;
+  background-size: 22%;
 
   &::after {
     content: '';
@@ -51,6 +51,12 @@
     background-size: cover;
   }
 
+  @media (width >=600px) {
+    max-width: 850px;
+    background: url('../../../../assets/images/SpotsBgPrimary.svg') 64% 48% no-repeat;
+    background-size: 30%;
+  }
+
   @media (width >=900px) {
     max-width: 850px;
     background: url('../../../../assets/images/SpotsBgPrimary.svg') 60% 52% no-repeat;
@@ -67,7 +73,7 @@
 
   @media (width >=1200px) {
     max-width: 1108px;
-    background: url('../../../../assets/images/SpotsBgPrimary.svg') 68% 65% no-repeat;
+    background: url('../../../../assets/images/SpotsBgPrimary.svg') 67% 55% no-repeat;
 
     &::after {
       width: calc(50% - 387px);

@@ -4,6 +4,7 @@ import arrowCurly from '../../../../assets/images/ArrowCurly.svg';
 import mainPageDog from '../../../../assets/images/MainPageDog.png';
 import Button from '@mui/material/Button';
 import classes from './HeroSection.module.scss';
+import heroContent from './constants';
 
 export default function HeroSection() {
   return (
@@ -12,12 +13,12 @@ export default function HeroSection() {
         component="div"
         className={classes['section-wrapper']}
         sx={{
-          maxWidth: { lg: '1108px', md: '850px', xs: '360px' },
+          maxWidth: { lg: '1108px', md: '850px', xs: '90%' },
           display: 'flex',
           flexDirection: 'column',
           gap: 2,
           margin: 'auto',
-          py: { lg: 13, md: 8, xs: 1.5 },
+          py: { lg: 13, md: 8, xs: 4 },
         }}
       >
         <Box display="flex" alignItems="center" justifyContent="space-between" gap={1.5}>
@@ -26,8 +27,8 @@ export default function HeroSection() {
               display="flex"
               alignItems="center"
               justifyContent="start"
-              gap={2}
-              sx={{ marginLeft: { md: 3.5, xs: 0.5 }, marginBottom: { md: 3.5, xs: 0.5 } }}
+              gap={1.5}
+              sx={{ marginLeft: { sm: 3.5, xs: 0.5 }, marginBottom: { md: 3.5, xs: 0.5 } }}
             >
               <Box
                 component="img"
@@ -52,13 +53,13 @@ export default function HeroSection() {
                   marginBottom: { md: 3.5, xs: 1 },
                 }}
               >
-                Available in select cities
+                {heroContent.subtitle2}
               </Typography>
             </Box>
             <Typography
               component="h2"
               sx={{
-                fontSize: { lg: 94, md: 56, xs: 26 },
+                fontSize: { lg: 94, md: 56, sm: 38, xs: 24 },
                 color: 'secondary',
                 textTransform: 'uppercase',
                 fontFamily: 'Josefin Sans',
@@ -68,10 +69,10 @@ export default function HeroSection() {
                 lineHeight: 1,
               }}
             >
-              <Box component="span">Small sticker</Box>
+              <Box component="span">{heroContent.title.start}</Box>
               <br />
               <Box component="span" color="primary.main">
-                Big impact
+                {heroContent.title.end}
               </Box>
             </Typography>
             <Typography
@@ -80,7 +81,7 @@ export default function HeroSection() {
               marginBottom={4}
               sx={{ fontSize: { md: 24, xs: 12 } }}
             >
-              Choose a shelter, make a donation, and get unique stickers.
+              {heroContent.subtitle}
             </Typography>
             <Button
               variant="contained"
@@ -89,7 +90,7 @@ export default function HeroSection() {
                 element?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              Learn more
+              {heroContent.buttonLabel}
             </Button>
           </Box>
           <Box
@@ -97,7 +98,7 @@ export default function HeroSection() {
             src={mainPageDog}
             alt="Dog"
             sx={{
-              width: { lg: 396, md: 360, xs: 125 },
+              width: { lg: 396, md: 360, sm: 200, xs: 130 },
               height: 'auto',
             }}
           ></Box>

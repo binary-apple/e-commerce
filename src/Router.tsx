@@ -4,6 +4,7 @@ import { Paths } from './types/paths';
 import RegistrationPage from './features/registration/RegistrationPage';
 import NotFoundPage from './features/notFound/NotFoundPage';
 import LoginPage from './features/login/LoginPage';
+import MainPage from './features/main/MainPage';
 
 export default function Router() {
   return (
@@ -11,7 +12,7 @@ export default function Router() {
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
-            <Route path={Paths.HOME} element={<div>Main Page</div>} />
+            <Route path={Paths.HOME} element={<MainPage />} />
             <Route path={Paths.CATALOG} element={<div>Catalog Page</div>} />
             <Route path={Paths.REGISTRATION} element={<RegistrationPage />} />
             <Route path={Paths.AUTH} element={<LoginPage />} />

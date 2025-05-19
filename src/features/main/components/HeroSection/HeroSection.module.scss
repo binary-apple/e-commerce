@@ -1,0 +1,80 @@
+.section {
+  position: relative;
+  overflow: clip;
+  background: url('../../../../assets/images/LoopBg.svg') top right no-repeat;
+  background-size: contain;
+
+  @media (width >=900px) {
+    background-size: auto;
+  }
+}
+
+.section-wrapper {
+  display: flex;
+  align-items: 'center';
+  justify-content: 'space-between';
+
+  max-width: 90%;
+  margin: auto;
+  padding: 28px 0;
+
+  background: url('../../../../assets/images/SpotsBgPrimary.svg') 65% 45% no-repeat;
+  background-size: 32%;
+
+  &::after {
+    content: '';
+
+    position: absolute;
+    z-index: -1;
+    top: -1px;
+    right: 0;
+
+    width: calc(50% - 320px);
+    height: calc(100% + 2px);
+
+    background-color: var(--mui-palette-secondary-main);
+  }
+
+  &::before {
+    content: '';
+
+    position: absolute;
+    z-index: -1;
+    top: -1px;
+    right: calc(50% - 320px);
+
+    width: 290px;
+    height: calc(100% + 2px);
+
+    background-image: url('../../../../assets/images/HeroBg.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  @media (width >=900px) {
+    max-width: 850px;
+    background: url('../../../../assets/images/SpotsBgPrimary.svg') 60% 52% no-repeat;
+    background-size: auto;
+
+    &::after {
+      width: calc(50% - 343px);
+    }
+
+    &::before {
+      right: calc(50% - 344px);
+    }
+  }
+
+  @media (width >=1200px) {
+    max-width: 1108px;
+    background: url('../../../../assets/images/SpotsBgPrimary.svg') 68% 65% no-repeat;
+
+    &::after {
+      width: calc(50% - 387px);
+    }
+
+    &::before {
+      right: calc(50% - 388px);
+    }
+  }
+}

@@ -59,7 +59,13 @@ export default function LoginForm() {
       enqueueSnackbar('Login successful!', { variant: 'success' });
       navigate(Paths.HOME);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+      let errorMessage = 'An unknown error occurred';
+
+      if (typeof error === 'string') {
+        errorMessage = error;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
 
       enqueueSnackbar(errorMessage, {
         variant: 'error',

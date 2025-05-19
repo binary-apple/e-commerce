@@ -4,6 +4,7 @@ import Router from './Router';
 import { SnackbarProvider } from 'notistack';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import { AuthProvider } from './providers/AuthProvider';
 
 export default function App() {
   return (
@@ -12,7 +13,9 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <SnackbarProvider maxSnack={3}>
             <CssBaseline />
-            <Router />
+            <AuthProvider>
+              <Router />
+            </AuthProvider>
           </SnackbarProvider>
         </ThemeProvider>
       </Provider>

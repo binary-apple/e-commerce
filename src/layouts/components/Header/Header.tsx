@@ -21,6 +21,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import { logout } from '../../../store/slices/authSlice';
 import { useSnackbar } from 'notistack';
+import { useAuth } from '../../../hooks/useAuth';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,11 +30,10 @@ export default function Header() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { clearAuthTokenLS } = useAuth();
 
   const handleLogout = () => {
-    // TODO Clear token from localStorage
-    // const { clearAuthTokenLS } = useAuth();
-    // clearAuthTokenLS();
+    clearAuthTokenLS();
 
     dispatch(logout());
 

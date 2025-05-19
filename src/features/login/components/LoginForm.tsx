@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router';
 import { Paths } from '../../../types/paths';
 import type { LoginData } from '../../../types/form';
 import { AuthViews } from '../../../types/authViews';
+import { useAuth } from '../../../hooks/useAuth';
 
 const defaultValues = {
   email: '',
@@ -35,6 +36,7 @@ export default function LoginForm() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { saveAuthTokenToLS } = useAuth();
 
   const onSubmit = async (data: LoginData) => {
     try {
@@ -43,9 +45,7 @@ export default function LoginForm() {
         password: data.password,
       }).unwrap();
 
-      // TODO Save token to localStorage
-      // const { saveAuthToken } = useAuth();
-      // saveAuthToken(loginResult.access_token);
+      saveAuthTokenToLS(loginResult.access_token);
 
       const meResp = await getMe(loginResult.access_token).unwrap();
 

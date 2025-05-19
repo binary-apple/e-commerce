@@ -19,6 +19,7 @@ import { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } from '../../
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../../../store/slices/authSlice';
 import { AuthViews } from '../../../../types/authViews';
+import { useAuth } from '../../../../hooks/useAuth';
 
 const defaultValues = {
   email: '',
@@ -55,6 +56,7 @@ export default function RegistrationForm() {
   const [register] = useRegisterMutation();
   const [login] = useLoginMutation();
   const [getMe] = useLazyGetMeQuery();
+  const { saveAuthTokenToLS } = useAuth();
 
   useEffect(() => {
     if (selectedCountry && hasSelectedCountry.current) {
@@ -87,9 +89,7 @@ export default function RegistrationForm() {
 
       const loginResult = await login({ email: data.email, password: data.password }).unwrap();
 
-      // TODO Save token to localStorage
-      // const { saveAuthTokenToLS } = useAuth();
-      // saveAuthTokenToLS(loginResult.access_token);
+      saveAuthTokenToLS(loginResult.access_token);
 
       const meResp = await getMe(loginResult.access_token).unwrap();
 

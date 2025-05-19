@@ -21,7 +21,12 @@ export default function WhyWeCareSection() {
         <Title title={title} />
         <Box
           component="div"
-          sx={{ display: 'flex', flexDirection: { md: 'row', xs: 'column' }, gap: 2 }}
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: { md: 'row', xs: 'column' },
+            gap: 2,
+          }}
         >
           {cardsData.map(({ title, imgUrl, text, isBg: bgImg }, i) => (
             <DetailsCard key={i} title={title} imgUrl={imgUrl} text={text} isBg={bgImg} />

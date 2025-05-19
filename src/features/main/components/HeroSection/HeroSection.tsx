@@ -13,12 +13,12 @@ export default function HeroSection() {
         component="div"
         className={classes['section-wrapper']}
         sx={{
-          maxWidth: { lg: '1108px', md: '850px', xs: '360px' },
+          maxWidth: { lg: '1108px', md: '850px', xs: '90%' },
           display: 'flex',
           flexDirection: 'column',
           gap: 2,
           margin: 'auto',
-          py: { lg: 13, md: 8, xs: 1.5 },
+          py: { lg: 13, md: 8, xs: 4 },
         }}
       >
         <Box display="flex" alignItems="center" justifyContent="space-between" gap={1.5}>
@@ -27,8 +27,8 @@ export default function HeroSection() {
               display="flex"
               alignItems="center"
               justifyContent="start"
-              gap={2}
-              sx={{ marginLeft: { md: 3.5, xs: 0.5 }, marginBottom: { md: 3.5, xs: 0.5 } }}
+              gap={1.5}
+              sx={{ marginLeft: { sm: 3.5, xs: 0.5 }, marginBottom: { md: 3.5, xs: 0.5 } }}
             >
               <Box
                 component="img"
@@ -59,7 +59,7 @@ export default function HeroSection() {
             <Typography
               component="h2"
               sx={{
-                fontSize: { lg: 94, md: 56, xs: 26 },
+                fontSize: { lg: 94, md: 56, sm: 38, xs: 24 },
                 color: 'secondary',
                 textTransform: 'uppercase',
                 fontFamily: 'Josefin Sans',
@@ -98,7 +98,7 @@ export default function HeroSection() {
             src={mainPageDog}
             alt="Dog"
             sx={{
-              width: { lg: 396, md: 360, xs: 125 },
+              width: { lg: 396, md: 360, sm: 200, xs: 130 },
               height: 'auto',
             }}
           ></Box>

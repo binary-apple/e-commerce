@@ -1,7 +1,7 @@
 const heroContent = {
   title: { start: 'Small Sticker', end: 'Big Impact' },
-  subtitle: 'Choose a shelter, make a donation, and get unique stickers.',
-  subtitle2: 'Available in select cities',
+  subtitle: 'Every purchase of our awesome stickers donates to a shelter you choose.',
+  subtitle2: 'Available in select countries',
   buttonLabel: 'Learn more',
 };
 

@@ -4,6 +4,7 @@ import arrowCurly from '../../../../assets/images/ArrowCurly.svg';
 import mainPageDog from '../../../../assets/images/MainPageDog.png';
 import Button from '@mui/material/Button';
 import classes from './HeroSection.module.scss';
+import heroContent from './constants';
 
 export default function HeroSection() {
   return (
@@ -52,7 +53,7 @@ export default function HeroSection() {
                   marginBottom: { md: 3.5, xs: 1 },
                 }}
               >
-                Available in select cities
+                {heroContent.subtitle2}
               </Typography>
             </Box>
             <Typography
@@ -68,10 +69,10 @@ export default function HeroSection() {
                 lineHeight: 1,
               }}
             >
-              <Box component="span">Small sticker</Box>
+              <Box component="span">{heroContent.title.start}</Box>
               <br />
               <Box component="span" color="primary.main">
-                Big impact
+                {heroContent.title.end}
               </Box>
             </Typography>
             <Typography
@@ -80,7 +81,7 @@ export default function HeroSection() {
               marginBottom={4}
               sx={{ fontSize: { md: 24, xs: 12 } }}
             >
-              Choose a shelter, make a donation, and get unique stickers.
+              {heroContent.subtitle}
             </Typography>
             <Button
               variant="contained"
@@ -89,7 +90,7 @@ export default function HeroSection() {
                 element?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              Learn more
+              {heroContent.buttonLabel}
             </Button>
           </Box>
           <Box

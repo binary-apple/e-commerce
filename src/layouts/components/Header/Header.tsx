@@ -21,19 +21,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import { logout } from '../../../store/slices/authSlice';
 import { useSnackbar } from 'notistack';
+import { useAuth } from '../../../hooks/useAuth';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const { isAuthenticated, isInitialized } = useSelector((state: RootState) => state.auth);
   const userEmail = useSelector((state: RootState) => state.auth.email);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { clearAuthTokenLS } = useAuth();
 
   const handleLogout = () => {
-    // TODO Clear token from localStorage
-    // const { clearAuthTokenLS } = useAuth();
-    // clearAuthTokenLS();
+    clearAuthTokenLS();
 
     dispatch(logout());
 
@@ -58,45 +58,47 @@ export default function Header() {
         ))}
       </List>
       <Divider />
-      <List>
-        {isAuthenticated && (
-          <>
-            <ListItem disablePadding>
-              <ListItemText
-                sx={{ textAlign: 'center', padding: '8px' }}
-                slotProps={{
-                  primary: { className: classes['user-info'] },
-                }}
-              >
-                {userEmail}
-              </ListItemText>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton onClick={handleLogout} sx={{ textAlign: 'center' }}>
-                <ListItemText primary="Log out" />
-              </ListItemButton>
-            </ListItem>
-          </>
-        )}
-        {!isAuthenticated && (
-          <>
-            <ListItem disablePadding>
-              <ListItemButton component={NavLink} to={Paths.AUTH} sx={{ textAlign: 'center' }}>
-                <ListItemText primary="Log in" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton
-                component={NavLink}
-                to={Paths.REGISTRATION}
-                sx={{ textAlign: 'center' }}
-              >
-                <ListItemText primary="Sign up" />
-              </ListItemButton>
-            </ListItem>
-          </>
-        )}
-      </List>
+      {isInitialized && (
+        <List>
+          {isAuthenticated && (
+            <>
+              <ListItem disablePadding>
+                <ListItemText
+                  sx={{ textAlign: 'center', padding: '8px' }}
+                  slotProps={{
+                    primary: { className: classes['user-info'] },
+                  }}
+                >
+                  {userEmail}
+                </ListItemText>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton onClick={handleLogout} sx={{ textAlign: 'center' }}>
+                  <ListItemText primary="Log out" />
+                </ListItemButton>
+              </ListItem>
+            </>
+          )}
+          {!isAuthenticated && (
+            <>
+              <ListItem disablePadding>
+                <ListItemButton component={NavLink} to={Paths.AUTH} sx={{ textAlign: 'center' }}>
+                  <ListItemText primary="Log in" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton
+                  component={NavLink}
+                  to={Paths.REGISTRATION}
+                  sx={{ textAlign: 'center' }}
+                >
+                  <ListItemText primary="Sign up" />
+                </ListItemButton>
+              </ListItem>
+            </>
+          )}
+        </List>
+      )}
     </Box>
   );
 
@@ -151,48 +153,59 @@ export default function Header() {
                 </Link>
               ))}
             </Stack>
-            <Stack direction="row" spacing={4}>
-              {isAuthenticated ? (
-                <>
-                  <Typography
-                    sx={{
-                      color: 'secondary.contrastText',
-                      alignSelf: 'center',
-                      marginRight: 2,
-                    }}
-                    className={classes['user-info']}
-                  >
-                    {userEmail}
-                  </Typography>
-                  <Button
-                    onClick={handleLogout}
-                    variant="outlined"
-                    sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
-                  >
-                    Log out
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    component={NavLink}
-                    to={Paths.AUTH}
-                    variant="outlined"
-                    sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
-                  >
-                    Log in
-                  </Button>
-                  <Button
-                    component={NavLink}
-                    to={Paths.REGISTRATION}
-                    variant="outlined"
-                    sx={{ color: 'secondary.contrastText', borderColor: 'secondary.contrastText' }}
-                  >
-                    Sign up
-                  </Button>
-                </>
-              )}
-            </Stack>
+            {isInitialized && (
+              <Stack direction="row" spacing={4}>
+                {isAuthenticated ? (
+                  <>
+                    <Typography
+                      sx={{
+                        color: 'secondary.contrastText',
+                        alignSelf: 'center',
+                        marginRight: 2,
+                      }}
+                      className={classes['user-info']}
+                    >
+                      {userEmail}
+                    </Typography>
+                    <Button
+                      onClick={handleLogout}
+                      variant="outlined"
+                      sx={{
+                        color: 'secondary.contrastText',
+                        borderColor: 'secondary.contrastText',
+                      }}
+                    >
+                      Log out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      component={NavLink}
+                      to={Paths.AUTH}
+                      variant="outlined"
+                      sx={{
+                        color: 'secondary.contrastText',
+                        borderColor: 'secondary.contrastText',
+                      }}
+                    >
+                      Log in
+                    </Button>
+                    <Button
+                      component={NavLink}
+                      to={Paths.REGISTRATION}
+                      variant="outlined"
+                      sx={{
+                        color: 'secondary.contrastText',
+                        borderColor: 'secondary.contrastText',
+                      }}
+                    >
+                      Sign up
+                    </Button>
+                  </>
+                )}
+              </Stack>
+            )}
           </Box>
         </Stack>
       </Box>

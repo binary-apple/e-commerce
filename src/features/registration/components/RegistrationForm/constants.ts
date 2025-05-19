@@ -9,7 +9,7 @@ export const fieldsConfig: FieldSection[] = [
   {
     section: 'Personal data',
     fields: [
-      { id: 'email', label: 'Email', type: 'email' },
+      { id: 'email', label: 'Email', type: 'text' },
       { id: 'password', label: 'Password', type: 'password' },
       { id: 'firstName', label: 'First name' },
       { id: 'lastName', label: 'Last name' },

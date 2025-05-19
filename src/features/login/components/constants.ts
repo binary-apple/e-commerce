@@ -6,6 +6,6 @@ export const formData = {
 };
 
 export const fields: LoginFieldProps[] = [
-  { id: 'email', label: 'Email', type: 'email' },
+  { id: 'email', label: 'Email' },
   { id: 'password', label: 'Password', type: 'password' },
 ];

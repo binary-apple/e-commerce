@@ -153,6 +153,7 @@ export default function Header() {
                   to={key}
                   color="text.primary"
                   sx={{
+                    transition: 'all 0.6s ease-in-out',
                     '&:hover': {
                       transition: 'all 0.4s ease-in-out',
                       color: theme.palette.primary.main,
@@ -160,10 +161,7 @@ export default function Header() {
                     '&.active': {
                       position: 'relative',
                       color: theme.palette.primary.contrastText,
-                      '&:hover': {
-                        transition: 'all 0.4s ease-in-out',
-                        color: theme.palette.text.primary,
-                      },
+                      cursor: 'default',
                       '&::before': {
                         content: '""',
                         position: 'absolute',

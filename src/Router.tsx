@@ -19,6 +19,12 @@ function PublicRoute({ children }: { children: ReactNode }) {
 }
 
 export default function Router() {
+  const { isInitialized } = useSelector((state: RootState) => state.auth);
+
+  if (!isInitialized) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <BrowserRouter>

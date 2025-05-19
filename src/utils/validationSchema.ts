@@ -11,13 +11,10 @@ const emailSchema = yup
     (value) => value === value?.trim(),
   )
   .required('Email is required')
-  .matches(
-    /^(([^\s"(),.:;<>@[\\\]]+(\.[^\s"(),.:;<>@[\\\]]+)*)|(".+"))@((\[(?:\d{1,3}\.){3}\d{1,3}])|(([\dA-Za-z-]+\.)+[A-Za-z]{2,}))$/,
-    {
-      message: 'Invalid email format',
-      excludeEmptyString: true,
-    },
-  );
+  .matches(/^[\w%+.-]+@([\dA-Za-z-]+\.)+[A-Za-z]{2,}$/, {
+    message: 'Invalid email format',
+    excludeEmptyString: true,
+  });
 
 const passwordSchema = yup
   .string()

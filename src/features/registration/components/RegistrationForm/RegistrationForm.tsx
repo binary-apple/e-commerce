@@ -12,7 +12,6 @@ import { useEffect, useRef, useState } from 'react';
 import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
 import { ResponseCodes } from '../../../../api/constants';
-import { CustomError } from '../../../../utils/CustomError';
 import { useNavigate } from 'react-router';
 import { Paths } from '../../../../types/paths';
 import { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } from '../../../../api/authApi';
@@ -135,18 +134,26 @@ export default function RegistrationForm() {
       enqueueSnackbar('Successful Registration!', { variant: 'success' });
       navigate(Paths.HOME);
     } catch (error) {
-      if (error instanceof CustomError) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'status' in error &&
+        'data' in error &&
+        typeof error.data === 'string'
+      ) {
         if (error.status === ResponseCodes.CONFLICT) {
-          enqueueSnackbar(`${error.message} Please log in or use another email address.`, {
+          enqueueSnackbar(`${error.data} Please log in or use another email address.`, {
             variant: 'error',
           });
         } else {
-          enqueueSnackbar(`Registration failed! ${error.message}`, {
+          enqueueSnackbar(`Registration failed! ${error.data}`, {
             variant: 'error',
           });
         }
       } else {
-        enqueueSnackbar(`Something went wrong... Please try again later.`, { variant: 'error' });
+        enqueueSnackbar('Something went wrong... Please try again later.', {
+          variant: 'error',
+        });
       }
     }
   };

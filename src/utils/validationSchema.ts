@@ -5,7 +5,11 @@ const PASSWORD_LENGTH = 8;
 
 const emailSchema = yup
   .string()
-  .trim('Leading or trailing spaces are not allowed')
+  .test(
+    'no-trim-spaces',
+    'Email must not contain leading or trailing whitespace.',
+    (value) => value === value?.trim(),
+  )
   .required('Email is required')
   .matches(
     /^(([^\s"(),.:;<>@[\\\]]+(\.[^\s"(),.:;<>@[\\\]]+)*)|(".+"))@((\[(?:\d{1,3}\.){3}\d{1,3}])|(([\dA-Za-z-]+\.)+[A-Za-z]{2,}))$/,

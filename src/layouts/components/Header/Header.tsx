@@ -24,7 +24,6 @@ import { useSnackbar } from 'notistack';
 import { useAuth } from '../../../hooks/useAuth';
 import { theme } from '../../../theme';
 
-
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, isInitialized } = useSelector((state: RootState) => state.auth);

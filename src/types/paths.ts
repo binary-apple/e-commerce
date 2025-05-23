@@ -4,6 +4,6 @@ export enum Paths {
   REGISTRATION = '/registration',
   CATALOG = '/catalog',
   ABOUT = '/about',
-  NOT_FOUND = '*',
   PROFILE = '/profile',
+  NOT_FOUND = '*',
 }

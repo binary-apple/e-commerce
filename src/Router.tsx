@@ -9,6 +9,7 @@ import MainPage from './features/main/MainPage';
 import { useSelector } from 'react-redux';
 import type { RootState } from './store/store';
 import CircularProgress from '@mui/material/CircularProgress';
+import CatalogPage from './features/catalog/CatalogPage';
 
 function PublicRoute({ children }: { children: ReactNode }) {
   const { isAuthenticated, isInitialized } = useSelector((state: RootState) => state.auth);
@@ -29,7 +30,7 @@ export default function Router() {
         <Routes>
           <Route element={<Layout />}>
             <Route path={Paths.HOME} element={<MainPage />} />
-            <Route path={Paths.CATALOG} element={<div>Catalog Page</div>} />
+            <Route path={Paths.CATALOG} element={<CatalogPage />} />
             <Route path={Paths.ABOUT} element={<div>About Page</div>} />
 
             <Route

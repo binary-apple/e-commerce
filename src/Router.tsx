@@ -9,13 +9,25 @@ import MainPage from './features/main/MainPage';
 import { useSelector } from 'react-redux';
 import type { RootState } from './store/store';
 import CircularProgress from '@mui/material/CircularProgress';
+import ProfilePage from './features/profile/ProfilePage';
 
-function PublicRoute({ children }: { children: ReactNode }) {
+type AuthGuardProps = {
+  children: ReactNode;
+  isPrivateRoute: boolean;
+};
+
+function AuthGuard({ children, isPrivateRoute }: AuthGuardProps) {
   const { isAuthenticated, isInitialized } = useSelector((state: RootState) => state.auth);
+
   if (!isInitialized) {
     return <CircularProgress size="3rem" />;
   }
-  if (isAuthenticated) {
+
+  if (isPrivateRoute && !isAuthenticated) {
+    return <Navigate to={Paths.AUTH} replace />;
+  }
+
+  if (!isPrivateRoute && isAuthenticated) {
     return <Navigate to={Paths.HOME} replace />;
   }
 
@@ -35,17 +47,26 @@ export default function Router() {
             <Route
               path={Paths.REGISTRATION}
               element={
-                <PublicRoute>
+                <AuthGuard isPrivateRoute={false}>
                   <RegistrationPage />
-                </PublicRoute>
+                </AuthGuard>
               }
             />
             <Route
               path={Paths.AUTH}
               element={
-                <PublicRoute>
+                <AuthGuard isPrivateRoute={false}>
                   <LoginPage />
-                </PublicRoute>
+                </AuthGuard>
+              }
+            />
+
+            <Route
+              path={Paths.PROFILE}
+              element={
+                <AuthGuard isPrivateRoute={true}>
+                  <ProfilePage />
+                </AuthGuard>
               }
             />
 

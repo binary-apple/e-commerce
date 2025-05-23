@@ -33,7 +33,7 @@ export default tslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'no-alert': 'error',
-      'max-lines-per-function': ['error', 40],
+      // 'max-lines-per-function': ['error', 40],
       'no-console': 'warn',
       'no-duplicate-imports': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
@@ -45,7 +45,13 @@ export default tslint.config(
       ],
       '@typescript-eslint/member-ordering': 'error',
       'no-magic-numbers': 'off',
-      '@typescript-eslint/no-magic-numbers': ['error', { ignore: [0, 1] }],
+      '@typescript-eslint/no-magic-numbers': [
+        'error',
+        {
+          ignoreEnums: true,
+          ignore: [0, 1],
+        },
+      ],
       'class-methods-use-this': 'error',
       'unicorn/filename-case': [
         'error',

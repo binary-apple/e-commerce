@@ -1,7 +1,7 @@
-export async function getClientToken(): Promise<string> {
+export async function getClientToken(scope: string): Promise<string> {
   const body = new URLSearchParams();
   body.append('grant_type', 'client_credentials');
-  body.append('scope', `manage_customers:${import.meta.env.VITE_CTP_PROJECT_KEY}`);
+  body.append('scope', `${scope}:${import.meta.env.VITE_CTP_PROJECT_KEY}`);
 
   const result = await fetch(`${import.meta.env.VITE_CTP_AUTH_URL}/oauth/token`, {
     method: 'POST',

@@ -3,4 +3,6 @@ export type ProductConfig = {
   price: number;
   image: string;
   description: string;
+  place: string;
+  color: 'color-cheap' | 'color-average' | 'color-expensive';
 };

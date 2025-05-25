@@ -11,6 +11,7 @@ import type { RootState } from './store/store';
 import CircularProgress from '@mui/material/CircularProgress';
 import ProfilePage from './features/profile/ProfilePage';
 import Catalog from './features/catalog/Catalog';
+import ProductPage from './features/product/ProductPage';
 
 type AuthGuardProps = {
   children: ReactNode;
@@ -43,6 +44,7 @@ export default function Router() {
           <Route element={<Layout />}>
             <Route path={Paths.HOME} element={<MainPage />} />
             <Route path={Paths.CATALOG} element={<Catalog />} />
+            <Route path={Paths.PRODUCT} element={<ProductPage />} />
             <Route path={Paths.ABOUT} element={<div>About Page</div>} />
 
             <Route

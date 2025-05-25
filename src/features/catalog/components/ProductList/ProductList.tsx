@@ -2,6 +2,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useGetProductsQuery } from '../../../../api/productsApi';
 import Box from '@mui/material/Box';
 import type { Product } from '../../../../types/productsApi';
+import { NavLink } from 'react-router';
 
 const CENTS_IN_EURO = 100;
 
@@ -19,7 +20,15 @@ export default function ProductList() {
         // TODO: refactor
         const price = product.masterData.staged.masterVariant.prices[0].value;
         return (
-          <Box key={product.id} display="flex" flexDirection="column" maxWidth="300px">
+          <Box
+            key={product.id}
+            component={NavLink}
+            to={`/product/${product.id}`}
+            display="flex"
+            flexDirection="column"
+            maxWidth="300px"
+            sx={{ textDecoration: 'none', color: 'text.primary' }}
+          >
             <h4>{product.masterData.staged.name['en-GB'] || ''}</h4>
             <div>{product.masterData.staged.description['en-GB'] || ''}</div>
             <div>{`${(price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits)}€`}</div>

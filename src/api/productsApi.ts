@@ -11,15 +11,16 @@ export const productsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `https://api.europe-west1.gcp.commercetools.com/${projectKey}`,
     prepareHeaders: async (headers) => {
-      const assessToken = await getClientToken('view_products');
-      headers.set('Authorization', `Bearer ${assessToken}`);
+      // TODO: get token only once in main
+      const accessToken = await getClientToken('view_products');
+      headers.set('Authorization', `Bearer ${accessToken}`);
       return headers;
     },
   }),
   endpoints: (build) => ({
     getProducts: build.query<ProductsResponse, { limit?: number; offset?: number }>({
       query: ({ limit = PRODUCTS_LIMIT, offset = OFFSET }) =>
-        `/products?limit=${limit}&offset=${offset}`,
+        `/product-projections?limit=${limit}&offset=${offset}`,
     }),
   }),
 });

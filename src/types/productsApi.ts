@@ -12,22 +12,24 @@ export type ProductsResponse = {
 
 export type Product = {
   id: string;
+  version: number;
+  name: LocalizedString;
+  description: LocalizedString;
+  slug: LocalizedString;
+  metaTitle: LocalizedString;
+  masterVariant: MasterVariant;
+  hasStagedChanges: boolean;
+  published: boolean;
   key: string;
-  masterData: MasterData;
-};
-
-export type MasterData = {
-  staged: {
-    name: LocalizedString;
-    description: LocalizedString;
-    slug: LocalizedString;
-    masterVariant: MasterVariant;
-  };
 };
 
 export type MasterVariant = {
+  id: number;
+  sku: string;
+  key: string;
   images: Image[];
   prices: Price[];
+  attributes: Attribute[];
 };
 
 export type Image = {
@@ -45,4 +47,19 @@ export type Price = {
     fractionDigits: number;
     type: string;
   };
+};
+
+export type Attribute = {
+  name: AttributeName;
+  value: AttributeValue;
+};
+
+export enum AttributeName {
+  Color = 'color',
+  PetType = 'pet-type',
+}
+
+export type AttributeValue = {
+  key: string;
+  label: string;
 };

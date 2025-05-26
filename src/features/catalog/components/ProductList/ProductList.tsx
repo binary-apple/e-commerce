@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import type { Product } from '../../../../types/productsApi';
 import Grid from '@mui/material/Grid';
 import type { ProductConfig } from '../../../../types/product.ts';
-import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
+import ProductCard from '../../../product/ProductCard.tsx';
 
 const CENTS_IN_EURO = 100;
 

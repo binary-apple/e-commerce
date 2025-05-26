@@ -1,13 +1,20 @@
-import type { ProductConfig } from '../../types/product';
-import ProductCard from '../../components/ProductCard/ProductCard';
-import { products } from './constants.ts';
+import Box from '@mui/material/Box';
+import ProductList from './components/ProductList/ProductList';
 
-export default function CatalogPage() {
+export default function Catalog() {
   return (
-    <>
-      {products.map((product: ProductConfig, index: number) => (
-        <ProductCard key={index} product={product} />
-      ))}
-    </>
+    <Box
+      component="div"
+      sx={{
+        maxWidth: { lg: '1108px', md: '850px', xs: '90%' },
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        margin: 'auto',
+        py: { lg: 8, md: 6, xs: 4 },
+      }}
+    >
+      <ProductList />
+    </Box>
   );
 }

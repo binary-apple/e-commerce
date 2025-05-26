@@ -1,0 +1,43 @@
+.card {
+  cursor: pointer;
+  max-width: 255px;
+  padding: 8px;
+
+  &-sticker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 237px;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: space-between;
+
+    padding-bottom: 0;
+  }
+
+  &-text-description {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+
+    text-overflow: ellipsis;
+  }
+
+  &-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0;
+  }
+
+  &-price {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+}

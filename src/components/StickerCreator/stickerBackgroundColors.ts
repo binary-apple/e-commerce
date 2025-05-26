@@ -1,7 +1,7 @@
-import { theme } from '../../theme.ts';
+import type { ProductConfig } from '../../types/product.ts';
 
-export const stickerBackgroundColor = {
-  'color-cheap': theme.palette.warning.main,
-  'color-average': theme.palette.primary.main,
-  'color-expensive': theme.palette.info.main,
+export const stickerBackgroundColor: Record<ProductConfig['color'], string> = {
+  'color-cheap': '#FBBD08',
+  'color-average': '#189cab',
+  'color-expensive': '#ed5c01',
 };

@@ -27,6 +27,7 @@ export default function ProductList() {
               src={product.masterVariant.images[0].url}
               alt={product.masterVariant.images[0].label}
             />
+            <div>{`Color: ${product.masterVariant.attributes.find((attribute) => attribute.name === 'color')?.value.key}`}</div>
           </Box>
         );
       })}

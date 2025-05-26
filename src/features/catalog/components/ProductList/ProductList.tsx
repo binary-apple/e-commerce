@@ -16,16 +16,16 @@ export default function ProductList() {
   return (
     <div className="product-list">
       {data?.results.map((product: Product) => {
-        // TODO: refactor
-        const price = product.masterData.staged.masterVariant.prices[0].value;
+        const price = product.masterVariant.prices[0].value;
+        const formattedPrice = (price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits);
         return (
           <Box key={product.id} display="flex" flexDirection="column" maxWidth="300px">
-            <h4>{product.masterData.staged.name['en-GB'] || ''}</h4>
-            <div>{product.masterData.staged.description['en-GB'] || ''}</div>
-            <div>{`${(price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits)}€`}</div>
+            <h4>{product.name['en-GB'] || ''}</h4>
+            <div>{product.description['en-GB'] || ''}</div>
+            <div>{`${formattedPrice}€`}</div>
             <img
-              src={product.masterData.staged.masterVariant.images[0].url}
-              alt={product.masterData.staged.masterVariant.images[0].label}
+              src={product.masterVariant.images[0].url}
+              alt={product.masterVariant.images[0].label}
             />
           </Box>
         );

@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import ProductList from './components/ProductList/ProductList';
+import CategoryList from './components/CategoryList/CategoryList';
 
 export default function Catalog() {
   return (
@@ -7,14 +8,17 @@ export default function Catalog() {
       component="div"
       sx={{
         maxWidth: { lg: '1108px', md: '850px', xs: '90%' },
-        display: 'flex',
-        flexDirection: 'column',
         gap: 2,
         margin: 'auto',
         py: { lg: 8, md: 6, xs: 4 },
       }}
     >
-      <ProductList />
+      <Box width="100%" display="flex" gap={2}>
+        <Box component="div" minWidth="30%" height="fit-content">
+          <CategoryList />
+        </Box>
+        <ProductList />
+      </Box>
     </Box>
   );
 }

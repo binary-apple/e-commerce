@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { projectKey } from './constants';
 import { getClientToken } from '../services/serviceToken';
-import type { ProductsResponse } from '../types/productsApi';
+import type { CategoriesResponse, ProductsResponse } from '../types/productsApi';
 
 const PRODUCTS_LIMIT = 100;
 const OFFSET = 0;
@@ -22,7 +22,10 @@ export const productsApi = createApi({
       query: ({ limit = PRODUCTS_LIMIT, offset = OFFSET }) =>
         `/product-projections?limit=${limit}&offset=${offset}`,
     }),
+    getAllCategories: build.query<CategoriesResponse, void>({
+      query: () => '/categories',
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = productsApi;
+export const { useGetProductsQuery, useGetAllCategoriesQuery } = productsApi;

@@ -4,8 +4,17 @@ import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import { useState } from 'react';
 
 export default function CategoryList() {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const handleListItemClick = (
+    // event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number,
+  ) => {
+    setSelectedIndex(index);
+  };
+
   const { data, isLoading } = useGetAllCategoriesQuery();
   if (isLoading) {
     return null;
@@ -50,7 +59,12 @@ export default function CategoryList() {
       <List>
         {categories.map((category, id) => {
           return (
-            <ListItemButton key={id} sx={{ py: 0 }}>
+            <ListItemButton
+              key={id}
+              sx={{ py: 0 }}
+              selected={selectedIndex === id}
+              onClick={(/* event */) => handleListItemClick(/* event, */ id)}
+            >
               <ListItemText
                 primary={category.categoryName}
                 sx={{ paddingLeft: `calc(1.5rem * ${category.nestingLevel})` }}

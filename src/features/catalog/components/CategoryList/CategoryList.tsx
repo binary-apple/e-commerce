@@ -1,10 +1,11 @@
 import Paper from '@mui/material/Paper';
-import { useGetAllCategoriesQuery } from '../../../../api/productsApi';
+// import { useGetAllCategoriesQuery } from '../../../../api/productsApi';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useState } from 'react';
+import { useCategories } from '../../../../hooks/useCategories';
 
 export default function CategoryList() {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -15,35 +16,10 @@ export default function CategoryList() {
     setSelectedIndex(index);
   };
 
-  const { data, isLoading } = useGetAllCategoriesQuery();
-  if (isLoading) {
+  const { categories, isLoading, isError } = useCategories();
+  if (isLoading || isError) {
     return null;
   }
-  const categories: { id: string; categoryName: string; nestingLevel: number }[] = [];
-  const map = new Map<
-    string,
-    { name: string; children: { id: string; name: string }[]; parent: string | undefined }
-  >();
-  map.set('root', { name: 'All products', children: [], parent: undefined });
-  data?.results.forEach((category) => {
-    map.set(category.id, {
-      name: category.name['en-GB'],
-      children: [],
-      parent: category.parent ? category.parent?.id : 'root',
-    });
-  });
-  map.forEach((categoryNode, key) => {
-    if (categoryNode.parent) {
-      map.get(categoryNode.parent)?.children.push({ id: key, name: categoryNode.name });
-    }
-  });
-  const treeTraversal = (id: string, currentNestingLevel: number) => {
-    const categoryNode = map.get(id);
-    if (!categoryNode) return;
-    categories.push({ categoryName: categoryNode.name, nestingLevel: currentNestingLevel, id: id });
-    categoryNode.children.forEach((child) => treeTraversal(child.id, currentNestingLevel + 1));
-  };
-  treeTraversal('root', 0);
 
   return (
     <Paper>

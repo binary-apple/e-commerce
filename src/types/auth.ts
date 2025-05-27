@@ -17,3 +17,9 @@ export type LoginResponse = {
   scope: string;
   refresh_token?: string;
 };
+
+export type Customer = {
+  email: string;
+  firstName: string;
+  lastName: string;
+};

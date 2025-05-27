@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
-import { useGetAllCategoriesQuery } from '../api/productsApi';
+import { useMemo, useState } from 'react';
 import type { FlatCategory } from '../types/categories';
 import type { Category } from '../types/productsApi';
+import { useGetAllCategoriesQuery } from '../api/productsApi';
+import { CategoryContext } from '../contexts/CategoryContext';
 
 function flattenCategories(categories: Category[]): FlatCategory[] {
   const flatCategories: { id: string; categoryName: string; nestingLevel: number }[] = [];
@@ -36,16 +37,26 @@ function flattenCategories(categories: Category[]): FlatCategory[] {
   return flatCategories;
 }
 
-export function useCategories() {
+export const CategoryProvider = ({ children }: { children: React.ReactNode }) => {
+  const [selectedIndex, setselectedIndex] = useState<number>(0);
   const { data, isLoading, isError } = useGetAllCategoriesQuery();
+
   const flatCategories = useMemo(() => {
     if (!data) return [];
     return flattenCategories(data.results);
   }, [data]);
 
-  return {
-    categories: flatCategories,
-    isLoading,
-    isError,
-  };
-}
+  return (
+    <CategoryContext.Provider
+      value={{
+        selectedIndex,
+        setselectedIndex,
+        categories: flatCategories,
+        isLoading,
+        isError,
+      }}
+    >
+      {children}
+    </CategoryContext.Provider>
+  );
+};

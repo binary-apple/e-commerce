@@ -1,25 +1,20 @@
 import Paper from '@mui/material/Paper';
-// import { useGetAllCategoriesQuery } from '../../../../api/productsApi';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { useState } from 'react';
-import { useCategories } from '../../../../hooks/useCategories';
+import { useCategory } from '../../../../contexts/CategoryContext';
 
 export default function CategoryList() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const handleListItemClick = (
-    // event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number,
-  ) => {
-    setSelectedIndex(index);
+  const { selectedIndex, setselectedIndex, categories, isLoading, isError } = useCategory();
+  const handleListItemClick = (index: number) => {
+    setselectedIndex(index);
   };
-
-  const { categories, isLoading, isError } = useCategories();
   if (isLoading || isError) {
     return null;
   }
+
+  console.log(categories[selectedIndex]);
 
   return (
     <Paper>
@@ -39,7 +34,7 @@ export default function CategoryList() {
               key={id}
               sx={{ py: 0 }}
               selected={selectedIndex === id}
-              onClick={(/* event */) => handleListItemClick(/* event, */ id)}
+              onClick={() => handleListItemClick(id)}
             >
               <ListItemText
                 primary={category.categoryName}

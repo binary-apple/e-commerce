@@ -1,8 +1,10 @@
 import CircularProgress from '@mui/material/CircularProgress';
-import { useGetProductsQuery } from '../../../../api/productsApi';
-import Box from '@mui/material/Box';
-import type { Product } from '../../../../types/productsApi';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import { useGetProductsQuery } from '../../../../api/productsApi';
+import type { Product } from '../../../../types/productsApi';
+import type { ProductCardConfig } from '../../../../types/product';
+import ProductCard from '../productCard/ProductCard.tsx';
 
 const CENTS_IN_EURO = 100;
 
@@ -19,21 +21,21 @@ export default function ProductList() {
       {data?.results.map((product: Product) => {
         const price = product.masterVariant.prices[0].value;
         const formattedPrice = (price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits);
-        return (
-          <Grid key={product.id} size={3}>
-            {/* TODO: replace the Box below to product card */}
-            <Box display="flex" flexDirection="column">
-              <h4>{product.name['en-GB'] || ''}</h4>
-              <div>{product.description['en-GB'] || ''}</div>
-              <div>{`${formattedPrice}€`}</div>
-              <img
-                src={product.masterVariant.images[0].url}
-                alt={product.masterVariant.images[0].label}
-              />
-              <div>{`Color: ${product.masterVariant.attributes.find((attribute) => attribute.name === 'color')?.value.key}`}</div>
-            </Box>
-          </Grid>
-        );
+
+        const typedProduct: ProductCardConfig = {
+          key: product.key,
+          name: product.name['en-GB'] || '',
+          price: formattedPrice,
+          image: product.masterVariant.images[0].url,
+          description: product.description['en-GB'] || '',
+          color:
+            product.masterVariant.attributes.find((attribute) => attribute.name === 'color')?.value
+              .key || 'color-cheap',
+          place: '',
+          //todo: replace place with country with city!
+        };
+
+        return <ProductCard key={product.id} product={typedProduct} />;
       })}
     </Grid>
   );

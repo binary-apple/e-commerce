@@ -4,7 +4,7 @@ import CategoryList from './components/CategoryList/CategoryList';
 import { CategoryProvider } from '../../providers/CategoriesProvider';
 import CustomBreadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 
-export default function Catalog() {
+export default function CatalogPage() {
   return (
     <CategoryProvider>
       <Box

@@ -73,11 +73,14 @@ export const CategoryProvider = ({ children }: { children: React.ReactNode }) =>
     }
   }
 
+  const selectedCategory = flatCategories[selectedIndex] ?? null;
+
   return (
     <CategoryContext.Provider
       value={{
         selectedIndex,
         setselectedIndex,
+        selectedCategory,
         categories: flatCategories,
         isLoading,
         isError,

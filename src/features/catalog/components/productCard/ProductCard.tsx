@@ -13,6 +13,7 @@ import styles from './ProductCard.module.scss';
 const priceSymbol: string = '€';
 
 const handleAddToCart = (event: React.MouseEvent, product: ProductCardConfig) => {
+  event.preventDefault();
   //todo: implement logic of adding sticker to cart
   event.stopPropagation();
   if (product) return;
@@ -57,6 +58,7 @@ export default function ProductCard({ product }: { product: ProductCardConfig })
           >
             <IconButton
               aria-label="add to cart"
+              className={styles['card-add-to-cart']}
               onClick={(event: React.MouseEvent) => {
                 handleAddToCart(event, product);
               }}

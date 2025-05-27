@@ -2,11 +2,11 @@ import type { ProductCardConfig } from '../../types/product.ts';
 import { theme } from '../../theme.ts';
 import { stickerBackgroundColor } from './stickerBackgroundColors.ts';
 
-const defaultImageSize = 300;
+const DEFAULT_IMAGE_SIZE = 300;
 //todo: if response of image request starts with 4** - fix with static image for this element, maybe use OopsBox
 export default function ShelterSticker({
   product,
-  size = defaultImageSize,
+  size = DEFAULT_IMAGE_SIZE,
 }: {
   product: ProductCardConfig;
   size: number;

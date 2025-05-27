@@ -19,17 +19,7 @@ const handleAddToCart = (event: React.MouseEvent, product: ProductCardConfig) =>
 
 export default function ProductCard({ product }: { product: ProductCardConfig }) {
   return (
-    <Card
-      className={styles.card}
-      sx={{
-        borderRadius: '36px',
-        transition: 'all 0.3s',
-        '&:hover': {
-          transform: 'scale(1.01)',
-          boxShadow: 6,
-        },
-      }}
-    >
+    <Card className={styles.card}>
       <Box className={styles['card-sticker']}>
         <ShelterSticker product={product} size={237} />
       </Box>

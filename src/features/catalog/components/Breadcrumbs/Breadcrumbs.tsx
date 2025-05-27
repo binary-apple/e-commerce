@@ -5,8 +5,14 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 export default function CustomBreadcrumbs() {
-  const { isLoading, isError, currentCategoryChain } = useCategory();
+  const { isLoading, isError, currentCategoryChain, categories, setselectedIndex } = useCategory();
   if (isLoading || isError) return null;
+
+  function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, categoryId: string) {
+    event.preventDefault();
+    setselectedIndex(categories.findIndex((category) => category.id === categoryId));
+  }
+
   return (
     <Box>
       <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ height: '26px' }}>
@@ -16,7 +22,11 @@ export default function CustomBreadcrumbs() {
               <Typography sx={{ fontFamily: 'Josefin Sans' }}>{category.categoryName}</Typography>
             );
           }
-          return <Link>{category.categoryName}</Link>;
+          return (
+            <Link onClick={(event) => handleClick(event, category.id)}>
+              {category.categoryName}
+            </Link>
+          );
         })}
       </Breadcrumbs>
     </Box>

@@ -11,30 +11,30 @@ export default function ShelterSticker({
   product: ProductCardConfig;
   size: number;
 }) {
-  const two = 2;
-  const center = size / two;
-  const borderRadius = 28;
+  const TWO = 2;
+  const CENTER = size / TWO;
+  const BORDER_RADIUS = 28;
 
-  const paddingCoefficient = 0.1;
-  const imageCoefficient = 0.9;
-  const imageOffsetY = 0.75;
-  const textWidthCoefficient = 0.9;
+  const PADDING_COEFFICIENT = 0.1;
+  const IMAGE_COEFFICIENT = 0.9;
+  const IMAGE_OFFSET_Y = 0.75;
+  const TEXT_WIDTH_COEFFICIENT = 0.9;
 
-  const fontCoefficient = 0.08;
-  const textBlockHeightCoefficient = 2.2;
+  const FONT_COEFFICIENT = 0.08;
+  const TEXT_BLOCK_COEFFICIENT = 2.2;
 
-  const stickerPadding = size * paddingCoefficient;
-  const imageHeight = size * imageCoefficient;
+  const stickerPadding = size * PADDING_COEFFICIENT;
+  const imageHeight = size * IMAGE_COEFFICIENT;
 
-  const imageY = size - imageHeight * imageOffsetY;
-  const imageX = center - imageHeight / two;
+  const imageY = size - imageHeight * IMAGE_OFFSET_Y;
+  const imageX = CENTER - imageHeight / TWO;
 
-  const fontSize = size * fontCoefficient;
-  const textBlockWidth = size * textWidthCoefficient;
-  const textBlockHeight = fontSize * textBlockHeightCoefficient;
+  const fontSize = size * FONT_COEFFICIENT;
+  const textBlockWidth = size * TEXT_WIDTH_COEFFICIENT;
+  const textBlockHeight = fontSize * TEXT_BLOCK_COEFFICIENT;
 
   const textY: number = stickerPadding;
-  const textX: number = center - textBlockWidth / two;
+  const textX: number = CENTER - textBlockWidth / TWO;
 
   return (
     <svg
@@ -45,7 +45,7 @@ export default function ShelterSticker({
     >
       <defs>
         <clipPath id="stickerClip">
-          <rect width={size} height={size} rx={borderRadius} ry={borderRadius} />
+          <rect width={size} height={size} rx={BORDER_RADIUS} ry={BORDER_RADIUS} />
         </clipPath>
       </defs>
 
@@ -53,8 +53,8 @@ export default function ShelterSticker({
         <rect
           width={size}
           height={size}
-          rx={borderRadius}
-          ry={borderRadius}
+          rx={BORDER_RADIUS}
+          ry={BORDER_RADIUS}
           fill={stickerBackgroundColor[product.color]}
         />
         <foreignObject x={textX} y={textY} width={textBlockWidth} height={textBlockHeight}>

@@ -14,7 +14,7 @@ const priceSymbol: string = '€';
 const handleAddToCart = (event: React.MouseEvent, product: ProductCardConfig) => {
   //todo: implement logic of adding sticker to cart
   event.stopPropagation();
-  console.log('Added to cart:', product);
+  if (product) return;
 };
 
 export default function ProductCard({ product }: { product: ProductCardConfig }) {

@@ -28,7 +28,7 @@ export default function ProductList() {
               flexDirection="column"
               key={product.id}
               component={NavLink}
-              to={`/product/${product.id}`}
+              to={`/product/${product.key}`}
               sx={{ textDecoration: 'none', color: 'text.primary' }}
             >
               <h4>{product.name['en-GB'] || ''}</h4>

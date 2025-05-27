@@ -3,7 +3,7 @@ export enum Paths {
   AUTH = '/login',
   REGISTRATION = '/registration',
   CATALOG = '/catalog',
-  PRODUCT = '/product/:id',
+  PRODUCT = '/product/:key',
   ABOUT = '/about',
   PROFILE = '/profile',
   NOT_FOUND = '*',

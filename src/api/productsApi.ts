@@ -22,7 +22,10 @@ export const productsApi = createApi({
       query: ({ limit = PRODUCTS_LIMIT, offset = OFFSET }) =>
         `/product-projections?limit=${limit}&offset=${offset}`,
     }),
+    getProductByKey: build.query<ProductsResponse, { key: string }>({
+      query: ({ key }) => `/product-projections/key=${key}`,
+    }),
   }),
 });
 
-export const { useGetProductsQuery } = productsApi;
+export const { useGetProductsQuery, useGetProductByKeyQuery } = productsApi;

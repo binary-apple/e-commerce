@@ -78,6 +78,19 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          padding: 4,
+          color: theme.palette.text.primary,
+          transition: 'all 0.6s',
+          '&:hover': {
+            transition: 'all 0.6s',
+            backgroundColor: theme.palette.text.secondary,
+          },
+        }),
+      },
+    },
   },
 };
 

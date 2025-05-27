@@ -1,5 +1,6 @@
-div.card {
+a.card {
   border-radius: 36px;
+  text-decoration: none;
   transition: all 0.4s;
 }
 
@@ -7,6 +8,7 @@ div.card {
   cursor: pointer;
   max-width: 255px;
   padding: 8px;
+  border-radius: 36px;
 
   &:hover {
     transform: scale(1.01);

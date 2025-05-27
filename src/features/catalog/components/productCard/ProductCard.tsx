@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -5,8 +6,8 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import { CardActions } from '@mui/material';
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
-import type { ProductCardConfig } from '../../types/product.ts';
-import ShelterSticker from '../../components/StickerCreator/ShelterSticker.tsx';
+import type { ProductCardConfig } from '../../../../types/product.ts';
+import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker.tsx';
 import styles from './ProductCard.module.scss';
 
 const priceSymbol: string = '€';
@@ -19,7 +20,12 @@ const handleAddToCart = (event: React.MouseEvent, product: ProductCardConfig) =>
 
 export default function ProductCard({ product }: { product: ProductCardConfig }) {
   return (
-    <Card className={styles.card}>
+    <Card
+      className={styles.card}
+      key={product.key}
+      component={NavLink}
+      to={`/product/${product.key}`}
+    >
       <Box className={styles['card-sticker']}>
         <ShelterSticker product={product} size={237} />
       </Box>

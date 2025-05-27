@@ -1,4 +1,5 @@
 export type ProductCardConfig = {
+  key: string;
   name: string;
   price: string;
   image: string;

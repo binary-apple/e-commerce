@@ -1,10 +1,10 @@
 import CircularProgress from '@mui/material/CircularProgress';
-import { useGetProductsQuery } from '../../../../api/productsApi';
-import Box from '@mui/material/Box';
-import type { Product } from '../../../../types/productsApi';
 import Grid from '@mui/material/Grid';
-import type { ProductCardConfig } from '../../../../types/product.ts';
-import ProductCard from '../../../product/ProductCard.tsx';
+import Box from '@mui/material/Box';
+import { useGetProductsQuery } from '../../../../api/productsApi';
+import type { Product } from '../../../../types/productsApi';
+import type { ProductCardConfig } from '../../../../types/product';
+import ProductCard from '../productCard/ProductCard.tsx';
 
 const CENTS_IN_EURO = 100;
 
@@ -23,6 +23,7 @@ export default function ProductList() {
         const formattedPrice = (price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits);
 
         const typedProduct: ProductCardConfig = {
+          key: product.key,
           name: product.name['en-GB'] || '',
           price: formattedPrice,
           image: product.masterVariant.images[0].url,

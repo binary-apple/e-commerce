@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import ProductList from './components/ProductList/ProductList';
 
-export default function Catalog() {
+export default function CatalogPage() {
   return (
     <Box
       component="div"

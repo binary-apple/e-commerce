@@ -15,7 +15,12 @@ export default function ProductPage() {
   if (isError) {
     return <Box>Error {JSON.stringify(error)}</Box>;
   }
-  console.log(data);
+  const productName = data?.name?.['en-GB'] || '';
   // TODO: render detailed page
-  return <div>Product {key}</div>;
+  return (
+    <>
+      <div>Product {key}</div>
+      <div>Name {productName}</div>
+    </>
+  );
 }

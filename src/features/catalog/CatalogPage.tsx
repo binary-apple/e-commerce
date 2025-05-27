@@ -20,7 +20,7 @@ export default function CatalogPage() {
           <Box component="div" minWidth="30%" height="fit-content">
             <CategoryList />
           </Box>
-          <Box maxWidth="calc(70% - 16px)">
+          <Box maxWidth="calc(70% - 16px)" display="flex" flexDirection="column" gap={1}>
             <CustomBreadcrumbs />
             <ProductList />
           </Box>

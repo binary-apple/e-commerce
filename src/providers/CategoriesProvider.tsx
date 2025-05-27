@@ -46,6 +46,23 @@ export const CategoryProvider = ({ children }: { children: React.ReactNode }) =>
     return flattenCategories(data.results);
   }, [data]);
 
+  const currentCategoryChain: FlatCategory[] = [];
+
+  if (flatCategories[selectedIndex]) {
+    currentCategoryChain.push(flatCategories[selectedIndex]);
+    let currentNestingLevel = flatCategories[selectedIndex].nestingLevel;
+    let currentCategoryIndex = selectedIndex;
+    while (currentNestingLevel > 0) {
+      const previousCategoryIndex = flatCategories.findLastIndex(
+        (category, id) =>
+          category.nestingLevel === currentNestingLevel - 1 && id < currentCategoryIndex,
+      );
+      currentCategoryChain.unshift(flatCategories[previousCategoryIndex]);
+      currentNestingLevel--;
+      currentCategoryIndex = previousCategoryIndex;
+    }
+  }
+
   return (
     <CategoryContext.Provider
       value={{
@@ -54,6 +71,7 @@ export const CategoryProvider = ({ children }: { children: React.ReactNode }) =>
         categories: flatCategories,
         isLoading,
         isError,
+        currentCategoryChain,
       }}
     >
       {children}

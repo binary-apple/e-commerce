@@ -6,7 +6,8 @@ import ListItemText from '@mui/material/ListItemText';
 import { useCategory } from '../../../../contexts/CategoryContext';
 
 export default function CategoryList() {
-  const { selectedIndex, setselectedIndex, categories, isLoading, isError } = useCategory();
+  const { selectedIndex, setselectedIndex, categories, isLoading, isError, currentCategoryChain } =
+    useCategory();
   const handleListItemClick = (index: number) => {
     setselectedIndex(index);
   };
@@ -15,6 +16,7 @@ export default function CategoryList() {
   }
 
   console.log(categories[selectedIndex]);
+  console.log(currentCategoryChain);
 
   return (
     <Paper>

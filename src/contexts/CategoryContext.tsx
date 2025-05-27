@@ -7,12 +7,14 @@ export const CategoryContext = createContext<{
   categories: FlatCategory[];
   isLoading: boolean;
   isError: boolean;
+  currentCategoryChain: FlatCategory[];
 }>({
   selectedIndex: 0,
   setselectedIndex: () => {},
   categories: [],
   isLoading: false,
   isError: false,
+  currentCategoryChain: [],
 });
 
 export const useCategory = () => useContext(CategoryContext);

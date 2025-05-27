@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import ProductList from './components/ProductList/ProductList';
 import CategoryList from './components/CategoryList/CategoryList';
 import { CategoryProvider } from '../../providers/CategoriesProvider';
+import CustomBreadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 
 export default function Catalog() {
   return (
@@ -19,7 +20,10 @@ export default function Catalog() {
           <Box component="div" minWidth="30%" height="fit-content">
             <CategoryList />
           </Box>
-          <ProductList />
+          <Box maxWidth="calc(70% - 16px)">
+            <CustomBreadcrumbs />
+            <ProductList />
+          </Box>
         </Box>
       </Box>
     </CategoryProvider>

@@ -1,4 +1,4 @@
-import type { ProductConfig } from '../../types/product.ts';
+import type { ProductCardConfig } from '../../types/product.ts';
 import { theme } from '../../theme.ts';
 import { stickerBackgroundColor } from './stickerBackgroundColors.ts';
 
@@ -8,7 +8,7 @@ export default function ShelterSticker({
   product,
   size = defaultImageSize,
 }: {
-  product: ProductConfig;
+  product: ProductCardConfig;
   size: number;
 }) {
   const two = 2;

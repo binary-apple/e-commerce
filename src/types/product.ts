@@ -1,4 +1,4 @@
-export type ProductConfig = {
+export type ProductCardConfig = {
   name: string;
   price: string;
   image: string;

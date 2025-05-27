@@ -3,7 +3,7 @@ import { useGetProductsQuery } from '../../../../api/productsApi';
 import Box from '@mui/material/Box';
 import type { Product } from '../../../../types/productsApi';
 import Grid from '@mui/material/Grid';
-import type { ProductConfig } from '../../../../types/product.ts';
+import type { ProductCardConfig } from '../../../../types/product.ts';
 import ProductCard from '../../../product/ProductCard.tsx';
 
 const CENTS_IN_EURO = 100;
@@ -22,7 +22,7 @@ export default function ProductList() {
         const price = product.masterVariant.prices[0].value;
         const formattedPrice = (price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits);
 
-        const typedProduct: ProductConfig = {
+        const typedProduct: ProductCardConfig = {
           name: product.name['en-GB'] || '',
           price: formattedPrice,
           image: product.masterVariant.images[0].url,

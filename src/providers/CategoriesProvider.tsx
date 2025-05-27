@@ -5,22 +5,31 @@ import { useGetAllCategoriesQuery } from '../api/productsApi';
 import { CategoryContext } from '../contexts/CategoryContext';
 
 function flattenCategories(categories: Category[]): FlatCategory[] {
-  const flatCategories: { id: string; categoryName: string; nestingLevel: number }[] = [];
+  const flatCategories: FlatCategory[] = [];
   const map = new Map<
     string,
-    { name: string; children: { id: string; name: string }[]; parent: string | undefined }
+    {
+      name: string;
+      key: string;
+      children: { id: string; key: string | undefined; name: string }[];
+      parent: string | undefined;
+    }
   >();
-  map.set('root', { name: 'All products', children: [], parent: undefined });
+  map.set('root', { name: 'All products', key: '', children: [], parent: undefined });
+
   categories.forEach((category) => {
     map.set(category.id, {
       name: category.name['en-GB'],
+      key: category.key,
       children: [],
       parent: category.parent ? category.parent?.id : 'root',
     });
   });
-  map.forEach((categoryNode, key) => {
+  map.forEach((categoryNode, mapKey) => {
     if (categoryNode.parent) {
-      map.get(categoryNode.parent)?.children.push({ id: key, name: categoryNode.name });
+      map
+        .get(categoryNode.parent)
+        ?.children.push({ id: mapKey, name: categoryNode.name, key: categoryNode.key });
     }
   });
   const treeTraversal = (id: string, currentNestingLevel: number) => {
@@ -30,6 +39,7 @@ function flattenCategories(categories: Category[]): FlatCategory[] {
       categoryName: categoryNode.name,
       nestingLevel: currentNestingLevel,
       id: id,
+      key: categoryNode.key,
     });
     categoryNode.children.forEach((child) => treeTraversal(child.id, currentNestingLevel + 1));
   };

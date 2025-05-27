@@ -1,4 +1,4 @@
-type LocalizedString = {
+export type LocalizedString = {
   [locale in 'en-GB']: string;
 };
 

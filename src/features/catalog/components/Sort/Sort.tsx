@@ -1,16 +1,19 @@
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import type { SelectChangeEvent } from '@mui/material/Select';
-import { Select } from '@mui/material';
-import { useState } from 'react';
+import { Select, type SelectChangeEvent } from '@mui/material';
 import { SortOptions } from './constants';
+import { isSortValues, type SortValues } from '../../types/sort';
 
-export default function Sort() {
-  const [sortValue, setSortValue] = useState('');
+type SortProps = {
+  sortValue: SortValues;
+  onChange: (value: SortValues) => void;
+};
 
+export default function Sort({ sortValue, onChange }: SortProps) {
   const handleChange = (event: SelectChangeEvent) => {
-    setSortValue(event.target.value);
+    const value = event.target.value;
+    onChange(isSortValues(value) ? value : '');
   };
 
   return (

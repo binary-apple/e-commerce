@@ -4,4 +4,4 @@ export const SortOptions = [
   { value: 'price+desc', label: 'Price ↓' },
   { value: 'name.en-GB+asc', label: 'Name ↑' },
   { value: 'name.en-GB+desc', label: 'Name ↓' },
-];
+] as const;

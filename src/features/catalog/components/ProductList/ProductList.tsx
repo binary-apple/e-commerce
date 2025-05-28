@@ -6,11 +6,13 @@ import type { Product } from '../../../../types/productsApi';
 import type { ProductCardConfig } from '../../../../types/product';
 import ProductCard from '../productCard/ProductCard.tsx';
 import { useCategory } from '../../../../contexts/CategoryContext.tsx';
+import type { SortValues } from '../../types/sort.ts';
 
 const CENTS_IN_EURO = 100;
 
-export default function ProductList() {
+export default function ProductList({ sortValue }: { sortValue: SortValues }) {
   const { isLoading: isCategoryLoading, selectedCategory } = useCategory();
+
   const {
     data,
     isLoading: isProductLoading,
@@ -18,6 +20,7 @@ export default function ProductList() {
     error,
   } = useGetProductsQuery({
     categoryId: selectedCategory?.id,
+    sortOption: sortValue,
   });
   if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;

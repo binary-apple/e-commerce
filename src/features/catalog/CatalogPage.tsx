@@ -5,8 +5,11 @@ import { CategoryProvider } from '../../providers/CategoriesProvider';
 import CustomBreadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 import Grid from '@mui/material/Grid';
 import Sort from './components/Sort/Sort';
+import { useState } from 'react';
+import type { SortValues } from './types/sort';
 
 export default function CatalogPage() {
+  const [sortValue, setSortValue] = useState<SortValues>('');
   return (
     <CategoryProvider>
       <Box
@@ -25,10 +28,10 @@ export default function CatalogPage() {
           </Grid>
           <Grid size={9} display={'grid'} gap={2}>
             <CustomBreadcrumbs />
-            <Sort />
-            <ProductList />
-          </Grid>
-        </Grid>
+            <Sort sortValue={sortValue} onChange={setSortValue} />
+            <ProductList sortValue={sortValue} />
+          </Box>
+        </Box>
       </Box>
     </CategoryProvider>
   );

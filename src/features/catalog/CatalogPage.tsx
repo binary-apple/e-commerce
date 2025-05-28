@@ -4,6 +4,7 @@ import CategoryList from './components/CategoryList/CategoryList';
 import { CategoryProvider } from '../../providers/CategoriesProvider';
 import CustomBreadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 import Grid from '@mui/material/Grid';
+import Sort from './components/Sort/Sort';
 
 export default function CatalogPage() {
   return (
@@ -24,6 +25,7 @@ export default function CatalogPage() {
           </Grid>
           <Grid size={9} display={'grid'} gap={2}>
             <CustomBreadcrumbs />
+            <Sort />
             <ProductList />
           </Grid>
         </Grid>

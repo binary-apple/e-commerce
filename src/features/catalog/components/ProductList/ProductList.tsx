@@ -5,19 +5,28 @@ import { useGetProductsQuery } from '../../../../api/productsApi';
 import type { Product } from '../../../../types/productsApi';
 import type { ProductCardConfig } from '../../../../types/product';
 import ProductCard from '../productCard/ProductCard.tsx';
+import { useCategory } from '../../../../contexts/CategoryContext.tsx';
 
 const CENTS_IN_EURO = 100;
 
 export default function ProductList() {
-  const { data, isLoading, isError, error } = useGetProductsQuery({});
-  if (isLoading) {
+  const { isLoading: isCategoryLoading, selectedCategory } = useCategory();
+  const {
+    data,
+    isLoading: isProductLoading,
+    isError,
+    error,
+  } = useGetProductsQuery({
+    categoryId: selectedCategory?.id,
+  });
+  if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;
   }
   if (isError) {
     return <Box>Error {JSON.stringify(error)}</Box>;
   }
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} justifyContent="center">
       {data?.results.map((product: Product) => {
         const price = product.masterVariant.prices[0].value;
         const formattedPrice = (price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits);

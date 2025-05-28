@@ -1,4 +1,4 @@
-type LocalizedString = {
+export type LocalizedString = {
   [locale in 'en-GB']: string;
 };
 
@@ -62,4 +62,34 @@ export enum AttributeName {
 export type AttributeValue = {
   key: string;
   label: string;
+};
+
+export type CategoriesResponse = {
+  limit: number;
+  offset: number;
+  count: number;
+  total: number;
+  results: Category[];
+};
+
+export type Category = {
+  id: string;
+  version: number;
+  versionModifiedAt: Date;
+  lastMessageSequenceNumber: number;
+  createdAt: Date;
+  lastModifiedAt: Date;
+  key: string;
+  name: LocalizedString;
+  slug: LocalizedString;
+  description: LocalizedString;
+  ancestors: Parent[];
+  orderHint: string;
+  assets: unknown[];
+  parent?: Parent;
+};
+
+export type Parent = {
+  typeId: 'category';
+  id: string;
 };

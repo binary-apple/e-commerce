@@ -18,9 +18,16 @@ export const productsApi = createApi({
     },
   }),
   endpoints: (build) => ({
-    getProducts: build.query<ProductsResponse, { limit?: number; offset?: number }>({
-      query: ({ limit = PRODUCTS_LIMIT, offset = OFFSET }) =>
-        `/product-projections?limit=${limit}&offset=${offset}`,
+    getProducts: build.query<
+      ProductsResponse,
+      { categoryId?: string; limit?: number; offset?: number }
+    >({
+      query: ({ categoryId = 'root', limit = PRODUCTS_LIMIT, offset = OFFSET }) => {
+        if (categoryId === 'root' || !categoryId) {
+          return `/product-projections?limit=${limit}&offset=${offset}`;
+        }
+        return `/product-projections/search?filter.query=categories.id:"${categoryId}"&limit=${limit}&offset=${offset}`;
+      },
     }),
     getAllCategories: build.query<CategoriesResponse, void>({
       query: () => '/categories',

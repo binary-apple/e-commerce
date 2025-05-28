@@ -30,8 +30,8 @@ export default function CatalogPage() {
             <CustomBreadcrumbs />
             <Sort sortValue={sortValue} onChange={setSortValue} />
             <ProductList sortValue={sortValue} />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       </Box>
     </CategoryProvider>
   );

@@ -90,6 +90,18 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          '&.Mui-selected': {
+            backgroundColor: '#062D3E1A',
+          },
+          '&.Mui-selected:hover': {
+            backgroundColor: '#062D3E0A',
+          },
+        },
+      },
+    },
     MuiIconButton: {
       styleOverrides: {
         root: ({ theme }) => ({

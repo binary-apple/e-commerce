@@ -10,7 +10,13 @@ import type { SortValues } from '../../types/sort.ts';
 
 const CENTS_IN_EURO = 100;
 
-export default function ProductList({ sortValue }: { sortValue: SortValues }) {
+export default function ProductList({
+  sortValue,
+  searchValue,
+}: {
+  sortValue: SortValues;
+  searchValue: string;
+}) {
   const { isLoading: isCategoryLoading, selectedCategory } = useCategory();
 
   const {
@@ -21,6 +27,7 @@ export default function ProductList({ sortValue }: { sortValue: SortValues }) {
   } = useGetProductsQuery({
     categoryId: selectedCategory?.id,
     sortOption: sortValue,
+    searchOption: searchValue,
   });
   if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;

@@ -11,6 +11,7 @@ import Search from './components/Search/Search';
 
 export default function CatalogPage() {
   const [sortValue, setSortValue] = useState<SortValues>('');
+  const [searchValue, setSearchValue] = useState<string>('');
   return (
     <CategoryProvider>
       <Box
@@ -30,10 +31,10 @@ export default function CatalogPage() {
           <Grid size={9} display={'grid'} gap={2}>
             <CustomBreadcrumbs />
             <Box component="div" display="flex" gap={2}>
-              <Search />
+              <Search searchValue={searchValue} onChange={setSearchValue} />
               <Sort sortValue={sortValue} onChange={setSortValue} />
             </Box>
-            <ProductList sortValue={sortValue} />
+            <ProductList sortValue={sortValue} searchValue={searchValue} />
           </Grid>
         </Grid>
       </Box>

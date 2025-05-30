@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import Sort from './components/Sort/Sort';
 import { useState } from 'react';
 import type { SortValues } from './types/sort';
+import Search from './components/Search/Search';
 
 export default function CatalogPage() {
   const [sortValue, setSortValue] = useState<SortValues>('');
@@ -28,7 +29,10 @@ export default function CatalogPage() {
           </Grid>
           <Grid size={9} display={'grid'} gap={2}>
             <CustomBreadcrumbs />
-            <Sort sortValue={sortValue} onChange={setSortValue} />
+            <Box component="div" display="flex" gap={2}>
+              <Search />
+              <Sort sortValue={sortValue} onChange={setSortValue} />
+            </Box>
             <ProductList sortValue={sortValue} />
           </Grid>
         </Grid>

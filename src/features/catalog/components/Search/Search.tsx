@@ -1,10 +1,10 @@
 import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import type { ChangeEvent } from 'react';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 type SearchProps = {
   searchValue: string;
@@ -22,7 +22,6 @@ export default function Search({ searchValue, onChange }: SearchProps) {
       <InputLabel htmlFor="search">Search</InputLabel>
       <OutlinedInput
         id="search"
-        type="search"
         value={searchValue}
         onChange={handleChange}
         sx={{
@@ -31,11 +30,13 @@ export default function Search({ searchValue, onChange }: SearchProps) {
           },
         }}
         endAdornment={
-          <InputAdornment position="end">
-            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </InputAdornment>
+          searchValue && (
+            <InputAdornment position="end">
+              <IconButton type="button" onClick={() => onChange('')}>
+                <CloseRoundedIcon />
+              </IconButton>
+            </InputAdornment>
+          )
         }
         label="search"
       />

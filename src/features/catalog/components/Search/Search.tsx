@@ -11,6 +11,11 @@ export default function Search() {
       <InputLabel htmlFor="search">Search</InputLabel>
       <OutlinedInput
         id="search"
+        sx={{
+          '& input:-webkit-autofill': {
+            WebkitBoxShadow: '0 0 0 100px #ebe3cc inset',
+          },
+        }}
         endAdornment={
           <InputAdornment position="end">
             <IconButton type="button" sx={{ p: '10px' }} aria-label="search">

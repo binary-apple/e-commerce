@@ -41,10 +41,10 @@ export default function ProductPage() {
 
         <CardContent className={styles['card-content']}>
           <Box>
-            <Typography variant="h4" component="h2" gutterBottom>
+            <Typography variant="h4" component="h2" color="text.secondary" gutterBottom>
               {data.name['en-GB']}
             </Typography>
-            <Typography variant="body1" color="text.secondary" gutterBottom>
+            <Typography variant="body1" color="text.primary" gutterBottom>
               {data.description['en-GB']}
             </Typography>
             <Stack direction="row" spacing={1}>

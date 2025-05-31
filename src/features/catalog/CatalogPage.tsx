@@ -8,6 +8,7 @@ import Sort from './components/Sort/Sort';
 import { useState } from 'react';
 import type { SortValues } from './types/sort';
 import Search from './components/Search/Search';
+import Filters from './components/Filters/Filters';
 
 export default function CatalogPage() {
   const [sortValue, setSortValue] = useState<SortValues>('');
@@ -30,9 +31,12 @@ export default function CatalogPage() {
           </Grid>
           <Grid size={9} display={'grid'} gap={2}>
             <CustomBreadcrumbs />
-            <Box component="div" display="flex" gap={2}>
-              <Search searchValue={searchValue} onChange={setSearchValue} />
-              <Sort sortValue={sortValue} onChange={setSortValue} />
+            <Box component="div" display="flex" flexDirection="column" gap={2}>
+              <Box component="div" display="flex" gap={2}>
+                <Search searchValue={searchValue} onChange={setSearchValue} />
+                <Sort sortValue={sortValue} onChange={setSortValue} />
+              </Box>
+              <Filters />
             </Box>
             <ProductList sortValue={sortValue} searchValue={searchValue} />
           </Grid>

@@ -1,4 +1,4 @@
-import type { Price } from '../types/productsApi';
+import type { Price } from '../../types/productsApi.ts';
 
 const CENTS_IN_EURO = 100;
 

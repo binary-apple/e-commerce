@@ -5,7 +5,7 @@ import { useGetProductsQuery } from '../../../../api/productsApi';
 import type { Product } from '../../../../types/productsApi';
 import type { ProductCardConfig } from '../../../../types/product';
 import ProductCard from '../productCard/ProductCard.tsx';
-import { formatPrice } from '../../../../services/formatPrice';
+import { formatPrice } from '../../../../utils/formatPrice/formatPrice.ts';
 
 export default function ProductList() {
   const { data, isLoading, isError, error } = useGetProductsQuery({});

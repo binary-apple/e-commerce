@@ -4,7 +4,7 @@ import { Grid, CardContent, Typography, Box, Button, Stack, Chip } from '@mui/ma
 import CircularProgress from '@mui/material/CircularProgress';
 import { Paths } from '../../types/paths.ts';
 import styles from './ProductPage.module.scss';
-import { formatPrice } from '../../services/formatPrice';
+import { formatPrice } from '../../utils/formatPrice/formatPrice.ts';
 
 export default function ProductPage() {
   const { key } = useParams();

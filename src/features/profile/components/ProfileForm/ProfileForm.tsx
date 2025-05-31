@@ -1,4 +1,4 @@
-import { Divider, Grid, ListItemText, Typography } from '@mui/material';
+import { Chip, Divider, Grid, ListItemText, Typography } from '@mui/material';
 import { countryMap, fieldsConfig } from './constants';
 import { Fragment } from 'react/jsx-runtime';
 import { useLazyGetMeQuery } from '../../../../api/authApi';
@@ -50,6 +50,8 @@ export default function ProfileForm() {
 
   if (!user) return null;
 
+  const { defaultBillingAddressId, defaultShippingAddressId } = user;
+
   const getAddressList = (type: 'shipping' | 'billing') => {
     const ids = type === 'shipping' ? user.shippingAddressIds : user.billingAddressIds;
     return ids.map((id) => user.addresses.find((addr) => addr.id === id));
@@ -76,11 +78,19 @@ export default function ProfileForm() {
               (source, index) =>
                 source && (
                   <Fragment key={index}>
-                    {isAddressSection && sourceList.length > 1 && (
-                      <Grid size={{ xs: 12 }}>
-                        <Typography variant="subtitle2" sx={{ mt: 1 }}>
-                          Address {index + 1}
-                        </Typography>
+                    {isAddressSection && (
+                      <Grid
+                        size={{ xs: 12 }}
+                        spacing={2}
+                        sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}
+                      >
+                        <Typography variant="subtitle2">Address {index + 1}</Typography>
+                        {addressType === 'shipping' && source.id === defaultShippingAddressId && (
+                          <Chip label="Default" color="info" variant="outlined" />
+                        )}
+                        {addressType === 'billing' && source.id === defaultBillingAddressId && (
+                          <Chip label="Default" color="info" variant="outlined" />
+                        )}
                       </Grid>
                     )}
                     {fields.map(({ id, label }) => {

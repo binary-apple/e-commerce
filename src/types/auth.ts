@@ -32,6 +32,6 @@ export type CustomerFromApi = {
   addresses: AddressWithId[];
   shippingAddressIds: string[];
   billingAddressIds: string[];
-  defaultShippingAddress?: number;
-  defaultBillingAddress?: number;
+  defaultShippingAddressId?: string;
+  defaultBillingAddressId?: string;
 };

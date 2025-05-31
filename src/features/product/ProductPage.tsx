@@ -1,7 +1,12 @@
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import { useGetProductByKeyQuery } from '../../api/productsApi';
-import Box from '@mui/material/Box';
+import { Grid, CardContent, Typography, Box, Button, Stack, Chip } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
+import { Paths } from '../../types/paths.ts';
+import styles from './ProductPage.module.scss';
+
+const TWO = 2;
+const CENTS_IN_EURO = 100;
 
 export default function ProductPage() {
   const { key } = useParams();
@@ -13,14 +18,65 @@ export default function ProductPage() {
     return <CircularProgress size="3rem" />;
   }
   if (isError) {
-    return <Box>Error {JSON.stringify(error)}</Box>;
+    return <Box className={styles['card']}>Error {JSON.stringify(error)}</Box>;
   }
-  const productName = data?.name?.['en-GB'] || '';
-  // TODO: render detailed page
+  if (!data) return <Navigate to={Paths.NOT_FOUND} replace />;
+  const formattedPrice = (data.masterVariant.prices[0].value.centAmount / CENTS_IN_EURO).toFixed(
+    TWO,
+  );
+  const CODE: string = data.masterVariant.prices[0].value.currencyCode;
+
+  const petTypeAttribute = data.masterVariant.attributes.find(
+    (attribute) => attribute.name === 'pet-type',
+  );
+  const petLabels = Array.isArray(petTypeAttribute?.value)
+    ? petTypeAttribute.value.map((value: { label: string }) => value.label)
+    : petTypeAttribute?.value?.label
+      ? [petTypeAttribute.value.label]
+      : ['other'];
   return (
-    <>
-      <div>Product {key}</div>
-      <div>Name {productName}</div>
-    </>
+    <Box component="div" className={styles['card']}>
+      <Grid className={styles['card-grid']}>
+        <Box className={styles['card-image-wrapper']}>
+          {/*todo: implement here carousel*/}
+          <img src={data.masterVariant.images[1].url} alt={data.masterVariant.images[1].label} />
+        </Box>
+
+        <CardContent className={styles['card-content']}>
+          <Box>
+            <Typography variant="h4" component="h2" gutterBottom>
+              {data.name['en-GB']}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" gutterBottom>
+              {data.description['en-GB']}
+            </Typography>
+            <Stack direction="row" spacing={1}>
+              {petLabels.map((label, index) => (
+                <Chip
+                  key={index}
+                  className={styles['card-label']}
+                  label={label}
+                  color="secondary"
+                  size="small"
+                />
+              ))}
+            </Stack>
+          </Box>
+          {/*todo: add here city and country*/}
+          <Box className={styles['card-bottom']}>
+            <Box className={styles['card-bottom-price']}>
+              <Typography variant="h6" color="primary">
+                {formattedPrice}
+              </Typography>
+              <Typography variant="h6">{CODE}</Typography>
+            </Box>
+            {/*todo: add event listeners on this button*/}
+            <Button variant="contained" color="primary">
+              Add to Cart
+            </Button>
+          </Box>
+        </CardContent>
+      </Grid>
+    </Box>
   );
 }

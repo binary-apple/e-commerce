@@ -6,17 +6,36 @@ import type { Product } from '../../../../types/productsApi';
 import type { ProductCardConfig } from '../../../../types/product';
 import ProductCard from '../productCard/ProductCard.tsx';
 import { formatPrice } from '../../../../utils/formatPrice/formatPrice.ts';
+import { useCategory } from '../../../../contexts/CategoryContext.tsx';
+import type { SortValues } from '../../types/sort.ts';
 
-export default function ProductList() {
-  const { data, isLoading, isError, error } = useGetProductsQuery({});
-  if (isLoading) {
+export default function ProductList({
+  sortValue,
+  searchValue,
+}: {
+  sortValue: SortValues;
+  searchValue: string;
+}) {
+  const { isLoading: isCategoryLoading, selectedCategory } = useCategory();
+
+  const {
+    data,
+    isLoading: isProductLoading,
+    isError,
+    error,
+  } = useGetProductsQuery({
+    categoryId: selectedCategory?.id,
+    sortOption: sortValue,
+    searchOption: searchValue,
+  });
+  if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;
   }
   if (isError) {
     return <Box>Error {JSON.stringify(error)}</Box>;
   }
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} justifyContent="center">
       {data?.results.map((product: Product) => {
         const formattedPrice = formatPrice(product.masterVariant.prices[0]);
         const typedProduct: ProductCardConfig = {

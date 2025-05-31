@@ -4,9 +4,7 @@ import { Grid, CardContent, Typography, Box, Button, Stack, Chip } from '@mui/ma
 import CircularProgress from '@mui/material/CircularProgress';
 import { Paths } from '../../types/paths.ts';
 import styles from './ProductPage.module.scss';
-
-const TWO = 2;
-const CENTS_IN_EURO = 100;
+import { formatPrice } from '../../services/formatPrice';
 
 export default function ProductPage() {
   const { key } = useParams();
@@ -21,9 +19,8 @@ export default function ProductPage() {
     return <Box className={styles['card']}>Error {JSON.stringify(error)}</Box>;
   }
   if (!data) return <Navigate to={Paths.NOT_FOUND} replace />;
-  const formattedPrice = (data.masterVariant.prices[0].value.centAmount / CENTS_IN_EURO).toFixed(
-    TWO,
-  );
+
+  const formattedPrice: string = formatPrice(data.masterVariant.prices[0]);
   const CODE: string = data.masterVariant.prices[0].value.currencyCode;
 
   const petTypeAttribute = data.masterVariant.attributes.find(

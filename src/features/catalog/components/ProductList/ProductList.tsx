@@ -5,8 +5,7 @@ import { useGetProductsQuery } from '../../../../api/productsApi';
 import type { Product } from '../../../../types/productsApi';
 import type { ProductCardConfig } from '../../../../types/product';
 import ProductCard from '../productCard/ProductCard.tsx';
-
-const CENTS_IN_EURO = 100;
+import { formatPrice } from '../../../../services/formatPrice';
 
 export default function ProductList() {
   const { data, isLoading, isError, error } = useGetProductsQuery({});
@@ -19,9 +18,7 @@ export default function ProductList() {
   return (
     <Grid container spacing={3}>
       {data?.results.map((product: Product) => {
-        const price = product.masterVariant.prices[0].value;
-        const formattedPrice = (price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits);
-
+        const formattedPrice = formatPrice(product.masterVariant.prices[0]);
         const typedProduct: ProductCardConfig = {
           key: product.key,
           name: product.name['en-GB'] || '',

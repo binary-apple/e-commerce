@@ -33,6 +33,7 @@ export default function ProductList() {
               .key || 'color-cheap',
           place: '',
           //todo: replace place with country with city!
+          currencyCode: product.masterVariant.prices[0].value.currencyCode,
         };
 
         return <ProductCard key={product.id} product={typedProduct} />;

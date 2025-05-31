@@ -20,11 +20,18 @@ export const productsApi = createApi({
   endpoints: (build) => ({
     getProducts: build.query<
       ProductsResponse,
-      { categoryId?: string; sortOption?: string; limit?: number; offset?: number }
+      {
+        categoryId?: string;
+        sortOption?: string;
+        searchOption?: string;
+        limit?: number;
+        offset?: number;
+      }
     >({
       query: ({
         categoryId = 'root',
         sortOption = '',
+        searchOption = '',
         limit = PRODUCTS_LIMIT,
         offset = OFFSET,
       }) => {
@@ -34,6 +41,9 @@ export const productsApi = createApi({
         }
         if (sortOption) {
           searchParameters.push(`sort=${sortOption}`);
+        }
+        if (searchOption) {
+          searchParameters.push(`text.en-GB=${searchOption}`);
         }
         searchParameters.push(`limit=${limit}`, `offset=${offset}`);
         const pathPrefix = 'product-projections/search';

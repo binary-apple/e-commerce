@@ -72,7 +72,7 @@ export const registrationSchema = yup.object().shape({
     .string()
     .required('Last name is required')
     .matches(/^[A-Za-z]+$/, 'Only Latin letters are allowed'),
-  dob: yup
+  dateOfBirth: yup
     .string()
     .typeError('Invalid date')
     .required('Date of birth is required')
@@ -80,7 +80,7 @@ export const registrationSchema = yup.object().shape({
       if (!value) return false;
       return checkAge(new Date(value));
     }),
-  street: yup
+  streetName: yup
     .string()
     .required('Street is required')
     .matches(/^[\d './A-Z[^a-z-]+$/, {
@@ -108,7 +108,7 @@ export const registrationSchema = yup.object().shape({
 
   isBilling: yup.boolean().required(),
 
-  streetBill: yup.string().when('isBilling', ([isBilling], schema) => {
+  streetNameBill: yup.string().when('isBilling', ([isBilling], schema) => {
     if (isBilling === false) {
       return schema.required('Street is required').matches(/^[\d './A-Z[^a-z-]+$/, {
         message: "Only Latin letters, numbers, dots, ', - and spaces allowed",

@@ -1,42 +1,12 @@
 import { Chip, Divider, Grid, ListItemText, Typography } from '@mui/material';
-import { countryMap, fieldsConfig } from './constants';
+import { fieldsConfig } from './constants';
 import { Fragment } from 'react/jsx-runtime';
 import { useLazyGetMeQuery } from '../../../../api/authApi';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../store/store';
 import { formatDate } from '../../../../utils/formatDate';
-import type { AddressWithId, CustomerFromApi } from '../../../../types/auth';
-import type { AddressFieldId, CustomerFieldId, ProfileFieldIds } from './types';
-
-function getFieldValue(
-  source: CustomerFromApi | AddressWithId,
-  id: ProfileFieldIds,
-): string | undefined {
-  if (isCustomer(source) && isCustomerField(id)) {
-    return source[id];
-  }
-
-  if (!isCustomer(source) && isAddressField(id)) {
-    if (id === 'country') {
-      return countryMap[source[id]] || source[id];
-    }
-    return source[id];
-  }
-
-  return undefined;
-}
-function isCustomer(source: CustomerFromApi | AddressWithId): source is CustomerFromApi {
-  return 'firstName' in source && 'lastName' in source;
-}
-
-function isCustomerField(id: string): id is CustomerFieldId {
-  return ['firstName', 'lastName', 'dateOfBirth'].includes(id);
-}
-
-function isAddressField(id: string): id is AddressFieldId {
-  return ['streetName', 'city', 'country', 'postalCode'].includes(id);
-}
+import { getFieldValue } from '../../utils/getFieldValue';
 
 export default function ProfileForm() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);

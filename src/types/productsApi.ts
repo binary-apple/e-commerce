@@ -2,12 +2,12 @@ export type LocalizedString = {
   [locale in 'en-GB']: string;
 };
 
-export type ProductsResponse = {
+export type Response<T> = {
   limit: number;
   offset: number;
   count: number;
   total: number;
-  results: Product[];
+  results: T[];
 };
 
 export type Product = {
@@ -29,7 +29,7 @@ export type MasterVariant = {
   key: string;
   images: Image[];
   prices: Price[];
-  attributes: Attribute[];
+  attributes: AttributeForProduct[];
 };
 
 export type Image = {
@@ -49,7 +49,7 @@ export type Price = {
   };
 };
 
-export type Attribute = {
+export type AttributeForProduct = {
   name: AttributeName;
   value: AttributeValue;
 };
@@ -62,14 +62,6 @@ export enum AttributeName {
 export type AttributeValue = {
   key: string;
   label: string;
-};
-
-export type CategoriesResponse = {
-  limit: number;
-  offset: number;
-  count: number;
-  total: number;
-  results: Category[];
 };
 
 export type Category = {
@@ -92,4 +84,35 @@ export type Category = {
 export type Parent = {
   typeId: 'category';
   id: string;
+};
+
+export type ProductType = {
+  id: string;
+  version: number;
+  versionModifiedAt: Date;
+  createdAt: Date;
+  lastModifiedAt: Date;
+  name: string;
+  description: string;
+  classifier: string;
+  attributes: AttributeForProductType[];
+  key: string;
+};
+
+export type AttributeForProductType = {
+  name: string;
+  label: LocalizedString;
+  inputTip: LocalizedString;
+  isRequired: boolean;
+  type: AttributeType;
+  attributeConstraint: string;
+  isSearchable: boolean;
+  inputHint: string;
+  displayGroup: string;
+  level: string;
+};
+
+export type AttributeType = {
+  name: string;
+  values: AttributeValue[];
 };

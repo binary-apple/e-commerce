@@ -72,10 +72,6 @@ export default function Filters() {
           <InputLabel id="price-label">Price</InputLabel>
           <Select labelId="price" id="price" value="" label="Price"></Select>
         </FormControl>
-        <FormControl sx={{ width: '150px' }}>
-          <InputLabel id="shelter-label">Shelter</InputLabel>
-          <Select labelId="shelter" id="shelter" value="" label="Shelter"></Select>
-        </FormControl>
       </Box>
       <Link component="button" variant="body2" onClick={resetFilters}>
         Reset filters

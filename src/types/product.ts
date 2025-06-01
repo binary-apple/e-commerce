@@ -6,4 +6,5 @@ export type ProductCardConfig = {
   description: string;
   place: string;
   color: string;
+  currencyCode: string;
 };

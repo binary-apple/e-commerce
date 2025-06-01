@@ -20,13 +20,34 @@ export const productsApi = createApi({
   endpoints: (build) => ({
     getProducts: build.query<
       ProductsResponse,
-      { categoryId?: string; limit?: number; offset?: number }
+      {
+        categoryId?: string;
+        sortOption?: string;
+        searchOption?: string;
+        limit?: number;
+        offset?: number;
+      }
     >({
-      query: ({ categoryId = 'root', limit = PRODUCTS_LIMIT, offset = OFFSET }) => {
-        if (categoryId === 'root' || !categoryId) {
-          return `/product-projections?limit=${limit}&offset=${offset}`;
+      query: ({
+        categoryId = 'root',
+        sortOption = '',
+        searchOption = '',
+        limit = PRODUCTS_LIMIT,
+        offset = OFFSET,
+      }) => {
+        const searchParameters = [];
+        if (categoryId !== 'root' && categoryId) {
+          searchParameters.push(`filter.query=categories.id:"${categoryId}"`);
         }
-        return `/product-projections/search?filter.query=categories.id:"${categoryId}"&limit=${limit}&offset=${offset}`;
+        if (sortOption) {
+          searchParameters.push(`sort=${sortOption}`);
+        }
+        if (searchOption) {
+          searchParameters.push(`text.en-GB=${searchOption}`);
+        }
+        searchParameters.push(`limit=${limit}`, `offset=${offset}`);
+        const pathPrefix = 'product-projections/search';
+        return `${pathPrefix}?${searchParameters.join('&')}`;
       },
     }),
     getAllCategories: build.query<CategoriesResponse, void>({

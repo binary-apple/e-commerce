@@ -5,12 +5,19 @@ import { useGetProductsQuery } from '../../../../api/productsApi';
 import type { Product } from '../../../../types/productsApi';
 import type { ProductCardConfig } from '../../../../types/product';
 import ProductCard from '../productCard/ProductCard.tsx';
+import { formatPrice } from '../../../../utils/formatPrice/formatPrice.ts';
 import { useCategory } from '../../../../contexts/CategoryContext.tsx';
+import type { SortValues } from '../../types/sort.ts';
 
-const CENTS_IN_EURO = 100;
-
-export default function ProductList() {
+export default function ProductList({
+  sortValue,
+  searchValue,
+}: {
+  sortValue: SortValues;
+  searchValue: string;
+}) {
   const { isLoading: isCategoryLoading, selectedCategory } = useCategory();
+
   const {
     data,
     isLoading: isProductLoading,
@@ -18,6 +25,8 @@ export default function ProductList() {
     error,
   } = useGetProductsQuery({
     categoryId: selectedCategory?.id,
+    sortOption: sortValue,
+    searchOption: searchValue,
   });
   if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;
@@ -28,9 +37,7 @@ export default function ProductList() {
   return (
     <Grid container spacing={3} justifyContent="center">
       {data?.results.map((product: Product) => {
-        const price = product.masterVariant.prices[0].value;
-        const formattedPrice = (price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits);
-
+        const formattedPrice = formatPrice(product.masterVariant.prices[0]);
         const typedProduct: ProductCardConfig = {
           key: product.key,
           name: product.name['en-GB'] || '',
@@ -42,6 +49,7 @@ export default function ProductList() {
               .key || 'color-cheap',
           place: '',
           //todo: replace place with country with city!
+          currencyCode: product.masterVariant.prices[0].value.currencyCode,
         };
 
         return <ProductCard key={product.id} product={typedProduct} />;

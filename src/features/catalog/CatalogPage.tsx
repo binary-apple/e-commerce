@@ -4,8 +4,14 @@ import CategoryList from './components/CategoryList/CategoryList';
 import { CategoryProvider } from '../../providers/CategoriesProvider';
 import CustomBreadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 import Grid from '@mui/material/Grid';
+import Sort from './components/Sort/Sort';
+import { useState } from 'react';
+import type { SortValues } from './types/sort';
+import Search from './components/Search/Search';
 
 export default function CatalogPage() {
+  const [sortValue, setSortValue] = useState<SortValues>('');
+  const [searchValue, setSearchValue] = useState<string>('');
   return (
     <CategoryProvider>
       <Box
@@ -24,7 +30,11 @@ export default function CatalogPage() {
           </Grid>
           <Grid size={9} display={'grid'} gap={2}>
             <CustomBreadcrumbs />
-            <ProductList />
+            <Box component="div" display="flex" gap={2}>
+              <Search searchValue={searchValue} onChange={setSearchValue} />
+              <Sort sortValue={sortValue} onChange={setSortValue} />
+            </Box>
+            <ProductList sortValue={sortValue} searchValue={searchValue} />
           </Grid>
         </Grid>
       </Box>

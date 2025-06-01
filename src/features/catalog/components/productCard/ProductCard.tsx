@@ -6,11 +6,9 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import { CardActions } from '@mui/material';
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
-import type { ProductCardConfig } from '../../../../types/product.ts';
-import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker.tsx';
+import type { ProductCardConfig } from '../../../../types/product';
+import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker';
 import styles from './ProductCard.module.scss';
-
-const priceSymbol: string = '€';
 
 const handleAddToCart = (event: React.MouseEvent, product: ProductCardConfig) => {
   event.preventDefault();
@@ -49,7 +47,7 @@ export default function ProductCard({ product }: { product: ProductCardConfig })
             <Typography variant="h6" color="text.secondary">
               {product.price}
             </Typography>
-            <Typography variant="h6">{priceSymbol}</Typography>
+            <Typography variant="h6">{product.currencyCode}</Typography>
           </Box>
           <CardActions
             sx={{

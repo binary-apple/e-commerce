@@ -9,7 +9,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
-    gap: 1rem;
+    gap: 2rem;
 
     @media (width <= 800px) {
       grid-template-columns: 1fr;
@@ -18,26 +18,51 @@
   }
 
   &-image-wrapper {
-    display: block;
-    height: 360px;
-    margin: 0 auto;
+    position: relative;
 
-    img {
-      display: block;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
 
-      max-width: 100%;
-      max-height: 100%;
+    width: 100%;
+    max-height: 400px;
 
-      object-fit: cover;
-      object-position: 50% 50%;
+    &-item {
+      position: relative;
+      border-radius: 2rem;
+      background: #fbf2da;
+
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        display: block;
+
+        width: 95%;
+      }
     }
 
     @media (width <= 900px) {
-      height: 250px;
+      max-height: 300px;
+    }
+
+    @media (width <= 800px) {
+      max-height: 250px;
+    }
+
+    @media (width <= 800px) {
+      img {
+        width: unset;
+        max-width: 100%;
+        height: unset;
+        max-height: 100%;
+      }
     }
   }
 
-  &-card-content {
+  &-content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;

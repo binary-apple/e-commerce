@@ -5,6 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Paths } from '../../types/paths.ts';
 import styles from './ProductPage.module.scss';
 import { formatPrice } from '../../utils/formatPrice/formatPrice.ts';
+import ImageSlider from './components/ImageSlider/ImageSlider';
 
 export default function ProductPage() {
   const { key } = useParams();
@@ -35,11 +36,10 @@ export default function ProductPage() {
     <Box component="div" className={styles['card']}>
       <Grid className={styles['card-grid']}>
         <Box className={styles['card-image-wrapper']}>
-          {/*todo: implement here carousel*/}
-          <img src={data.masterVariant.images[1].url} alt={data.masterVariant.images[1].label} />
+          <ImageSlider product={data} />
         </Box>
 
-        <CardContent className={styles['card-content']}>
+        <CardContent className={styles['card-content']} sx={{ p: 0 }}>
           <Box>
             <Typography variant="h4" component="h2" color="text.secondary" gutterBottom>
               {data.name['en-GB']}

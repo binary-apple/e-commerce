@@ -26,7 +26,7 @@ export default function ProductCard({ product }: { product: ProductCardConfig })
       to={`/product/${product.key}`}
     >
       <Box className={styles['card-sticker']}>
-        <ShelterSticker product={product} size={237} />
+        <ShelterSticker product={product} />
       </Box>
       <CardContent
         className={styles['card-content']}

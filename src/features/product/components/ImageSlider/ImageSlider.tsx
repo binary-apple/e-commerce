@@ -22,7 +22,7 @@ export default function ImageSlider({ product }: { product: Product }) {
       slidesPerView={1}
       autoplay={{
         delay: 3000,
-        disableOnInteraction: true,
+        pauseOnMouseEnter: true,
       }}
     >
       <SwiperSlide key="sticker">

@@ -21,6 +21,7 @@ export const productsApi = createApi({
     getProducts: build.query<
       Response<Product>,
       {
+        priceRange?: { from?: number; to?: number };
         categoryId?: string;
         sortOption?: string;
         searchOption?: string;
@@ -29,6 +30,7 @@ export const productsApi = createApi({
       }
     >({
       query: ({
+        priceRange = {},
         categoryId = 'root',
         sortOption = '',
         searchOption = '',
@@ -36,6 +38,14 @@ export const productsApi = createApi({
         offset = OFFSET,
       }) => {
         const searchParameters = [];
+        if (
+          (priceRange.from !== undefined && priceRange.from >= 0) ||
+          (priceRange.to !== undefined && priceRange.to >= 0)
+        ) {
+          searchParameters.push(
+            `facet=variants.price.centAmount:range(${priceRange.from ?? 0} to ${priceRange.to ?? '*'})`,
+          );
+        }
         if (categoryId !== 'root' && categoryId) {
           searchParameters.push(`filter.query=categories.id:"${categoryId}"`);
         }

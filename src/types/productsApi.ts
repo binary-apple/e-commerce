@@ -8,6 +8,7 @@ export type Response<T> = {
   count: number;
   total: number;
   results: T[];
+  facets?: Facets;
 };
 
 export type Product = {
@@ -115,4 +116,28 @@ export type AttributeForProductType = {
 export type AttributeType = {
   name: string;
   values: AttributeValue[];
+};
+
+export type Facets = {
+  [key: string]: PriceFacet;
+};
+
+export type PriceFacet = {
+  type: string;
+  dataType: string;
+  ranges: Range[];
+};
+
+export type Range = {
+  type: string;
+  from: number;
+  fromStr: string;
+  to: number;
+  toStr: string;
+  count: number;
+  totalCount: number;
+  total: number;
+  min: number;
+  max: number;
+  mean: number;
 };

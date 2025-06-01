@@ -3,22 +3,38 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Link from '@mui/material/Link';
 import Select, { type SelectChangeEvent } from '@mui/material/Select';
-import { useGetProductTypesQuery } from '../../../../api/productsApi';
+import { useGetProductsQuery, useGetProductTypesQuery } from '../../../../api/productsApi';
 import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import { AttributeName } from '../../../../types/productsApi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import TextField from '@mui/material/TextField';
+import Slider from '@mui/material/Slider';
+
+const CENTS_IN_EURO = 100;
 
 export default function Filters() {
+  const { data: priceData } = useGetProductsQuery({
+    priceRange: { from: 0 },
+    limit: 0,
+  });
   const [petType, setPetType] = useState<string[]>([]);
+  const range = priceData?.facets?.['variants.price.centAmount'].ranges[0];
+  const rangeMin = (range?.min ?? 0) / CENTS_IN_EURO;
+  const rangeMax = (range?.max ?? 0) / CENTS_IN_EURO;
+  const [priceRange, setPriceRange] = useState<number[]>([rangeMin, rangeMax]);
+  useEffect(() => {
+    setPriceRange([rangeMin, rangeMax]);
+  }, [rangeMax, rangeMin]);
   const { data } = useGetProductTypesQuery();
+
   const attributes = data?.results[0].attributes;
   if (!attributes) return;
   const petTypesAttribute = attributes.find(
     (attribute) => attribute.name === AttributeName.PetType,
   );
-  const handleChange = (event: SelectChangeEvent<typeof petType>) => {
+  const handlePetTypeChange = (event: SelectChangeEvent<typeof petType>) => {
     const {
       target: { value },
     } = event;
@@ -28,8 +44,16 @@ export default function Filters() {
     setPetType([]);
   };
 
+  const handlePriceRangeChange = (_event: Event, newValue: number[]) => {
+    setPriceRange(newValue);
+  };
+  const resetPriceRange = () => {
+    setPriceRange([rangeMin, rangeMax]);
+  };
+
   const resetFilters = () => {
     resetPetType();
+    resetPriceRange();
   };
 
   return (
@@ -42,7 +66,7 @@ export default function Filters() {
             id="pet"
             multiple
             value={petType}
-            onChange={handleChange}
+            onChange={handlePetTypeChange}
             label="Pet"
             renderValue={(selected) => selected.join(', ')}
           >
@@ -70,7 +94,60 @@ export default function Filters() {
         </FormControl>
         <FormControl sx={{ width: '150px' }}>
           <InputLabel id="price-label">Price</InputLabel>
-          <Select labelId="price" id="price" value="" label="Price"></Select>
+          <Select
+            labelId="price"
+            id="price"
+            value={priceRange}
+            label="Price"
+            multiple
+            renderValue={() => {
+              return `${priceRange[0]} - ${priceRange[1]}EUR`;
+            }}
+          >
+            <MenuItem sx={{ padding: '0' }}>
+              <Link
+                component="button"
+                variant="body2"
+                width="100%"
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                  event.stopPropagation();
+                  resetPriceRange();
+                }}
+              >
+                Reset
+              </Link>
+            </MenuItem>
+            <MenuItem disabled divider />
+            <MenuItem value="value">
+              <Box px={1} py={1} sx={{ width: '250px' }}>
+                <Box display="flex" gap={1} mb={2}>
+                  <TextField
+                    size="small"
+                    label="Min"
+                    type="number"
+                    value={priceRange[0]}
+                    sx={{ width: '50%' }}
+                  />
+                  <TextField
+                    size="small"
+                    label="Max"
+                    type="number"
+                    value={priceRange[1]}
+                    sx={{ width: '50%' }}
+                  />
+                </Box>
+                <Slider
+                  getAriaLabel={() => 'Price'}
+                  value={priceRange}
+                  onChange={handlePriceRangeChange}
+                  valueLabelDisplay="auto"
+                  min={rangeMin}
+                  max={rangeMax}
+                  step={0.1}
+                />
+              </Box>
+            </MenuItem>
+          </Select>
         </FormControl>
       </Box>
       <Link component="button" variant="body2" onClick={resetFilters}>

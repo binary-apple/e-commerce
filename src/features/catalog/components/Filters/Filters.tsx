@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import { AttributeName } from '../../../../types/productsApi';
-import { useEffect, useState } from 'react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Slider from '@mui/material/Slider';
 
@@ -47,6 +47,15 @@ export default function Filters() {
   const handlePriceRangeChange = (_event: Event, newValue: number[]) => {
     setPriceRange(newValue);
   };
+  const handleMinPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newValue = Math.max(+event.target?.value, rangeMin);
+    setPriceRange([newValue, priceRange[1]]);
+  };
+  const handleMaxPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newValue = Math.min(+event.target?.value, rangeMax);
+    setPriceRange([priceRange[0], newValue]);
+  };
+
   const resetPriceRange = () => {
     setPriceRange([rangeMin, rangeMax]);
   };
@@ -125,15 +134,27 @@ export default function Filters() {
                     size="small"
                     label="Min"
                     type="number"
+                    onChange={handleMinPriceChange}
                     value={priceRange[0]}
                     sx={{ width: '50%' }}
+                    inputProps={{
+                      min: rangeMin,
+                      max: priceRange[1],
+                      step: '0.1',
+                    }}
                   />
                   <TextField
                     size="small"
                     label="Max"
                     type="number"
+                    onChange={handleMaxPriceChange}
                     value={priceRange[1]}
                     sx={{ width: '50%' }}
+                    inputProps={{
+                      min: priceRange[0],
+                      max: rangeMax,
+                      step: '0.1',
+                    }}
                   />
                 </Box>
                 <Slider

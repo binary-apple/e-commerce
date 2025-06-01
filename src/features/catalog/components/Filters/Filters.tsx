@@ -10,8 +10,6 @@ import ListItemText from '@mui/material/ListItemText';
 import { AttributeName } from '../../../../types/productsApi';
 import { useState } from 'react';
 
-const resetFilters = () => {};
-
 export default function Filters() {
   const [petType, setPetType] = useState<string[]>([]);
   const { data } = useGetProductTypesQuery();
@@ -24,7 +22,14 @@ export default function Filters() {
     const {
       target: { value },
     } = event;
-    setPetType(typeof value === 'string' ? value.split(', ') : value);
+    setPetType(typeof value === 'string' ? value.split(',') : value);
+  };
+  const resetPetType = () => {
+    setPetType([]);
+  };
+
+  const resetFilters = () => {
+    resetPetType();
   };
 
   return (
@@ -41,6 +46,20 @@ export default function Filters() {
             label="Pet"
             renderValue={(selected) => selected.join(', ')}
           >
+            <MenuItem sx={{ padding: '0' }}>
+              <Link
+                component="button"
+                variant="body2"
+                width="100%"
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+                  event.stopPropagation();
+                  resetPetType();
+                }}
+              >
+                Reset
+              </Link>
+            </MenuItem>
+            <MenuItem disabled divider />
             {petTypesAttribute?.type.values.map((attribute) => (
               <MenuItem key={attribute.key} value={attribute.label}>
                 <Checkbox checked={petType.includes(attribute.label)} />

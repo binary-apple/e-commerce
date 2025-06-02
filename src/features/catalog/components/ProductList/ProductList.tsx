@@ -11,9 +11,11 @@ import formatDataForSticker from '../../../../utils/formatDataForSticker/formatD
 export default function ProductList({
   sortValue,
   searchValue,
+  petType,
 }: {
   sortValue: SortValues;
   searchValue: string;
+  petType: string[];
 }) {
   const { isLoading: isCategoryLoading, selectedCategory } = useCategory();
 
@@ -26,6 +28,7 @@ export default function ProductList({
     categoryId: selectedCategory?.id,
     sortOption: sortValue,
     searchOption: searchValue,
+    petType: petType,
   });
   if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;

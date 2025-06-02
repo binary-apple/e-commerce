@@ -25,6 +25,7 @@ export const productsApi = createApi({
         categoryId?: string;
         sortOption?: string;
         searchOption?: string;
+        petType?: string[];
         limit?: number;
         offset?: number;
       }
@@ -34,6 +35,7 @@ export const productsApi = createApi({
         categoryId = 'root',
         sortOption = '',
         searchOption = '',
+        petType = [],
         limit = PRODUCTS_LIMIT,
         offset = OFFSET,
       }) => {
@@ -44,6 +46,11 @@ export const productsApi = createApi({
         ) {
           searchParameters.push(
             `facet=variants.price.centAmount:range(${priceRange.from ?? 0} to ${priceRange.to ?? '*'})`,
+          );
+        }
+        if (petType.length > 0) {
+          searchParameters.push(
+            `filter=variants.attributes.pet-type.key:${petType.map((pet) => `"${pet.toLowerCase()}"`).join(',')}`,
           );
         }
         if (categoryId !== 'root' && categoryId) {

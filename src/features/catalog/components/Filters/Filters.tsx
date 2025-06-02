@@ -14,12 +14,16 @@ import Slider from '@mui/material/Slider';
 
 const CENTS_IN_EURO = 100;
 
-export default function Filters() {
+type FilterProps = {
+  petType: string[];
+  onPetTypeChange: (value: string[]) => void;
+};
+
+export default function Filters({ petType, onPetTypeChange }: FilterProps) {
   const { data: priceData } = useGetProductsQuery({
     priceRange: { from: 0 },
     limit: 0,
   });
-  const [petType, setPetType] = useState<string[]>([]);
   const range = priceData?.facets?.['variants.price.centAmount'].ranges[0];
   const rangeMin = (range?.min ?? 0) / CENTS_IN_EURO;
   const rangeMax = (range?.max ?? 0) / CENTS_IN_EURO;
@@ -38,10 +42,10 @@ export default function Filters() {
     const {
       target: { value },
     } = event;
-    setPetType(typeof value === 'string' ? value.split(',') : value);
+    onPetTypeChange(typeof value === 'string' ? value.split(',') : value);
   };
   const resetPetType = () => {
-    setPetType([]);
+    onPetTypeChange([]);
   };
 
   const handlePriceRangeChange = (_event: Event, newValue: number[]) => {

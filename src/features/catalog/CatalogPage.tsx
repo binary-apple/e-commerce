@@ -12,6 +12,7 @@ import Filters from './components/Filters/Filters';
 export default function CatalogPage() {
   const [sortValue, setSortValue] = useState<SortValues>('');
   const [searchValue, setSearchValue] = useState<string>('');
+  const [petType, setPetType] = useState<string[]>([]);
   return (
     <CategoryProvider>
       <Box
@@ -46,10 +47,10 @@ export default function CatalogPage() {
                 <Search searchValue={searchValue} onChange={setSearchValue} />
                 <Sort sortValue={sortValue} onChange={setSortValue} />
               </Box>
-              <Filters />
+              <Filters petType={petType} onPetTypeChange={setPetType} />
             </Box>
             <Box width="100%" display="flex" justifyContent={'center'}>
-              <ProductList sortValue={sortValue} searchValue={searchValue} />
+              <ProductList sortValue={sortValue} searchValue={searchValue} petType={petType} />
             </Box>
           </Box>
         </Box>

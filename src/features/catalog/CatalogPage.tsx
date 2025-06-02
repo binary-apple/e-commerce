@@ -38,6 +38,7 @@ export default function CatalogPage() {
               flexDirection: 'column',
               gap: { sm: 2, xs: 0.5 },
               maxWidth: { sm: '75%', xs: '70%' },
+              width: { sm: '75%', xs: '70%' },
             }}
           >
             <Box component="div" display="flex" flexDirection="column" gap={2}>

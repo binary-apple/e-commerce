@@ -5,13 +5,13 @@ import type { RootState } from '../../../../store/store';
 import { useUpdateMutation } from '../../../../api/userApi';
 import type { CustomerFromApi } from '../../../../types/auth';
 import type { FieldsProfileProps } from '../ProfileForm/types';
-import { userInfoSchema } from '../../../../utils/validationSchema';
 import { DateInput } from '../../../../components/DateInput/DateInput';
 import { SelectInput } from '../../../../components/SelectInput/SelectInput';
 import { useSnackbar } from 'notistack';
 import { TextInput } from '../../../../components/TextInput/TextInput';
 import { normalizeDate, toUtcIsoString } from '../../../../utils/formatDate';
 import { useEffect } from 'react';
+import { getValidationSchema } from '../../utils/getFieldValue';
 
 type Props = {
   open: boolean;
@@ -36,7 +36,7 @@ export default function ProfileEditModal({
 
   const formik = useFormik({
     initialValues,
-    validationSchema: userInfoSchema,
+    validationSchema: getValidationSchema(fields),
     // enableReinitialize: true,
     onSubmit: async (values) => {
       if (!accessToken) {

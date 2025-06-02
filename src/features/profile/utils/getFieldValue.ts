@@ -1,10 +1,12 @@
 import type { AddressWithId, CustomerFromApi } from '../../../types/auth';
-import { countryMap } from '../components/ProfileForm/constants';
+import { addressSchema, userInfoSchema } from '../../../utils/validationSchema';
 import type {
   AddressFieldId,
   CustomerFieldId,
+  FieldsProfileProps,
   ProfileFieldIds,
 } from '../components/ProfileForm/types';
+import { ADDRESS_KEYS } from '../constants';
 
 export function getFieldValue(
   source: CustomerFromApi | AddressWithId,
@@ -15,9 +17,6 @@ export function getFieldValue(
   }
 
   if (!isCustomer(source) && isAddressField(id)) {
-    if (id === 'country') {
-      return countryMap[source[id]] || source[id];
-    }
     return source[id];
   }
 
@@ -33,5 +32,15 @@ function isCustomerField(id: string): id is CustomerFieldId {
 }
 
 function isAddressField(id: string): id is AddressFieldId {
-  return ['streetName', 'city', 'country', 'postalCode'].includes(id);
+  return ADDRESS_KEYS.includes(id);
+}
+export function getValidationSchema(fields: FieldsProfileProps[]) {
+  const hasAddressFields = fields.some((field) => isAddressField(field.id));
+  const hasUserFields = fields.some((field) => !isAddressField(field.id));
+
+  if (hasAddressFields && !hasUserFields) {
+    return addressSchema;
+  }
+
+  return userInfoSchema;
 }

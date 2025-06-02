@@ -1,4 +1,4 @@
-import { Chip, Divider, Grid, IconButton, ListItemText, Typography } from '@mui/material';
+import { Button, Chip, Divider, Grid, IconButton, ListItemText, Typography } from '@mui/material';
 import { fieldsConfig } from './constants';
 import { Fragment } from 'react/jsx-runtime';
 import { useLazyGetMeQuery } from '../../../../api/authApi';
@@ -11,11 +11,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import ProfileEditModal from '../ProfileEditModal/ProfileEditModal';
 import type { FieldsProfileProps } from './types';
 import type { AddressWithId, CustomerFromApi } from '../../../../types/auth';
+import PasswordEditModal from '../PasswordEditModal/PasswordEditModal';
 
 export default function ProfileForm() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   const [trigger, { data: user }] = useLazyGetMeQuery();
   const [modalOpen, setModalOpen] = useState(false);
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [editableFields, setEditableFields] = useState<FieldsProfileProps[]>([]);
   const [initialValues, setInitialValues] = useState<Record<string, string>>({});
 
@@ -53,8 +55,23 @@ export default function ProfileForm() {
     setEditableFields([]);
   };
 
+  const handlePasswordOpen = () => {
+    setPasswordModalOpen(true);
+  };
+
+  const handleClosePasswordModal = () => {
+    setPasswordModalOpen(false);
+    setEditableFields([]);
+  };
+
   return (
     <>
+      <Divider></Divider>
+      <Grid size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+        <Button color="secondary" variant="outlined" size="small" onClick={handlePasswordOpen}>
+          Change Password
+        </Button>
+      </Grid>
       <Grid container spacing={1}>
         {fieldsConfig.map(({ section, fields, addressType }) => {
           const isAddressSection = addressType === 'shipping' || addressType === 'billing';
@@ -128,6 +145,12 @@ export default function ProfileForm() {
         user={user}
         fields={editableFields}
         initialValues={initialValues}
+        refetchUser={trigger}
+      />
+      <PasswordEditModal
+        open={passwordModalOpen}
+        user={user}
+        handleClose={handleClosePasswordModal}
         refetchUser={trigger}
       />
     </>

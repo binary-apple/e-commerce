@@ -171,3 +171,8 @@ export const userInfoSchema = yup.object().shape({
       return checkAge(new Date(value));
     }),
 });
+
+export const passwordUpdateSchema = yup.object().shape({
+  currentPassword: passwordSchema,
+  newPassword: passwordSchema,
+});

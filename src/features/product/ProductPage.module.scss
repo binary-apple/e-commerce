@@ -53,13 +53,9 @@
       max-height: 250px;
     }
 
-    @media (width <= 800px) {
-      img {
-        width: unset;
-        max-width: 100%;
-        height: unset;
-        max-height: 100%;
-      }
+    @media (width <= 500px) {
+      max-width: 90%;
+      max-height: 90%;
     }
   }
 

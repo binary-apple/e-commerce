@@ -12,10 +12,12 @@ export default function ProductList({
   sortValue,
   searchValue,
   petType,
+  selectedPriceRange: priceRange,
 }: {
   sortValue: SortValues;
   searchValue: string;
   petType: string[];
+  selectedPriceRange: number[];
 }) {
   const { isLoading: isCategoryLoading, selectedCategory } = useCategory();
 
@@ -29,6 +31,7 @@ export default function ProductList({
     sortOption: sortValue,
     searchOption: searchValue,
     petType: petType,
+    selectedPriceRange: priceRange,
   });
   if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;

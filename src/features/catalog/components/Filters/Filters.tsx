@@ -8,18 +8,24 @@ import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import { AttributeName } from '../../../../types/productsApi';
-import { type ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Slider from '@mui/material/Slider';
-
-const CENTS_IN_EURO = 100;
+import { CENTS_IN_EURO } from '../../../../utils/formatPrice/formatPrice';
 
 type FilterProps = {
   petType: string[];
   onPetTypeChange: (value: string[]) => void;
+  priceRange: number[];
+  onPriceRangeChange: (value: number[]) => void;
 };
 
-export default function Filters({ petType, onPetTypeChange }: FilterProps) {
+export default function Filters({
+  petType,
+  onPetTypeChange,
+  priceRange,
+  onPriceRangeChange,
+}: FilterProps) {
   const { data: priceData } = useGetProductsQuery({
     priceRange: { from: 0 },
     limit: 0,
@@ -27,10 +33,9 @@ export default function Filters({ petType, onPetTypeChange }: FilterProps) {
   const range = priceData?.facets?.['variants.price.centAmount'].ranges[0];
   const rangeMin = (range?.min ?? 0) / CENTS_IN_EURO;
   const rangeMax = (range?.max ?? 0) / CENTS_IN_EURO;
-  const [priceRange, setPriceRange] = useState<number[]>([rangeMin, rangeMax]);
   useEffect(() => {
-    setPriceRange([rangeMin, rangeMax]);
-  }, [rangeMax, rangeMin]);
+    onPriceRangeChange([rangeMin, rangeMax]);
+  }, [onPriceRangeChange, rangeMax, rangeMin]);
   const { data } = useGetProductTypesQuery();
 
   const attributes = data?.results[0].attributes;
@@ -49,19 +54,19 @@ export default function Filters({ petType, onPetTypeChange }: FilterProps) {
   };
 
   const handlePriceRangeChange = (_event: Event, newValue: number[]) => {
-    setPriceRange(newValue);
+    onPriceRangeChange(newValue);
   };
   const handleMinPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = Math.max(+event.target?.value, rangeMin);
-    setPriceRange([newValue, priceRange[1]]);
+    onPriceRangeChange([newValue, priceRange[1]]);
   };
   const handleMaxPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = Math.min(+event.target?.value, rangeMax);
-    setPriceRange([priceRange[0], newValue]);
+    onPriceRangeChange([priceRange[0], newValue]);
   };
 
   const resetPriceRange = () => {
-    setPriceRange([rangeMin, rangeMax]);
+    onPriceRangeChange([rangeMin, rangeMax]);
   };
 
   const resetFilters = () => {

@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { projectKey } from './constants';
 import { getClientToken } from '../services/serviceToken';
 import type { Response, Product, Category, ProductType } from '../types/productsApi';
+import { CENTS_IN_EURO } from '../utils/formatPrice/formatPrice';
 
 const PRODUCTS_LIMIT = 100;
 const OFFSET = 0;
@@ -22,6 +23,7 @@ export const productsApi = createApi({
       Response<Product>,
       {
         priceRange?: { from?: number; to?: number };
+        selectedPriceRange?: number[];
         categoryId?: string;
         sortOption?: string;
         searchOption?: string;
@@ -32,6 +34,7 @@ export const productsApi = createApi({
     >({
       query: ({
         priceRange = {},
+        selectedPriceRange = [],
         categoryId = 'root',
         sortOption = '',
         searchOption = '',
@@ -46,6 +49,15 @@ export const productsApi = createApi({
         ) {
           searchParameters.push(
             `facet=variants.price.centAmount:range(${priceRange.from ?? 0} to ${priceRange.to ?? '*'})`,
+          );
+        }
+        if (
+          selectedPriceRange &&
+          selectedPriceRange.length > 0 &&
+          (selectedPriceRange[0] !== 0 || selectedPriceRange[1] !== 0)
+        ) {
+          searchParameters.push(
+            `filter.query=variants.price.centAmount:range(${selectedPriceRange[0] ? selectedPriceRange[0] * CENTS_IN_EURO : 0} to ${selectedPriceRange[1] ? selectedPriceRange[1] * CENTS_IN_EURO : '*'})`,
           );
         }
         if (petType.length > 0) {

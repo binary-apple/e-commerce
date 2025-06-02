@@ -13,6 +13,7 @@ export default function CatalogPage() {
   const [sortValue, setSortValue] = useState<SortValues>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [petType, setPetType] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<number[]>([0, 0]);
   return (
     <CategoryProvider>
       <Box
@@ -47,10 +48,20 @@ export default function CatalogPage() {
                 <Search searchValue={searchValue} onChange={setSearchValue} />
                 <Sort sortValue={sortValue} onChange={setSortValue} />
               </Box>
-              <Filters petType={petType} onPetTypeChange={setPetType} />
+              <Filters
+                petType={petType}
+                onPetTypeChange={setPetType}
+                priceRange={priceRange}
+                onPriceRangeChange={setPriceRange}
+              />
             </Box>
             <Box width="100%" display="flex" justifyContent={'center'}>
-              <ProductList sortValue={sortValue} searchValue={searchValue} petType={petType} />
+              <ProductList
+                sortValue={sortValue}
+                searchValue={searchValue}
+                petType={petType}
+                selectedPriceRange={priceRange}
+              />
             </Box>
           </Box>
         </Box>

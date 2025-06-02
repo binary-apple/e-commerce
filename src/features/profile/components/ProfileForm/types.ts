@@ -1,6 +1,6 @@
 import type { FieldType } from '../../../../types/form';
 
-export type CustomerFieldId = 'firstName' | 'lastName' | 'dateOfBirth';
+export type CustomerFieldId = 'firstName' | 'lastName' | 'dateOfBirth' | 'email';
 export type AddressFieldId = 'streetName' | 'city' | 'country' | 'postalCode';
 
 export type ProfileFieldIds = CustomerFieldId | AddressFieldId;

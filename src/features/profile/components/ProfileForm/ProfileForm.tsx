@@ -1,16 +1,23 @@
-import { Chip, Divider, Grid, ListItemText, Typography } from '@mui/material';
+import { Chip, Divider, Grid, IconButton, ListItemText, Typography } from '@mui/material';
 import { fieldsConfig } from './constants';
 import { Fragment } from 'react/jsx-runtime';
 import { useLazyGetMeQuery } from '../../../../api/authApi';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../store/store';
 import { formatDate } from '../../../../utils/formatDate';
 import { getFieldValue } from '../../utils/getFieldValue';
+import EditIcon from '@mui/icons-material/Edit';
+import ProfileEditModal from '../ProfileEditModal/ProfileEditModal';
+import type { FieldsProfileProps } from './types';
+import type { AddressWithId, CustomerFromApi } from '../../../../types/auth';
 
 export default function ProfileForm() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   const [trigger, { data: user }] = useLazyGetMeQuery();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editableFields, setEditableFields] = useState<FieldsProfileProps[]>([]);
+  const [initialValues, setInitialValues] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (accessToken) {
@@ -27,59 +34,102 @@ export default function ProfileForm() {
     return ids.map((id) => user.addresses.find((addr) => addr.id === id));
   };
 
+  const handleEditClick = (
+    fields: FieldsProfileProps[],
+    source: CustomerFromApi | AddressWithId,
+  ) => {
+    setEditableFields(fields);
+    const values = fields.reduce<Record<string, string>>((acc, { id }) => {
+      const value = getFieldValue(source, id);
+      acc[id] = value || '';
+      return acc;
+    }, {});
+    setInitialValues({ ...values });
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setEditableFields([]);
+  };
+
   return (
-    <Grid container spacing={1}>
-      {fieldsConfig.map(({ section, fields, addressType }) => {
-        const isAddressSection = addressType === 'shipping' || addressType === 'billing';
+    <>
+      <Grid container spacing={1}>
+        {fieldsConfig.map(({ section, fields, addressType }) => {
+          const isAddressSection = addressType === 'shipping' || addressType === 'billing';
+          const sourceList = isAddressSection ? getAddressList(addressType) : [user];
 
-        const sourceList = isAddressSection ? getAddressList(addressType) : [user];
-
-        return (
-          <Fragment key={section}>
-            <Grid size={{ xs: 12 }}>
-              <Divider>{section}</Divider>
-            </Grid>
-            {sourceList?.length === 0 && isAddressSection && (
-              <Grid>
-                <Typography variant="body2">There are no addresses here yet.</Typography>
+          return (
+            <Fragment key={section}>
+              <Grid size={{ xs: 12 }}>
+                <Divider>{section}</Divider>
               </Grid>
-            )}
-            {sourceList?.map(
-              (source, index) =>
-                source && (
-                  <Fragment key={index}>
-                    {isAddressSection && (
-                      <Grid
-                        size={{ xs: 12 }}
-                        spacing={2}
-                        sx={{ display: 'flex', alignItems: 'center', mt: 1, gap: 2 }}
-                      >
-                        <Typography variant="subtitle2">Address {index + 1}</Typography>
-                        {addressType === 'shipping' && source.id === defaultShippingAddressId && (
-                          <Chip label="Default" color="info" variant="outlined" />
+              {sourceList?.length === 0 && isAddressSection && (
+                <Grid>
+                  <Typography variant="body2">There are no addresses here yet.</Typography>
+                </Grid>
+              )}
+              {sourceList?.map(
+                (source, index) =>
+                  source && (
+                    <Fragment key={index}>
+                      <Grid size={{ xs: 12 }} sx={{ display: 'flex', alignItems: 'center' }}>
+                        {isAddressSection && (
+                          <Grid
+                            size={{ xs: 6 }}
+                            spacing={2}
+                            sx={{ display: 'flex', alignItems: 'center', gap: 2 }}
+                          >
+                            <Typography variant="subtitle2">Address {index + 1}</Typography>
+                            {addressType === 'shipping' &&
+                              source.id === defaultShippingAddressId && (
+                                <Chip label="Default" color="info" variant="outlined" />
+                              )}
+                            {addressType === 'billing' && source.id === defaultBillingAddressId && (
+                              <Chip label="Default" color="info" variant="outlined" />
+                            )}
+                          </Grid>
                         )}
-                        {addressType === 'billing' && source.id === defaultBillingAddressId && (
-                          <Chip label="Default" color="info" variant="outlined" />
-                        )}
-                      </Grid>
-                    )}
-                    {fields.map(({ id, label }) => {
-                      let value = getFieldValue(source, id);
-                      if (id === 'dateOfBirth' && value) {
-                        value = formatDate(value);
-                      }
-                      return (
-                        <Grid key={id + index} size={{ xs: 12, md: 6 }}>
-                          <ListItemText primary={label} secondary={value} />
+                        <Grid
+                          size={isAddressSection ? { xs: 6 } : { xs: 12 }}
+                          sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+                        >
+                          <IconButton
+                            color="primary"
+                            aria-label="edit"
+                            onClick={() => handleEditClick(fields, source)}
+                          >
+                            <EditIcon />
+                          </IconButton>
                         </Grid>
-                      );
-                    })}
-                  </Fragment>
-                ),
-            )}
-          </Fragment>
-        );
-      })}
-    </Grid>
+                      </Grid>
+                      {fields.map(({ id, label }) => {
+                        let value = getFieldValue(source, id);
+                        if (id === 'dateOfBirth' && value) {
+                          value = formatDate(value);
+                        }
+                        return (
+                          <Grid key={id + index} size={{ xs: 12, md: 6 }}>
+                            <ListItemText primary={label} secondary={value} />
+                          </Grid>
+                        );
+                      })}
+                    </Fragment>
+                  ),
+              )}
+            </Fragment>
+          );
+        })}
+      </Grid>
+      <ProfileEditModal
+        open={modalOpen}
+        handleClose={handleCloseModal}
+        user={user}
+        fields={editableFields}
+        initialValues={initialValues}
+        refetchUser={trigger}
+      />
+    </>
   );
 }

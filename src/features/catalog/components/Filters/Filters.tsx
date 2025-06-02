@@ -147,7 +147,7 @@ export default function Filters() {
                     inputProps={{
                       min: rangeMin,
                       max: priceRange[1],
-                      step: '0.1',
+                      step: '1',
                     }}
                   />
                   <TextField
@@ -160,7 +160,7 @@ export default function Filters() {
                     inputProps={{
                       min: priceRange[0],
                       max: rangeMax,
-                      step: '0.1',
+                      step: '1',
                     }}
                   />
                 </Box>
@@ -171,7 +171,7 @@ export default function Filters() {
                   valueLabelDisplay="auto"
                   min={rangeMin}
                   max={rangeMax}
-                  step={0.1}
+                  step={1}
                 />
               </Box>
             </MenuItem>

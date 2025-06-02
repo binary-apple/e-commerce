@@ -3,7 +3,6 @@ import ProductList from './components/ProductList/ProductList';
 import CategoryList from './components/CategoryList/CategoryList';
 import { CategoryProvider } from '../../providers/CategoriesProvider';
 import CustomBreadcrumbs from './components/Breadcrumbs/Breadcrumbs';
-import Grid from '@mui/material/Grid';
 import Sort from './components/Sort/Sort';
 import { useState } from 'react';
 import type { SortValues } from './types/sort';
@@ -29,11 +28,18 @@ export default function CatalogPage() {
         }}
       >
         <CustomBreadcrumbs />
-        <Grid container spacing={3}>
-          <Grid size={3}>
+        <Box component="div" sx={{ display: 'flex', gap: { sm: 2, xs: 0.5 }, width: '100%' }}>
+          <Box sx={{ minWidth: { sm: '25%', xs: '30%' } }}>
             <CategoryList />
-          </Grid>
-          <Grid size={9} display={'grid'} gap={2}>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: { sm: 2, xs: 0.5 },
+              maxWidth: { sm: '75%', xs: '70%' },
+            }}
+          >
             <Box component="div" display="flex" flexDirection="column" gap={2}>
               <Box component="div" display="flex" gap={2}>
                 <Search searchValue={searchValue} onChange={setSearchValue} />
@@ -41,9 +47,11 @@ export default function CatalogPage() {
               </Box>
               <Filters />
             </Box>
-            <ProductList sortValue={sortValue} searchValue={searchValue} />
-          </Grid>
-        </Grid>
+            <Box width="100%" display="flex" justifyContent={'center'}>
+              <ProductList sortValue={sortValue} searchValue={searchValue} />
+            </Box>
+          </Box>
+        </Box>
       </Box>
     </CategoryProvider>
   );

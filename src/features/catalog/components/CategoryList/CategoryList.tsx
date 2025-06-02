@@ -22,6 +22,7 @@ export default function CategoryList() {
         padding="0.7rem"
         fontWeight={600}
         color="primary"
+        sx={{ fontSize: { sm: '1.4rem', xs: '1rem' }, px: { sm: 1, xs: 0.5 } }}
       >
         Categories
       </Typography>
@@ -36,7 +37,16 @@ export default function CategoryList() {
             >
               <ListItemText
                 primary={category.categoryName}
-                sx={{ paddingLeft: `calc(1.5rem * ${category.nestingLevel})` }}
+                sx={{
+                  paddingLeft: {
+                    md: `calc(1.5rem * ${category.nestingLevel})`,
+                    xs: `calc(0.5rem * ${category.nestingLevel})`,
+                  },
+                  fontSize: {
+                    md: '1rem',
+                    xs: '0.75rem',
+                  },
+                }}
               />
             </ListItemButton>
           );

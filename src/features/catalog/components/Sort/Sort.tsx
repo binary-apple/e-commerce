@@ -17,7 +17,7 @@ export default function Sort({ sortValue, onChange }: SortProps) {
   };
 
   return (
-    <FormControl sx={{ width: '120px' }}>
+    <FormControl size="small" sx={{ minWidth: '120px' }}>
       <InputLabel id="sort-label">Sort</InputLabel>
       <Select labelId="sort" id="sort" value={sortValue} label="Sort" onChange={handleChange}>
         {SortOptions.map(({ value, label }) => (

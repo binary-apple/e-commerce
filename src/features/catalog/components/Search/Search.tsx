@@ -18,7 +18,7 @@ export default function Search({ searchValue, onChange }: SearchProps) {
   };
 
   return (
-    <FormControl variant="outlined" fullWidth sx={{ flexGrow: '1' }}>
+    <FormControl variant="outlined" fullWidth size="small" sx={{ flexGrow: '1' }}>
       <InputLabel htmlFor="search">Search</InputLabel>
       <OutlinedInput
         id="search"

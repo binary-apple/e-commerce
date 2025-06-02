@@ -66,9 +66,16 @@ export default function Filters() {
   };
 
   return (
-    <Box component="div" display="flex" justifyContent="space-between" alignItems="center">
-      <Box display="flex" gap={2}>
-        <FormControl sx={{ width: '150px' }}>
+    <Box
+      component="div"
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+      gap={1}
+      flexWrap={'wrap'}
+    >
+      <Box display="flex" gap={2} flexWrap={'wrap'}>
+        <FormControl size="small" sx={{ width: '150px' }}>
           <InputLabel id="pet-label">Pet</InputLabel>
           <Select
             labelId="pet"
@@ -101,7 +108,7 @@ export default function Filters() {
             ))}
           </Select>
         </FormControl>
-        <FormControl sx={{ width: '150px' }}>
+        <FormControl size="small" sx={{ width: '150px' }}>
           <InputLabel id="price-label">Price</InputLabel>
           <Select
             labelId="price"

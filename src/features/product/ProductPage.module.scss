@@ -6,6 +6,9 @@
   padding-bottom: 4rem;
 
   &-grid {
+    position: relative;
+
+    overflow: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
@@ -77,7 +80,11 @@
 
     &-price {
       display: flex;
-      gap: 0.5rem;
+      flex-direction: column;
+
+      &-sale {
+        color: #c21f39;
+      }
     }
   }
 

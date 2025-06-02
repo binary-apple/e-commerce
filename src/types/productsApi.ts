@@ -39,14 +39,25 @@ export type Image = {
 };
 
 export type Price = {
+  discounted?: Discount;
   id: string;
   key: string;
-  value: {
-    centAmount: number;
-    currencyCode: 'EUR';
-    fractionDigits: number;
-    type: string;
+  value: PriceValue;
+};
+
+export type Discount = {
+  discount: {
+    id: string;
+    typeId: string;
   };
+  value: PriceValue;
+};
+
+export type PriceValue = {
+  centAmount: number;
+  currencyCode: string;
+  fractionDigits: number;
+  type: string;
 };
 
 export type Attribute = {

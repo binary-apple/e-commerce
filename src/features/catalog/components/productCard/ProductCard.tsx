@@ -8,6 +8,7 @@ import { CardActions } from '@mui/material';
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
 import type { ProductCardConfig } from '../../../../types/product';
 import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker';
+import { formatPrice } from '../../../../utils/formatPrice/formatPrice';
 import styles from './ProductCard.module.scss';
 
 const handleAddToCart = (event: React.MouseEvent, product: ProductCardConfig) => {
@@ -25,6 +26,7 @@ export default function ProductCard({ product }: { product: ProductCardConfig })
       component={NavLink}
       to={`/product/${product.key}`}
     >
+      {product.discount && <Box className="urgent">Urgent!</Box>}
       <Box className={styles['card-sticker']}>
         <ShelterSticker product={product} />
       </Box>
@@ -44,10 +46,26 @@ export default function ProductCard({ product }: { product: ProductCardConfig })
         </Typography>
         <Box className={styles['card-price-row']}>
           <Box className={styles['card-price']}>
-            <Typography variant="h6" color="text.secondary">
-              {product.price}
-            </Typography>
-            <Typography variant="h6">{product.currencyCode}</Typography>
+            {product.discount ? (
+              <>
+                <Box className={styles['card-price-box']}>
+                  <Typography variant="h5" className={styles['card-price-sale']}>
+                    {formatPrice(product.discount.value)}
+                  </Typography>
+                  <Typography variant="h6" color="text.secondary">
+                    <s>{product.price}</s>
+                  </Typography>
+                </Box>
+                <Typography variant="h6">{product.currencyCode}</Typography>
+              </>
+            ) : (
+              <>
+                <Typography variant="h6" color="text.secondary">
+                  {product.price}
+                </Typography>
+                <Typography variant="h6">{product.currencyCode}</Typography>
+              </>
+            )}
           </Box>
           <CardActions
             sx={{

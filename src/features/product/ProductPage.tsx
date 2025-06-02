@@ -1,6 +1,6 @@
 import { Navigate, useParams } from 'react-router';
 import { useGetProductByKeyQuery } from '../../api/productsApi';
-import { Grid, CardContent, Typography, Box, Button, Stack, Chip } from '@mui/material';
+import { Grid, CardContent, Typography, Box, Button } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Paths } from '../../types/paths.ts';
 import styles from './ProductPage.module.scss';
@@ -24,14 +24,15 @@ export default function ProductPage() {
   const formattedPrice: string = formatPrice(data.masterVariant.prices[0]);
   const CODE: string = data.masterVariant.prices[0].value.currencyCode;
 
-  const petTypeAttribute = data.masterVariant.attributes.find(
-    (attribute) => attribute.name === 'pet-type',
-  );
-  const petLabels = Array.isArray(petTypeAttribute?.value)
-    ? petTypeAttribute.value.map((value: { label: string }) => value.label)
-    : petTypeAttribute?.value?.label
-      ? [petTypeAttribute.value.label]
-      : ['other'];
+  // Todo: implement logic of adding labels of animal type
+  // const petTypeAttribute = data.masterVariant.attributes.find(
+  //   (attribute) => attribute.name === 'pet-type',
+  // );
+  // const petLabels = Array.isArray(petTypeAttribute?.value)
+  //   ? petTypeAttribute.value.map((value: { label: string }) => value.label)
+  //   : petTypeAttribute?.value?.label
+  //     ? [petTypeAttribute.value.label]
+  //     : ['other'];
   return (
     <Box component="div" className={styles['card']}>
       <Grid className={styles['card-grid']}>
@@ -47,17 +48,17 @@ export default function ProductPage() {
             <Typography variant="body1" color="text.primary" gutterBottom>
               {data.description['en-GB']}
             </Typography>
-            <Stack direction="row" spacing={1}>
-              {petLabels.map((label, index) => (
-                <Chip
-                  key={index}
-                  className={styles['card-label']}
-                  label={label}
-                  color="secondary"
-                  size="small"
-                />
-              ))}
-            </Stack>
+            {/*<Stack direction="row" spacing={1}>*/}
+            {/*  {petLabels.map((label, index) => (*/}
+            {/*    <Chip*/}
+            {/*      key={index}*/}
+            {/*      className={styles['card-label']}*/}
+            {/*      label={label}*/}
+            {/*      color="secondary"*/}
+            {/*      size="small"*/}
+            {/*    />*/}
+            {/*  ))}*/}
+            {/*</Stack>*/}
           </Box>
           {/*todo: add here city and country*/}
           <Box className={styles['card-bottom']}>

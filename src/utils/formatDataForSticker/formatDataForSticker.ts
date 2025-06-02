@@ -3,6 +3,9 @@ import type { Product } from '../../types/productsApi.ts';
 import type { ProductCardConfig } from '../../types/product.ts';
 
 export default function formatDataForSticker(data: Product): ProductCardConfig {
+  const priceObject = data.masterVariant.prices[0];
+  const hasDiscount = Boolean(priceObject.discounted);
+
   return {
     key: data.key,
     name: data.name['en-GB'] || '',
@@ -15,5 +18,6 @@ export default function formatDataForSticker(data: Product): ProductCardConfig {
     place: '',
     //todo: replace place with country with city!
     currencyCode: data.masterVariant.prices[0].value.currencyCode,
+    ...(hasDiscount && { discount: priceObject.discounted! }),
   };
 }

@@ -1,3 +1,5 @@
+import type { Discount } from './productsApi.ts';
+
 export type ProductCardConfig = {
   key: string;
   name: string;
@@ -7,4 +9,5 @@ export type ProductCardConfig = {
   place: string;
   color: string;
   currencyCode: string;
+  discount?: Discount;
 };

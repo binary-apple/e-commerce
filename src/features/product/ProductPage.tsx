@@ -4,7 +4,7 @@ import { Grid, CardContent, Typography, Box, Button } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Paths } from '../../types/paths.ts';
 import styles from './ProductPage.module.scss';
-import { formatPrice } from '../../utils/formatPrice/formatPrice.ts';
+import { formatPrice } from '../../utils/formatPrice/formatPrice';
 import ImageSlider from './components/ImageSlider/ImageSlider';
 
 export default function ProductPage() {
@@ -45,7 +45,7 @@ export default function ProductPage() {
   return (
     <Box component="div" className={styles['card']}>
       <Grid className={styles['card-grid']}>
-        {hasDiscount && <Box className={styles['card-grid-discount']}>Discount!</Box>}
+        {hasDiscount && <Box className="urgent">Urgent!</Box>}
         <Box className={styles['card-image-wrapper']}>
           <ImageSlider product={data} />
         </Box>

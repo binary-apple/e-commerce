@@ -1,9 +1,9 @@
-import type { Price } from '../../types/productsApi.ts';
+import type { PriceValue } from '../../types/productsApi.ts';
 
 const CENTS_IN_EURO = 100;
 
-export function formatPrice(price: Price): string {
-  const { centAmount, fractionDigits } = price.value;
+export function formatPrice(price: PriceValue): string {
+  const { centAmount, fractionDigits } = price;
   const euroAmount = centAmount / CENTS_IN_EURO;
   return euroAmount.toFixed(fractionDigits);
 }

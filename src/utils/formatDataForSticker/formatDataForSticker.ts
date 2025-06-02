@@ -6,7 +6,7 @@ export default function formatDataForSticker(data: Product): ProductCardConfig {
   return {
     key: data.key,
     name: data.name['en-GB'] || '',
-    price: formatPrice(data.masterVariant.prices[0]),
+    price: formatPrice(data.masterVariant.prices[0].value),
     image: data.masterVariant.images[0].url,
     description: data.description['en-GB'] || '',
     color:

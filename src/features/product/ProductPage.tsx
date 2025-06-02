@@ -21,8 +21,17 @@ export default function ProductPage() {
   }
   if (!data) return <Navigate to={Paths.NOT_FOUND} replace />;
 
-  const formattedPrice: string = formatPrice(data.masterVariant.prices[0]);
-  const CODE: string = data.masterVariant.prices[0].value.currencyCode;
+  const priceObject = data.masterVariant.prices[0];
+
+  const formattedPrice: string = formatPrice(priceObject.value);
+  const CODE: string = priceObject.value.currencyCode;
+
+  const hasDiscount = Boolean(priceObject.discounted);
+
+  let formattedSalePrice: string | null = null;
+  if (hasDiscount) {
+    formattedSalePrice = formatPrice(priceObject.discounted!.value);
+  }
 
   // Todo: implement logic of adding labels of animal type
   // const petTypeAttribute = data.masterVariant.attributes.find(
@@ -36,6 +45,7 @@ export default function ProductPage() {
   return (
     <Box component="div" className={styles['card']}>
       <Grid className={styles['card-grid']}>
+        {hasDiscount && <Box className={styles['card-grid-discount']}>Discount!</Box>}
         <Box className={styles['card-image-wrapper']}>
           <ImageSlider product={data} />
         </Box>
@@ -63,10 +73,22 @@ export default function ProductPage() {
           {/*todo: add here city and country*/}
           <Box className={styles['card-bottom']}>
             <Box className={styles['card-bottom-price']}>
-              <Typography variant="h6" color="primary">
-                {formattedPrice}
-              </Typography>
-              <Typography variant="h6">{CODE}</Typography>
+              {hasDiscount ? (
+                <>
+                  <Typography variant="h6">
+                    <s>
+                      {formattedPrice} {CODE}
+                    </s>
+                  </Typography>
+                  <Typography variant="h5" className={styles['card-bottom-price-sale']}>
+                    {formattedSalePrice} {CODE}
+                  </Typography>
+                </>
+              ) : (
+                <Typography variant="h5" color="primary">
+                  {formattedPrice} {CODE}
+                </Typography>
+              )}
             </Box>
             {/*todo: add event listeners on this button*/}
             <Button variant="contained" color="primary">

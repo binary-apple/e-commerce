@@ -4,6 +4,10 @@ export type AddressWithId = AddressApi & {
   id: string;
 };
 
+export type AddressWithId = AddressApi & {
+  id: string;
+};
+
 export type RegistrationDataApi = {
   email: string;
   password: string;

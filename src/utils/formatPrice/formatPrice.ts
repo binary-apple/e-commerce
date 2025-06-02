@@ -1,6 +1,6 @@
 import type { PriceValue } from '../../types/productsApi.ts';
 
-const CENTS_IN_EURO = 100;
+export const CENTS_IN_EURO = 100;
 
 export function formatPrice(price: PriceValue): string {
   const { centAmount, fractionDigits } = price;

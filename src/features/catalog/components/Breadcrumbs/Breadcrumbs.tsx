@@ -14,8 +14,8 @@ export default function CustomBreadcrumbs() {
   }
 
   return (
-    <Box>
-      <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ height: '26px' }}>
+    <Box px={2}>
+      <Breadcrumbs separator="›" aria-label="breadcrumb" sx={{ minHeight: '26px' }}>
         {currentCategoryChain.map((category, id) => {
           if (id === currentCategoryChain.length - 1) {
             return (

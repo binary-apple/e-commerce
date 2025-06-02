@@ -3,7 +3,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
-import type { ChangeEvent } from 'react';
+import { useCallback, type ChangeEvent } from 'react';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 type SearchProps = {
@@ -12,13 +12,16 @@ type SearchProps = {
 };
 
 export default function Search({ searchValue, onChange }: SearchProps) {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target?.value;
-    onChange(value);
-  };
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target?.value;
+      onChange(value);
+    },
+    [onChange],
+  );
 
   return (
-    <FormControl variant="outlined" fullWidth>
+    <FormControl variant="outlined" fullWidth size="small" sx={{ flexGrow: '1' }}>
       <InputLabel htmlFor="search">Search</InputLabel>
       <OutlinedInput
         id="search"

@@ -3,12 +3,10 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import { useGetProductsQuery } from '../../../../api/productsApi';
 import type { Product } from '../../../../types/productsApi';
-import type { ProductCardConfig } from '../../../../types/product';
 import ProductCard from '../productCard/ProductCard.tsx';
 import { useCategory } from '../../../../contexts/CategoryContext.tsx';
 import type { SortValues } from '../../types/sort.ts';
-
-const CENTS_IN_EURO = 100;
+import formatDataForSticker from '../../../../utils/formatDataForSticker/formatDataForSticker.ts';
 
 export default function ProductList({
   sortValue,
@@ -38,23 +36,7 @@ export default function ProductList({
   return (
     <Grid container spacing={1}>
       {data?.results.map((product: Product) => {
-        const price = product.masterVariant.prices[0].value;
-        const formattedPrice = (price.centAmount / CENTS_IN_EURO).toFixed(price.fractionDigits);
-
-        const typedProduct: ProductCardConfig = {
-          key: product.key,
-          name: product.name['en-GB'] || '',
-          price: formattedPrice,
-          image: product.masterVariant.images[0].url,
-          description: product.description['en-GB'] || '',
-          color:
-            product.masterVariant.attributes.find((attribute) => attribute.name === 'color')?.value
-              .key || 'color-cheap',
-          place: '',
-          //todo: replace place with country with city!
-        };
-
-        return <ProductCard key={product.id} product={typedProduct} />;
+        return <ProductCard key={product.id} product={formatDataForSticker(product)} />;
       })}
     </Grid>
   );

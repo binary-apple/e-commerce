@@ -1,5 +1,9 @@
 export type AddressApi = { streetName: string; city: string; country: string; postalCode: string };
 
+export type AddressWithId = AddressApi & {
+  id: string;
+};
+
 export type RegistrationDataApi = {
   email: string;
   password: string;
@@ -18,8 +22,16 @@ export type LoginResponse = {
   refresh_token?: string;
 };
 
-export type Customer = {
+export type CustomerFromApi = {
+  id: string;
   email: string;
+  password: string;
   firstName: string;
   lastName: string;
+  dateOfBirth: string;
+  addresses: AddressWithId[];
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
+  defaultShippingAddressId?: string;
+  defaultBillingAddressId?: string;
 };

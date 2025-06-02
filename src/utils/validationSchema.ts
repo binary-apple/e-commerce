@@ -30,30 +30,33 @@ const passwordSchema = yup
   .matches(/\d/, 'Must include at least one number');
 
 // TODO ??? I don't know: how we can use addressSchema in validations registrationSchema
-// const addressSchema = yup.object({
-//   street: yup
-//     .string()
-//     .required('Street is required')
-//     .matches(/^[\d './A-Z[^a-z-]+$/, {
-//       message: "Only Latin letters, numbers, dots, ', - and spaces allowed",
-//     }),
-//   city: yup
-//     .string()
-//     .required('City is required')
-//     .matches(/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/, {
-//       message: 'Only Latin letters, single spaces and hyphens allowed',
-//     }),
-//   country: yup.string().required('Country is required'),
-//   postalCode: yup
-//     .string()
-//     .required('Postal code is required')
-//     .test('is-valid-postal-code', 'Invalid postal code format', function (value) {
-//       const { country } = this.parent;
-//       const regex = postalCodeRegexMap[country];
-//       if (!regex) return true;
-//       return regex.test(value || '');
-//     }),
-// });
+export const addressSchema = yup.object({
+  streetName: yup
+    .string()
+    .required('Street is required')
+    .matches(/^[\d './A-Z[^a-z-]+$/, {
+      message: "Only Latin letters, numbers, dots, ', - and spaces allowed",
+      excludeEmptyString: true,
+    }),
+  city: yup
+    .string()
+    .required('City is required')
+    .trim()
+    .matches(/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/, {
+      message: 'Only Latin letters, single spaces and hyphens allowed',
+      excludeEmptyString: true,
+    }),
+  country: yup.string().required('Country is required'),
+  postalCode: yup
+    .string()
+    .required('Postal code is required')
+    .test('is-valid-postal-code', 'Invalid postal code format', function (value) {
+      const { country } = this.parent;
+      const regex = postalCodeRegexMap[country];
+      if (!regex) return true;
+      return regex.test(value || '');
+    }),
+});
 
 const postalCodeRegexMap: Record<string, RegExp> = {
   GB: /^[A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2}$/,

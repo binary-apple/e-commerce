@@ -1,5 +1,5 @@
 import { Button, Chip, Divider, Grid, IconButton, ListItemText, Typography } from '@mui/material';
-import { fieldsConfig } from './constants';
+import { countryMap, fieldsConfig } from './constants';
 import { Fragment } from 'react/jsx-runtime';
 import { useLazyGetMeQuery } from '../../../../api/authApi';
 import { useEffect, useState } from 'react';
@@ -125,6 +125,9 @@ export default function ProfileForm() {
                         let value = getFieldValue(source, id);
                         if (id === 'dateOfBirth' && value) {
                           value = formatDate(value);
+                        }
+                        if (id === 'country' && value) {
+                          value = countryMap[value] || value;
                         }
                         return (
                           <Grid key={id + index} size={{ xs: 12, md: 6 }}>

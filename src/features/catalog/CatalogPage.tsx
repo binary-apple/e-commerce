@@ -17,20 +17,23 @@ export default function CatalogPage() {
     <CategoryProvider>
       <Box
         component="div"
+        display="flex"
+        flexDirection="column"
+        gap={2}
         sx={{
           width: '100%',
           maxWidth: { lg: '1108px', md: '850px', xs: '90%' },
           gap: 2,
-          margin: 'auto',
-          py: { lg: 8, md: 6, xs: 4 },
+          margin: '0 auto auto',
+          py: { lg: 6, md: 4, xs: 2 },
         }}
       >
+        <CustomBreadcrumbs />
         <Grid container spacing={3}>
           <Grid size={3}>
             <CategoryList />
           </Grid>
           <Grid size={9} display={'grid'} gap={2}>
-            <CustomBreadcrumbs />
             <Box component="div" display="flex" flexDirection="column" gap={2}>
               <Box component="div" display="flex" gap={2}>
                 <Search searchValue={searchValue} onChange={setSearchValue} />

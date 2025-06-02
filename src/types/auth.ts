@@ -12,6 +12,7 @@ export type RegistrationDataApi = {
   dateOfBirth: string;
   addresses: AddressApi[];
   defaultShippingAddress?: number;
+  defaultBillingAddress?: number;
 };
 
 export type LoginResponse = {
@@ -24,6 +25,7 @@ export type LoginResponse = {
 
 export type CustomerFromApi = {
   id: string;
+  version: number;
   email: string;
   password: string;
   firstName: string;

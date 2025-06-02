@@ -151,3 +151,23 @@ export const loginSchema = yup.object({
   email: emailSchema,
   password: passwordSchema,
 });
+
+export const userInfoSchema = yup.object().shape({
+  email: emailSchema,
+  firstName: yup
+    .string()
+    .required('First name is required')
+    .matches(/^[A-Za-z]+$/, 'Only Latin letters are allowed'),
+  lastName: yup
+    .string()
+    .required('Last name is required')
+    .matches(/^[A-Za-z]+$/, 'Only Latin letters are allowed'),
+  dateOfBirth: yup
+    .string()
+    .typeError('Invalid date')
+    .required('Date of birth is required')
+    .test('age', 'You must be at least 18 years old', (value) => {
+      if (!value) return false;
+      return checkAge(new Date(value));
+    }),
+});

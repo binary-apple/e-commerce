@@ -23,12 +23,13 @@ export function getFieldValue(
 
   return undefined;
 }
+
 function isCustomer(source: CustomerFromApi | AddressWithId): source is CustomerFromApi {
   return 'firstName' in source && 'lastName' in source;
 }
 
 function isCustomerField(id: string): id is CustomerFieldId {
-  return ['firstName', 'lastName', 'dateOfBirth'].includes(id);
+  return ['firstName', 'lastName', 'dateOfBirth', 'email'].includes(id);
 }
 
 function isAddressField(id: string): id is AddressFieldId {

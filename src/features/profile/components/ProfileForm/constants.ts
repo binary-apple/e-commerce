@@ -4,9 +4,10 @@ export const pageData = {
   titleForm: 'User Profile',
 };
 
-// const credantialsFields: FieldProps[] = [
-//   { id: 'email', label: 'Email', type: 'text' },
-//   { id: 'password', label: 'Password', type: 'password' },
+// TODO
+// const passwordFields: FieldProps[] = [
+//   { id: 'password', label: 'Old Password', type: 'password' },
+//   { id: 'password-new', label: 'New Password', type: 'password' },
 // ];
 
 export const addressFields: FieldsProfileProps[] = [
@@ -29,9 +30,10 @@ export const fieldsConfig: FieldsProfileSection[] = [
   {
     section: 'Personal data',
     fields: [
+      { id: 'email', label: 'Email', type: 'text' },
+      { id: 'dateOfBirth', label: 'Date of birth', type: 'date' },
       { id: 'firstName', label: 'First name' },
       { id: 'lastName', label: 'Last name' },
-      { id: 'dateOfBirth', label: 'Date of birth', type: 'date' },
     ],
   },
   {

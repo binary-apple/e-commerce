@@ -9,7 +9,7 @@ export default function ShelterSticker({
   size = DEFAULT_IMAGE_SIZE,
 }: {
   product: ProductCardConfig;
-  size: number;
+  size?: number;
 }) {
   const TWO = 2;
   const CENTER = size / TWO;
@@ -38,10 +38,11 @@ export default function ShelterSticker({
 
   return (
     <svg
-      width={size}
-      height={size}
+      width="100%"
+      height="100%"
       viewBox={`0 0 ${size} ${size}`}
       xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
     >
       <defs>
         <clipPath id="stickerClip">

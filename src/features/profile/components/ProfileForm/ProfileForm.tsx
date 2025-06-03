@@ -86,7 +86,22 @@ export default function ProfileForm() {
   return (
     <>
       <Divider></Divider>
-      <Grid size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'space-between', p: 2 }}>
+      <Grid
+        size={{ xs: 12 }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          p: 2,
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
+          gap: {
+            xs: 3,
+            md: 0,
+          },
+        }}
+      >
         <Button color="secondary" variant="outlined" size="small" onClick={handlePasswordOpen}>
           Change Password
         </Button>

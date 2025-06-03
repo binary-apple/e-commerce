@@ -1,21 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { apiUrl, projectKey } from './constants';
-
-type UserAction = {
-  [key: string]: string;
-  action: string;
-};
-
-type UpdateUserRequest = {
-  version: number;
-  actions: Array<UserAction>;
-  accessToken: string;
-};
-
-type UpdateUserResponse = {
-  id: string;
-  version: number;
-};
+import type { UpdateUserRequest, UpdateUserResponse } from '../types/userApi';
 
 export const userApi = createApi({
   reducerPath: 'userApi',

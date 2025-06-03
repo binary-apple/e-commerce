@@ -18,6 +18,7 @@ export default function ProfileForm() {
   const [trigger, { data: user }] = useLazyGetMeQuery();
   const [modalOpen, setModalOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [currentAddressId, setCurrentAddressId] = useState('');
   const [editableFields, setEditableFields] = useState<FieldsProfileProps[]>([]);
   const [initialValues, setInitialValues] = useState<Record<string, string>>({});
 
@@ -47,6 +48,11 @@ export default function ProfileForm() {
       return acc;
     }, {});
     setInitialValues({ ...values });
+    if ('streetName' in source) {
+      setCurrentAddressId(source.id);
+    } else {
+      setCurrentAddressId('');
+    }
     setModalOpen(true);
   };
 
@@ -148,6 +154,7 @@ export default function ProfileForm() {
         user={user}
         fields={editableFields}
         initialValues={initialValues}
+        addressId={currentAddressId}
         refetchUser={trigger}
       />
       <PasswordEditModal

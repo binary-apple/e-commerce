@@ -12,6 +12,7 @@ import { TextInput } from '../../../../components/TextInput/TextInput';
 import { normalizeDate, toUtcIsoString } from '../../../../utils/formatDate';
 import { useEffect } from 'react';
 import { getValidationSchema } from '../../utils/getFieldValue';
+import type { UserAction } from '../../../../types/userApi';
 
 type Props = {
   open: boolean;
@@ -20,6 +21,7 @@ type Props = {
   fields: FieldsProfileProps[];
   refetchUser: (token: string) => void;
   initialValues: Record<string, string>;
+  addressId?: string;
 };
 
 export default function ProfileEditModal({
@@ -29,6 +31,7 @@ export default function ProfileEditModal({
   fields,
   initialValues,
   refetchUser,
+  addressId = '',
 }: Props) {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   const [update] = useUpdateMutation();
@@ -46,17 +49,26 @@ export default function ProfileEditModal({
         return;
       }
 
-      const actions = Object.entries(values).map(([key, value]) => {
-        const actionPrefix = key === 'email' ? 'change' : 'set';
-        let formattedValue = value;
-        if (key === 'dateOfBirth') {
-          formattedValue = normalizeDate(value);
-        }
-        return {
-          action: `${actionPrefix}${key[0].toUpperCase() + key.slice(1)}`,
-          [key]: formattedValue,
-        };
-      });
+      const isAddress = !!addressId;
+      const actions: UserAction[] = isAddress
+        ? [
+            {
+              action: 'changeAddress',
+              address: { ...values },
+              addressId: addressId,
+            },
+          ]
+        : Object.entries(values).map(([key, value]) => {
+            const actionPrefix = key === 'email' ? 'change' : 'set';
+            let formattedValue = value;
+            if (key === 'dateOfBirth') {
+              formattedValue = normalizeDate(value);
+            }
+            return {
+              action: `${actionPrefix}${key[0].toUpperCase() + key.slice(1)}`,
+              [key]: formattedValue,
+            };
+          });
 
       try {
         await update({

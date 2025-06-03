@@ -1,3 +1,4 @@
+import { ADDRESS_FIELDS } from '../../../../constants';
 import type { FieldSection } from '../../../../types/form';
 
 export const formData = {
@@ -18,21 +19,7 @@ export const fieldsConfig: FieldSection[] = [
   },
   {
     section: 'Shipping Address',
-    fields: [
-      { id: 'streetName', label: 'Street' },
-      { id: 'city', label: 'City' },
-      {
-        id: 'country',
-        label: 'Country',
-        type: 'select',
-        options: [
-          { value: 'GB', label: 'United Kingdom' },
-          { value: 'DE', label: 'Germany' },
-          { value: 'IE', label: 'Ireland' },
-        ],
-      },
-      { id: 'postalCode', label: 'Postal code' },
-    ],
+    fields: ADDRESS_FIELDS,
   },
   {
     section: 'Billing Address',

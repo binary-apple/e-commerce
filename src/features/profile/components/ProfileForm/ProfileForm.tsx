@@ -12,12 +12,14 @@ import ProfileEditModal from '../ProfileEditModal/ProfileEditModal';
 import type { FieldsProfileProps } from './types';
 import type { AddressWithId, CustomerFromApi } from '../../../../types/auth';
 import PasswordEditModal from '../PasswordEditModal/PasswordEditModal';
+import AddAddressModal from '../AddAddressModal/AddAddressModal';
 
 export default function ProfileForm() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   const [trigger, { data: user }] = useLazyGetMeQuery();
   const [modalOpen, setModalOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [addAddressOpen, setAddAddressOpen] = useState(false);
   const [currentAddressId, setCurrentAddressId] = useState('');
   const [editableFields, setEditableFields] = useState<FieldsProfileProps[]>([]);
   const [initialValues, setInitialValues] = useState<Record<string, string>>({});
@@ -70,12 +72,41 @@ export default function ProfileForm() {
     setEditableFields([]);
   };
 
+  const handleAddAddressOpen = () => {
+    setAddAddressOpen(true);
+  };
+
+  const handleCloseAddAddress = () => {
+    setAddAddressOpen(false);
+    if (accessToken) {
+      trigger(accessToken);
+    }
+  };
+
   return (
     <>
       <Divider></Divider>
-      <Grid size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+      <Grid
+        size={{ xs: 12 }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          p: 2,
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
+          gap: {
+            xs: 3,
+            md: 0,
+          },
+        }}
+      >
         <Button color="secondary" variant="outlined" size="small" onClick={handlePasswordOpen}>
           Change Password
+        </Button>
+        <Button color="secondary" variant="outlined" size="small" onClick={handleAddAddressOpen}>
+          Add Address
         </Button>
       </Grid>
       <Grid container spacing={1}>
@@ -161,6 +192,12 @@ export default function ProfileForm() {
         open={passwordModalOpen}
         user={user}
         handleClose={handleClosePasswordModal}
+        refetchUser={trigger}
+      />
+      <AddAddressModal
+        userVersion={user.version}
+        open={addAddressOpen}
+        handleClose={handleCloseAddAddress}
         refetchUser={trigger}
       />
     </>

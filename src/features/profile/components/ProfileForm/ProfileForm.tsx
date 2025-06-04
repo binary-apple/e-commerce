@@ -171,13 +171,15 @@ export default function ProfileForm() {
                           >
                             <EditIcon />
                           </IconButton>
-                          <IconButton
-                            color="error"
-                            aria-label="delete"
-                            onClick={() => handleDeleteClick(source.id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
+                          {isAddressSection && (
+                            <IconButton
+                              color="error"
+                              aria-label="delete"
+                              onClick={() => handleDeleteClick(source.id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          )}
                         </Grid>
                       </Grid>
                       {fields.map(({ id, label }) => {

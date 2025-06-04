@@ -13,6 +13,8 @@ import type { FieldsProfileProps } from './types';
 import type { AddressWithId, CustomerFromApi } from '../../../../types/auth';
 import PasswordEditModal from '../PasswordEditModal/PasswordEditModal';
 import AddAddressModal from '../AddAddressModal/AddAddressModal';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteAddressModal from '../DeleteAddressModal/DeleteAddressModal';
 
 export default function ProfileForm() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
@@ -20,6 +22,7 @@ export default function ProfileForm() {
   const [modalOpen, setModalOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [addAddressOpen, setAddAddressOpen] = useState(false);
+  const [deleteAddressOpen, setDeleteAddressOpen] = useState(false);
   const [currentAddressId, setCurrentAddressId] = useState('');
   const [editableFields, setEditableFields] = useState<FieldsProfileProps[]>([]);
   const [initialValues, setInitialValues] = useState<Record<string, string>>({});
@@ -56,6 +59,18 @@ export default function ProfileForm() {
       setCurrentAddressId('');
     }
     setModalOpen(true);
+  };
+
+  const handleDeleteClick = (addressId: string) => {
+    setCurrentAddressId(addressId);
+    setDeleteAddressOpen(true);
+  };
+
+  const handleCloseDeleteAddress = () => {
+    setDeleteAddressOpen(false);
+    if (accessToken) {
+      trigger(accessToken);
+    }
   };
 
   const handleCloseModal = () => {
@@ -156,6 +171,15 @@ export default function ProfileForm() {
                           >
                             <EditIcon />
                           </IconButton>
+                          {isAddressSection && (
+                            <IconButton
+                              color="error"
+                              aria-label="delete"
+                              onClick={() => handleDeleteClick(source.id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          )}
                         </Grid>
                       </Grid>
                       {fields.map(({ id, label }) => {
@@ -198,6 +222,13 @@ export default function ProfileForm() {
         userVersion={user.version}
         open={addAddressOpen}
         handleClose={handleCloseAddAddress}
+        refetchUser={trigger}
+      />
+      <DeleteAddressModal
+        userVersion={user.version}
+        addressId={currentAddressId}
+        open={deleteAddressOpen}
+        handleClose={handleCloseDeleteAddress}
         refetchUser={trigger}
       />
     </>

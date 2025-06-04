@@ -1,6 +1,6 @@
-import type { FieldProps } from './types/form';
+import type { AddressFieldProps } from './features/profile/types';
 
-export const ADDRESS_FIELDS: FieldProps[] = [
+export const ADDRESS_FIELDS: AddressFieldProps[] = [
   { id: 'streetName', label: 'Street' },
   { id: 'city', label: 'City' },
   {

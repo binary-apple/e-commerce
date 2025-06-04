@@ -182,4 +182,5 @@ export const passwordUpdateSchema = yup.object().shape({
 
 export const AddressWithTypeSchema = addressSchema.shape({
   addressType: yup.string().required('Address type is required'),
+  isDefault: yup.boolean(),
 });

@@ -5,7 +5,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   Grid,
+  Switch,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
@@ -19,6 +21,7 @@ import { SelectInput } from '../../../../components/SelectInput/SelectInput';
 import { ADDRESS_TYPE_OPTIONS } from '../../constants';
 import { ADDRESS_FIELDS } from '../../../../constants';
 import type { CustomerFromApi } from '../../../../types/auth';
+import type { AddressFormValues } from '../../types';
 
 type Props = {
   userVersion: number;
@@ -27,12 +30,13 @@ type Props = {
   refetchUser: (token: string) => Promise<{ data?: CustomerFromApi }>;
 };
 
-const initialValues: Record<string, string> = {
+const initialValues: AddressFormValues = {
   addressType: '',
   country: '',
   city: '',
   streetName: '',
   postalCode: '',
+  isDefault: false,
 };
 
 export default function AddAddressModal({ userVersion, open, handleClose, refetchUser }: Props) {
@@ -40,7 +44,7 @@ export default function AddAddressModal({ userVersion, open, handleClose, refetc
   const [update, { isLoading }] = useUpdateMutation();
   const { enqueueSnackbar } = useSnackbar();
 
-  const formik = useFormik({
+  const formik = useFormik<AddressFormValues>({
     initialValues,
     validationSchema: AddressWithTypeSchema,
     onSubmit: async (values) => {
@@ -89,17 +93,22 @@ export default function AddAddressModal({ userVersion, open, handleClose, refetc
           return;
         }
 
-        const actionType =
-          values.addressType === 'billing' ? 'addBillingAddressId' : 'addShippingAddressId';
+        const type = values.addressType;
+        const id = matchingAddress.id;
+        const baseAction = type === 'billing' ? 'addBillingAddressId' : 'addShippingAddressId';
+
+        const updateActions = [{ action: baseAction, addressId: id }];
+
+        if (values.isDefault) {
+          updateActions.push({
+            action: type === 'billing' ? 'setDefaultBillingAddress' : 'setDefaultShippingAddress',
+            addressId: id,
+          });
+        }
 
         await update({
           version: updatedUser.version,
-          actions: [
-            {
-              action: actionType,
-              addressId: matchingAddress.id,
-            },
-          ],
+          actions: updateActions,
           accessToken,
         }).unwrap();
 
@@ -169,10 +178,10 @@ export default function AddAddressModal({ userVersion, open, handleClose, refetc
                     id={id}
                     label={label}
                     options={options || []}
-                    value={formik.values[id] || ''}
+                    value={formik.values[id] ?? ''}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched[id] && Boolean(formik.errors[id])}
+                    error={Boolean(formik.touched[id] && formik.errors[id])}
                     helperText={(formik.touched[id] && formik.errors[id]) || ' '}
                     required
                   />
@@ -181,16 +190,30 @@ export default function AddAddressModal({ userVersion, open, handleClose, refetc
                     id={id}
                     label={label}
                     type={type}
-                    value={formik.values[id]}
+                    value={formik.values[id] ?? ''}
                     onInput={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched[id] && Boolean(formik.errors[id])}
-                    helperText={formik.touched[id] && formik.errors[id]}
+                    error={Boolean(formik.touched[id] && formik.errors[id])}
+                    helperText={(formik.touched[id] && formik.errors[id]) || ' '}
                     required
                   />
                 )}
               </Grid>
             ))}
+
+            <FormControlLabel
+              control={
+                <Switch
+                  name="isDefault"
+                  checked={formik.values.isDefault}
+                  onChange={formik.handleChange}
+                  slotProps={{
+                    input: { 'aria-label': 'set default address' },
+                  }}
+                />
+              }
+              label={`Set as default ${formik.values.addressType || 'address'}`}
+            />
           </Box>
         </Box>
       </DialogContent>

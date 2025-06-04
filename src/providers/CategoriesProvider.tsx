@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import type { FlatCategory } from '../types/categories';
 import type { Category } from '../types/productsApi';
 import { useGetAllCategoriesQuery } from '../api/productsApi';
@@ -49,14 +49,17 @@ function flattenCategories(categories: Category[]): FlatCategory[] {
 }
 
 export const CategoryProvider = ({ children }: { children: React.ReactNode }) => {
-  const [selectedIndex, setselectedIndex] = useState<number>(0);
-  const [searchParameters, setSearchParameters] = useSearchParams();
+  const [searchParameters] = useSearchParams();
   const { data, isLoading, isError } = useGetAllCategoriesQuery();
 
   const flatCategories = useMemo(() => {
     if (!data) return [];
     return flattenCategories(data.results);
   }, [data]);
+
+  const category = searchParameters.get('category');
+  let selectedIndex = flatCategories.findIndex((value) => value.key === category);
+  selectedIndex = Math.max(selectedIndex, 0);
 
   const currentCategoryChain: FlatCategory[] = [];
 
@@ -77,22 +80,10 @@ export const CategoryProvider = ({ children }: { children: React.ReactNode }) =>
 
   const selectedCategory = flatCategories[selectedIndex] ?? null;
 
-  useEffect(() => {
-    const newParameters = new URLSearchParams(searchParameters);
-    if (selectedIndex && flatCategories[selectedIndex]) {
-      newParameters.set('category', flatCategories[selectedIndex].key);
-      setSearchParameters(newParameters, { replace: true });
-    } else {
-      newParameters.delete('category');
-      setSearchParameters(newParameters, { replace: true });
-    }
-  }, [selectedIndex, flatCategories, setSearchParameters, searchParameters]);
-
   return (
     <CategoryContext.Provider
       value={{
         selectedIndex,
-        setselectedIndex,
         selectedCategory,
         categories: flatCategories,
         isLoading,

@@ -4,11 +4,19 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useCategory } from '../../../../contexts/CategoryContext';
+import { useSearchParams } from 'react-router';
 
 export default function CategoryList() {
-  const { selectedIndex, setselectedIndex, categories, isLoading, isError } = useCategory();
+  const { selectedIndex, categories, isLoading, isError } = useCategory();
+  const [searchParameters, setSearchParameters] = useSearchParams();
   const handleListItemClick = (index: number) => {
-    setselectedIndex(index);
+    const newParameters = new URLSearchParams(searchParameters);
+    if (categories[index].key) {
+      newParameters.set('category', categories[index].key);
+    } else {
+      newParameters.delete('category');
+    }
+    setSearchParameters(newParameters);
   };
   if (isLoading || isError) {
     return null;

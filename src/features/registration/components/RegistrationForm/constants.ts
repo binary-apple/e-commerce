@@ -1,12 +1,11 @@
-import { ADDRESS_FIELDS } from '../../../../constants';
-import type { FieldSection } from '../../../../types/form';
+import type { FieldId, FieldSection } from '../../../../types/form';
 
 export const formData = {
   titleForm: 'Registration',
   titleButton: 'Sign Up',
 };
 
-export const fieldsConfig: FieldSection[] = [
+export const fieldsConfig: FieldSection<FieldId>[] = [
   {
     section: 'Personal data',
     fields: [
@@ -19,7 +18,21 @@ export const fieldsConfig: FieldSection[] = [
   },
   {
     section: 'Shipping Address',
-    fields: ADDRESS_FIELDS,
+    fields: [
+      { id: 'streetName', label: 'Street' },
+      { id: 'city', label: 'City' },
+      {
+        id: 'country',
+        label: 'Country',
+        type: 'select',
+        options: [
+          { value: 'GB', label: 'United Kingdom' },
+          { value: 'DE', label: 'Germany' },
+          { value: 'IE', label: 'Ireland' },
+        ],
+      },
+      { id: 'postalCode', label: 'Postal code' },
+    ],
   },
   {
     section: 'Billing Address',

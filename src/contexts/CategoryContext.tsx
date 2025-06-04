@@ -3,7 +3,6 @@ import type { FlatCategory } from '../types/categories';
 
 export const CategoryContext = createContext<{
   selectedIndex: number;
-  setselectedIndex: (id: number) => void;
   selectedCategory: FlatCategory | null;
   categories: FlatCategory[];
   isLoading: boolean;
@@ -11,7 +10,6 @@ export const CategoryContext = createContext<{
   currentCategoryChain: FlatCategory[];
 }>({
   selectedIndex: 0,
-  setselectedIndex: () => {},
   selectedCategory: null,
   categories: [],
   isLoading: false,

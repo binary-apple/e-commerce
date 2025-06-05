@@ -10,6 +10,7 @@ import type { ProductCardConfig } from '../../../../types/product';
 import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker';
 import { formatPrice } from '../../../../utils/formatPrice/formatPrice';
 import styles from './ProductCard.module.scss';
+import { theme } from '../../../../theme.ts';
 
 const handleAddToCart = (event: React.MouseEvent, product: ProductCardConfig) => {
   event.preventDefault();
@@ -75,6 +76,14 @@ export default function ProductCard({ product }: { product: ProductCardConfig })
             <IconButton
               aria-label="add to cart"
               className={styles['card-add-to-cart']}
+              color="secondary"
+              sx={{
+                transition: 'all 0.6s',
+                '&:hover': {
+                  transition: 'all 0.6s',
+                  backgroundColor: theme.palette.primary.main,
+                },
+              }}
               onClick={(event: React.MouseEvent) => {
                 handleAddToCart(event, product);
               }}

@@ -25,6 +25,7 @@ export default function EnlargedModal({
     <Modal open={open} onClose={onClose}>
       <Box className={styles['slider-modal']}>
         <IconButton
+          color="secondary"
           className={styles['slider-modal-close']}
           sx={{
             position: 'absolute',

@@ -165,7 +165,7 @@ export default function ProfileForm() {
                           sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                         >
                           <IconButton
-                            color="primary"
+                            color="secondary"
                             aria-label="edit"
                             onClick={() => handleEditClick(fields, source)}
                           >

@@ -23,11 +23,12 @@ import { logout } from '../../../store/slices/authSlice';
 import { useSnackbar } from 'notistack';
 import { useAuth } from '../../../hooks/useAuth';
 import { theme } from '../../../theme';
+import { UserAvatar } from '../../../components/UserAvatar/UserAvatar';
+import { Tooltip } from '@mui/material';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, isInitialized } = useSelector((state: RootState) => state.auth);
-  const userEmail = useSelector((state: RootState) => state.auth.email);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -64,14 +65,9 @@ export default function Header() {
           {isAuthenticated && (
             <>
               <ListItem disablePadding>
-                <ListItemText
-                  sx={{ textAlign: 'center', padding: '8px' }}
-                  slotProps={{
-                    primary: { className: classes['user-info'] },
-                  }}
-                >
-                  {userEmail}
-                </ListItemText>
+                <ListItemButton component={NavLink} to={Paths.PROFILE} sx={{ textAlign: 'center' }}>
+                  <ListItemText>User Profile</ListItemText>
+                </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
                 <ListItemButton onClick={handleLogout} sx={{ textAlign: 'center' }}>
@@ -188,16 +184,11 @@ export default function Header() {
               <Stack direction="row" spacing={4}>
                 {isAuthenticated ? (
                   <>
-                    <Typography
-                      sx={{
-                        color: 'secondary.contrastText',
-                        alignSelf: 'center',
-                        marginRight: 2,
-                      }}
-                      className={classes['user-info']}
-                    >
-                      {userEmail}
-                    </Typography>
+                    <Tooltip title="User Profile" arrow>
+                      <Link component={NavLink} to={Paths.PROFILE}>
+                        <UserAvatar />
+                      </Link>
+                    </Tooltip>
                     <Button
                       onClick={handleLogout}
                       variant="outlined"

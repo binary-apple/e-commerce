@@ -9,13 +9,27 @@ import MainPage from './features/main/MainPage';
 import { useSelector } from 'react-redux';
 import type { RootState } from './store/store';
 import CircularProgress from '@mui/material/CircularProgress';
+import ProfilePage from './features/profile/ProfilePage';
+import CatalogPage from './features/catalog/CatalogPage';
+import ProductPage from './features/product/ProductPage';
 
-function PublicRoute({ children }: { children: ReactNode }) {
+type AuthGuardProps = {
+  children: ReactNode;
+  isPrivateRoute: boolean;
+};
+
+function AuthGuard({ children, isPrivateRoute }: AuthGuardProps) {
   const { isAuthenticated, isInitialized } = useSelector((state: RootState) => state.auth);
+
   if (!isInitialized) {
     return <CircularProgress size="3rem" />;
   }
-  if (isAuthenticated) {
+
+  if (isPrivateRoute && !isAuthenticated) {
+    return <Navigate to={Paths.AUTH} replace />;
+  }
+
+  if (!isPrivateRoute && isAuthenticated) {
     return <Navigate to={Paths.HOME} replace />;
   }
 
@@ -29,23 +43,33 @@ export default function Router() {
         <Routes>
           <Route element={<Layout />}>
             <Route path={Paths.HOME} element={<MainPage />} />
-            <Route path={Paths.CATALOG} element={<div>Catalog Page</div>} />
+            <Route path={Paths.CATALOG} element={<CatalogPage />} />
+            <Route path={Paths.PRODUCT} element={<ProductPage />} />
             <Route path={Paths.ABOUT} element={<div>About Page</div>} />
 
             <Route
               path={Paths.REGISTRATION}
               element={
-                <PublicRoute>
+                <AuthGuard isPrivateRoute={false}>
                   <RegistrationPage />
-                </PublicRoute>
+                </AuthGuard>
               }
             />
             <Route
               path={Paths.AUTH}
               element={
-                <PublicRoute>
+                <AuthGuard isPrivateRoute={false}>
                   <LoginPage />
-                </PublicRoute>
+                </AuthGuard>
+              }
+            />
+
+            <Route
+              path={Paths.PROFILE}
+              element={
+                <AuthGuard isPrivateRoute={true}>
+                  <ProfilePage />
+                </AuthGuard>
               }
             />
 

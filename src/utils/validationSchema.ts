@@ -30,30 +30,33 @@ const passwordSchema = yup
   .matches(/\d/, 'Must include at least one number');
 
 // TODO ??? I don't know: how we can use addressSchema in validations registrationSchema
-// const addressSchema = yup.object({
-//   street: yup
-//     .string()
-//     .required('Street is required')
-//     .matches(/^[\d './A-Z[^a-z-]+$/, {
-//       message: "Only Latin letters, numbers, dots, ', - and spaces allowed",
-//     }),
-//   city: yup
-//     .string()
-//     .required('City is required')
-//     .matches(/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/, {
-//       message: 'Only Latin letters, single spaces and hyphens allowed',
-//     }),
-//   country: yup.string().required('Country is required'),
-//   postalCode: yup
-//     .string()
-//     .required('Postal code is required')
-//     .test('is-valid-postal-code', 'Invalid postal code format', function (value) {
-//       const { country } = this.parent;
-//       const regex = postalCodeRegexMap[country];
-//       if (!regex) return true;
-//       return regex.test(value || '');
-//     }),
-// });
+export const addressSchema = yup.object({
+  streetName: yup
+    .string()
+    .required('Street is required')
+    .matches(/^[\d './A-Z[^a-z-]+$/, {
+      message: "Only Latin letters, numbers, dots, ', - and spaces allowed",
+      excludeEmptyString: true,
+    }),
+  city: yup
+    .string()
+    .required('City is required')
+    .trim()
+    .matches(/^[A-Za-z]+(?:[ -][A-Za-z]+)*$/, {
+      message: 'Only Latin letters, single spaces and hyphens allowed',
+      excludeEmptyString: true,
+    }),
+  country: yup.string().required('Country is required'),
+  postalCode: yup
+    .string()
+    .required('Postal code is required')
+    .test('is-valid-postal-code', 'Invalid postal code format', function (value) {
+      const { country } = this.parent;
+      const regex = postalCodeRegexMap[country];
+      if (!regex) return true;
+      return regex.test(value || '');
+    }),
+});
 
 const postalCodeRegexMap: Record<string, RegExp> = {
   GB: /^[A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2}$/,
@@ -72,7 +75,7 @@ export const registrationSchema = yup.object().shape({
     .string()
     .required('Last name is required')
     .matches(/^[A-Za-z]+$/, 'Only Latin letters are allowed'),
-  dob: yup
+  dateOfBirth: yup
     .string()
     .typeError('Invalid date')
     .required('Date of birth is required')
@@ -80,7 +83,7 @@ export const registrationSchema = yup.object().shape({
       if (!value) return false;
       return checkAge(new Date(value));
     }),
-  street: yup
+  streetName: yup
     .string()
     .required('Street is required')
     .matches(/^[\d './A-Z[^a-z-]+$/, {
@@ -108,7 +111,7 @@ export const registrationSchema = yup.object().shape({
 
   isBilling: yup.boolean().required(),
 
-  streetBill: yup.string().when('isBilling', ([isBilling], schema) => {
+  streetNameBill: yup.string().when('isBilling', ([isBilling], schema) => {
     if (isBilling === false) {
       return schema.required('Street is required').matches(/^[\d './A-Z[^a-z-]+$/, {
         message: "Only Latin letters, numbers, dots, ', - and spaces allowed",
@@ -150,4 +153,34 @@ export const registrationSchema = yup.object().shape({
 export const loginSchema = yup.object({
   email: emailSchema,
   password: passwordSchema,
+});
+
+export const userInfoSchema = yup.object().shape({
+  email: emailSchema,
+  firstName: yup
+    .string()
+    .required('First name is required')
+    .matches(/^[A-Za-z]+$/, 'Only Latin letters are allowed'),
+  lastName: yup
+    .string()
+    .required('Last name is required')
+    .matches(/^[A-Za-z]+$/, 'Only Latin letters are allowed'),
+  dateOfBirth: yup
+    .string()
+    .typeError('Invalid date')
+    .required('Date of birth is required')
+    .test('age', 'You must be at least 18 years old', (value) => {
+      if (!value) return false;
+      return checkAge(new Date(value));
+    }),
+});
+
+export const passwordUpdateSchema = yup.object().shape({
+  currentPassword: passwordSchema,
+  newPassword: passwordSchema,
+});
+
+export const AddressWithTypeSchema = addressSchema.shape({
+  addressType: yup.string().required('Address type is required'),
+  isDefault: yup.boolean(),
 });

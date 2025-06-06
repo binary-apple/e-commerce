@@ -1,11 +1,11 @@
-import type { FieldSection } from '../../../../types/form';
+import type { FieldId, FieldSection } from '../../../../types/form';
 
 export const formData = {
   titleForm: 'Registration',
   titleButton: 'Sign Up',
 };
 
-export const fieldsConfig: FieldSection[] = [
+export const fieldsConfig: FieldSection<FieldId>[] = [
   {
     section: 'Personal data',
     fields: [
@@ -13,13 +13,13 @@ export const fieldsConfig: FieldSection[] = [
       { id: 'password', label: 'Password', type: 'password' },
       { id: 'firstName', label: 'First name' },
       { id: 'lastName', label: 'Last name' },
-      { id: 'dob', label: 'Date of birth', type: 'date' },
+      { id: 'dateOfBirth', label: 'Date of birth', type: 'date' },
     ],
   },
   {
     section: 'Shipping Address',
     fields: [
-      { id: 'street', label: 'Street' },
+      { id: 'streetName', label: 'Street' },
       { id: 'city', label: 'City' },
       {
         id: 'country',
@@ -37,7 +37,7 @@ export const fieldsConfig: FieldSection[] = [
   {
     section: 'Billing Address',
     fields: [
-      { id: 'streetBill', label: 'Street' },
+      { id: 'streetNameBill', label: 'Street' },
       { id: 'cityBill', label: 'City' },
       {
         id: 'countryBill',

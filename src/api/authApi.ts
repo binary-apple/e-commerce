@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { LoginResponse, RegistrationDataApi } from '../types/auth';
+import type { CustomerFromApi, LoginResponse, RegistrationDataApi } from '../types/auth';
 import { apiUrl, clientId, clientSecret, projectKey, ResponseCodes } from './constants';
 import { getClientToken } from '../services/serviceToken';
 
@@ -42,7 +42,7 @@ export const authApi = createApi({
       },
     }),
 
-    getMe: builder.query<{ email: string }, string>({
+    getMe: builder.query<CustomerFromApi, string>({
       queryFn: async (accessToken) => {
         const result = await fetch(`${apiUrl}/${projectKey}/me`, {
           headers: {
@@ -59,7 +59,7 @@ export const authApi = createApi({
     register: builder.mutation<unknown, RegistrationDataApi>({
       async queryFn(data) {
         try {
-          const token = await getClientToken();
+          const token = await getClientToken('manage_customers');
 
           const response = await fetch(`${apiUrl}/${projectKey}/customers`, {
             method: 'POST',

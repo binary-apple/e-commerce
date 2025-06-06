@@ -1,0 +1,104 @@
+.card {
+  width: 100%;
+  max-width: 1108px;
+  margin: auto;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+
+  &-grid {
+    position: relative;
+
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 2rem;
+
+    @media (width <= 800px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+  }
+
+  &-image-wrapper {
+    position: relative;
+
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
+    max-height: 400px;
+
+    &-item {
+      &-image {
+        position: relative;
+        height: 100%;
+        border-radius: 2rem;
+        background: #fbf2da;
+      }
+
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        display: block;
+
+        max-width: 95%;
+        max-height: 95%;
+      }
+    }
+
+    @media (width <= 900px) {
+      max-height: 300px;
+    }
+
+    @media (width <= 800px) {
+      max-height: 250px;
+    }
+
+    @media (width <= 500px) {
+      max-height: 90%;
+    }
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &-label {
+    text-transform: capitalize;
+  }
+
+  &-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+
+    &-price {
+      display: flex;
+      flex-direction: column;
+
+      &-sale {
+        color: #c21f39;
+      }
+    }
+  }
+
+  @media (width <= 1200px) {
+    max-width: 850px;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (width <= 900px) {
+    max-width: 90%;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}

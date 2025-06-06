@@ -25,12 +25,12 @@ const defaultValues = {
   password: '',
   firstName: '',
   lastName: '',
-  dob: '',
-  street: '',
+  dateOfBirth: '',
+  streetName: '',
   city: '',
   country: '',
   postalCode: '',
-  streetBill: '',
+  streetNameBill: '',
   cityBill: '',
   countryBill: '',
   postalCodeBill: '',
@@ -86,7 +86,7 @@ export default function RegistrationForm() {
 
   const onSubmit = async (data: RegistrationData) => {
     const shippingAddress = {
-      streetName: data.street,
+      streetName: data.streetName,
       city: data.city,
       country: data.country,
       postalCode: data.postalCode,
@@ -97,7 +97,7 @@ export default function RegistrationForm() {
       password: data.password,
       firstName: data.firstName,
       lastName: data.lastName,
-      dateOfBirth: new Date(data.dob).toISOString().split('T')[0],
+      dateOfBirth: new Date(data.dateOfBirth).toISOString().split('T')[0],
       addresses: [shippingAddress],
       defaultShippingAddress: defaultShipping ? 0 : undefined,
       defaultBillingAddress: defaultBilling ? (isBilling ? 0 : 1) : undefined,
@@ -107,7 +107,7 @@ export default function RegistrationForm() {
 
     if (!isBilling) {
       const billingAddress = {
-        streetName: data.streetBill || '',
+        streetName: data.streetNameBill || '',
         city: data.cityBill || '',
         country: data.countryBill || '',
         postalCode: data.postalCodeBill || '',

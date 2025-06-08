@@ -135,9 +135,9 @@ export default function Header() {
               component={NavLink}
               to={Paths.CART}
               sx={{
-                color: 'secondary.contrastText',
-                '&:active': {
-                  backgroundColor: 'secondary.contrastText' + customIconHoverOpacity,
+                color: theme.palette.secondary.contrastText,
+                '&:hover': {
+                  color: theme.palette.primary.main,
                 },
               }}
             >
@@ -211,7 +211,12 @@ export default function Header() {
                 <IconButton
                   component={NavLink}
                   to={Paths.CART}
-                  sx={{ color: 'secondary.contrastText' }}
+                  sx={{
+                    color: theme.palette.secondary.contrastText,
+                    '&:hover': {
+                      color: theme.palette.primary.main,
+                    },
+                  }}
                 >
                   <ShoppingCartRoundedIcon fontSize="large" />
                 </IconButton>

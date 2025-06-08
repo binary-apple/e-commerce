@@ -44,3 +44,7 @@ export function getValidationSchema(fields: FieldsProfileProps[]) {
 
   return userInfoSchema;
 }
+
+export function isAddressWithId(source: CustomerFromApi | AddressWithId): source is AddressWithId {
+  return source && 'streetName' in source;
+}

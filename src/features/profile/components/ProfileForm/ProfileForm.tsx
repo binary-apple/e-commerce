@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../../../store/store';
 import { formatDate } from '../../../../utils/formatDate';
-import { getFieldValue } from '../../utils/getFieldValue';
+import { getFieldValue, isAddressWithId } from '../../utils/getFieldValue';
 import EditIcon from '@mui/icons-material/Edit';
 import ProfileEditModal from '../ProfileEditModal/ProfileEditModal';
 import type { FieldsProfileProps } from './types';
@@ -15,6 +15,9 @@ import PasswordEditModal from '../PasswordEditModal/PasswordEditModal';
 import AddAddressModal from '../AddAddressModal/AddAddressModal';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteAddressModal from '../DeleteAddressModal/DeleteAddressModal';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import type { AddressFormValuesWithId } from '../../types';
+import EditAddressModal from '../EditAddressModal/EditAddressModal';
 
 export default function ProfileForm() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
@@ -22,10 +25,14 @@ export default function ProfileForm() {
   const [modalOpen, setModalOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [addAddressOpen, setAddAddressOpen] = useState(false);
+  const [editAddressOpen, setEditAddressOpen] = useState(false);
   const [deleteAddressOpen, setDeleteAddressOpen] = useState(false);
   const [currentAddressId, setCurrentAddressId] = useState('');
   const [editableFields, setEditableFields] = useState<FieldsProfileProps[]>([]);
   const [initialValues, setInitialValues] = useState<Record<string, string>>({});
+  const [currentAddressValues, setCurrentAddressValues] = useState<AddressFormValuesWithId | null>(
+    null,
+  );
 
   useEffect(() => {
     if (accessToken) {
@@ -91,8 +98,36 @@ export default function ProfileForm() {
     setAddAddressOpen(true);
   };
 
+  const handleEditAddressOpen = (source: AddressWithId, addressType: 'shipping' | 'billing') => {
+    console.log('source in ProfileForm', source);
+    const isCurrentDefault =
+      (addressType === 'shipping' && source.id === defaultShippingAddressId) ||
+      (addressType === 'billing' && source.id === defaultBillingAddressId);
+
+    const fieldValues: AddressFormValuesWithId = {
+      addressType: addressType,
+      country: source.country,
+      city: source.city,
+      streetName: source.streetName,
+      postalCode: source.postalCode,
+      isDefault: isCurrentDefault,
+      id: source.id,
+    };
+    console.log('currentAddressValues in form', currentAddressValues);
+    setCurrentAddressValues(fieldValues);
+    setEditAddressOpen(true);
+  };
+
   const handleCloseAddAddress = () => {
     setAddAddressOpen(false);
+    if (accessToken) {
+      trigger(accessToken);
+    }
+  };
+
+  const handleCloseEditAddress = () => {
+    setCurrentAddressValues(null);
+    setEditAddressOpen(false);
     if (accessToken) {
       trigger(accessToken);
     }
@@ -150,7 +185,17 @@ export default function ProfileForm() {
                             spacing={2}
                             sx={{ display: 'flex', alignItems: 'center', gap: 2 }}
                           >
-                            <Typography variant="subtitle2">Address {index + 1}</Typography>
+                            <Typography
+                              variant="subtitle2"
+                              sx={{
+                                fontWeight: 'bold',
+                                display: 'flex',
+                                alignItems: 'flex-end',
+                                gap: 1,
+                              }}
+                            >
+                              <HomeOutlinedIcon /> Address {index + 1}
+                            </Typography>
                             {addressType === 'shipping' &&
                               source.id === defaultShippingAddressId && (
                                 <Chip label="Default" color="info" variant="outlined" />
@@ -167,7 +212,11 @@ export default function ProfileForm() {
                           <IconButton
                             color="secondary"
                             aria-label="edit"
-                            onClick={() => handleEditClick(fields, source)}
+                            onClick={() => {
+                              return isAddressWithId(source) && addressType
+                                ? handleEditAddressOpen(source, addressType)
+                                : handleEditClick(fields, source);
+                            }}
                           >
                             <EditIcon />
                           </IconButton>
@@ -224,6 +273,15 @@ export default function ProfileForm() {
         handleClose={handleCloseAddAddress}
         refetchUser={trigger}
       />
+      {currentAddressValues && (
+        <EditAddressModal
+          userVersion={user.version}
+          open={editAddressOpen}
+          handleClose={handleCloseEditAddress}
+          refetchUser={trigger}
+          fieldValues={currentAddressValues}
+        />
+      )}
       <DeleteAddressModal
         userVersion={user.version}
         addressId={currentAddressId}

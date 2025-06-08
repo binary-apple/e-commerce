@@ -9,6 +9,8 @@ export type AddressFormValues = {
   isDefault: boolean;
 };
 
+export type AddressFormValuesWithId = AddressFormValues & { id: string };
+
 export type FieldType = NonNullable<InputProps['type']>;
 export type FieldId = keyof AddressFormValues;
 

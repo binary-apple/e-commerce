@@ -25,6 +25,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { theme } from '../../../theme';
 import { UserAvatar } from '../../../components/UserAvatar/UserAvatar';
 import { Tooltip } from '@mui/material';
+import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -123,19 +124,38 @@ export default function Header() {
               FurEver
             </Typography>
           </Link>
-          <IconButton
-            aria-label="open drawer"
-            onClick={handleDrawerToggle}
+          <Stack
+            spacing={2}
+            direction={'row'}
             sx={{
               display: { md: 'none' },
-              color: 'secondary.contrastText',
-              '&:active': {
-                backgroundColor: 'secondary.contrastText' + customIconHoverOpacity,
-              },
             }}
           >
-            <MenuIcon />
-          </IconButton>
+            <IconButton
+              component={NavLink}
+              to={Paths.CART}
+              sx={{
+                color: 'secondary.contrastText',
+                '&:active': {
+                  backgroundColor: 'secondary.contrastText' + customIconHoverOpacity,
+                },
+              }}
+            >
+              <ShoppingCartRoundedIcon fontSize="medium" />
+            </IconButton>
+            <IconButton
+              aria-label="open drawer"
+              onClick={handleDrawerToggle}
+              sx={{
+                color: 'secondary.contrastText',
+                '&:active': {
+                  backgroundColor: 'secondary.contrastText' + customIconHoverOpacity,
+                },
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Stack>
           <Box
             sx={{
               display: { md: 'flex', xs: 'none' },
@@ -181,7 +201,20 @@ export default function Header() {
               ))}
             </Stack>
             {isInitialized && (
-              <Stack direction="row" spacing={4}>
+              <Stack
+                direction="row"
+                alignItems={'center'}
+                sx={{
+                  gap: { lg: 4, xs: 2 },
+                }}
+              >
+                <IconButton
+                  component={NavLink}
+                  to={Paths.CART}
+                  sx={{ color: 'secondary.contrastText' }}
+                >
+                  <ShoppingCartRoundedIcon fontSize="large" />
+                </IconButton>
                 {isAuthenticated ? (
                   <>
                     <Tooltip title="User Profile" arrow>

@@ -215,6 +215,7 @@ export default function Header() {
                     color: theme.palette.secondary.contrastText,
                     '&:hover': {
                       color: theme.palette.primary.main,
+                      transition: 'all 0.4s ease-in-out',
                     },
                   }}
                 >

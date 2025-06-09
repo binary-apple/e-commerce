@@ -46,6 +46,7 @@ export default function Router() {
             <Route path={Paths.CATALOG} element={<CatalogPage />} />
             <Route path={Paths.PRODUCT} element={<ProductPage />} />
             <Route path={Paths.ABOUT} element={<div>About Page</div>} />
+            <Route path={Paths.CART} element={<div>Cart page</div>} />
 
             <Route
               path={Paths.REGISTRATION}

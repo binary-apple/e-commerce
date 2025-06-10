@@ -3,6 +3,12 @@ import { projectKey, apiUrl } from './constants';
 import type { Cart, LineItemDraft } from '../types/cartApi';
 import type { Response } from '../types/productsApi';
 
+function isCartListResponse(data: unknown): data is Response<Cart> {
+  return (
+    typeof data === 'object' && data !== null && 'results' in data && Array.isArray(data.results)
+  );
+}
+
 export const cartApi = createApi({
   reducerPath: 'cartApi',
   baseQuery: fetchBaseQuery({
@@ -24,65 +30,22 @@ export const cartApi = createApi({
       providesTags: ['Cart'],
     }),
 
-    // Todo: replace method under commet to RTK Query methods!
-    // getMyActiveCart: build.query<Cart, void>({
-    //   async queryFn(_arguments, _api, _extraOptions, fetchWithBQ) {
-    //     const carts = await fetchWithBQ('me/carts');
-    //     if (carts.error) return { error: carts.error as FetchBaseQueryError };
-    //     const fetchedCarts = carts.data as Response<Cart[]>;
-    //     if (fetchedCarts.results.length === 0) {
-    //       await fetchWithBQ({
-    //         url: 'me/carts',
-    //         method: 'POST',
-    //         body: {
-    //           currency: 'EUR',
-    //         },
-    //       });
-    //       const activeCart = await fetchWithBQ('me/active-cart');
-    //       return activeCart.data ? { data: activeCart.data } : { error: activeCart.error };
-    //     }
-    //     const activeCart = await fetchWithBQ('me/active-cart');
-    //     return activeCart.data ? { data: activeCart.data } : { error: activeCart.error };
-    //   },
-    //   providesTags: ['Cart'],
-    // }),
-    getMyActiveCart: build.query<Cart, void>({
-      queryFn: async () => {
-        const cartsResponse = await fetch(`${apiUrl}/${projectKey}/me/carts`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        });
-        const responseData: Response<Cart> = await cartsResponse.json();
-
-        if (!cartsResponse.ok) {
-          return { error: { status: cartsResponse.status, data: responseData } };
-        }
-
-        if (responseData.results.length === 0) {
-          await fetch(`${apiUrl}/${projectKey}/me/carts`, {
+    getMyActiveCart: build.query({
+      async queryFn(_arguments, _api, _extraOptions, fetchWithBQ) {
+        const carts = await fetchWithBQ('me/carts');
+        if (carts.error) return { error: carts.error };
+        if (isCartListResponse(carts.data) && carts.data.results.length === 0) {
+          await fetchWithBQ({
+            url: 'me/carts',
             method: 'POST',
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({
+            body: {
               currency: 'EUR',
-            }),
+            },
           });
         }
-        const activeCartResponse = await fetch(`${apiUrl}/${projectKey}/me/active-cart`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        });
-        const activeCartData = await activeCartResponse.json();
-        if (!activeCartResponse.ok) {
-          return { error: { status: activeCartResponse.status, data: activeCartData } };
-        }
-        return { data: activeCartData };
+        const activeCart = await fetchWithBQ('me/active-cart');
+        if (activeCart.error) return { error: activeCart.error };
+        return { data: activeCart };
       },
       providesTags: ['Cart'],
     }),

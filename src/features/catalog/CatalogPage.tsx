@@ -4,40 +4,16 @@ import CategoryList from './components/CategoryList/CategoryList';
 import { CategoryProvider } from '../../providers/CategoriesProvider';
 import CustomBreadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 import Sort from './components/Sort/Sort';
-import { type ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { SortValues } from './types/sort';
 import Search from './components/Search/Search';
 import Filters from './components/Filters/Filters';
-import Pagination from '@mui/material/Pagination';
-import { useSearchParams } from 'react-router';
-
-const PRODUCTS_LIMIT = 9;
-const totalProducts = 45;
-const totalPages = totalProducts / PRODUCTS_LIMIT;
 
 export default function CatalogPage() {
   const [sortValue, setSortValue] = useState<SortValues>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [petType, setPetType] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([0, 0]);
-  const [searchParameters, setSearchParameters] = useSearchParams();
-
-  const getInitialPage = useCallback(() => {
-    return +(searchParameters.get('page') ?? 1);
-  }, [searchParameters]);
-
-  const [page, setPage] = useState(getInitialPage());
-
-  useEffect(() => {
-    setPage(getInitialPage());
-  }, [getInitialPage]);
-
-  const handleChange = (_event: ChangeEvent<unknown>, page: number) => {
-    setPage(page);
-    const newParameters = new URLSearchParams(searchParameters);
-    newParameters.set('page', String(page));
-    setSearchParameters(newParameters);
-  };
 
   return (
     <CategoryProvider>
@@ -80,15 +56,12 @@ export default function CatalogPage() {
                 onPriceRangeChange={setPriceRange}
               />
             </Box>
-            <Pagination count={totalPages} page={page} onChange={handleChange} color="primary" />
             <Box width="100%" display="flex" justifyContent={'center'}>
               <ProductList
                 sortValue={sortValue}
                 searchValue={searchValue}
                 petType={petType}
                 selectedPriceRange={priceRange}
-                currentPage={page}
-                limit={PRODUCTS_LIMIT}
               />
             </Box>
           </Box>

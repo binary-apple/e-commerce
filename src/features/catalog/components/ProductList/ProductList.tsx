@@ -13,11 +13,15 @@ export default function ProductList({
   searchValue,
   petType,
   selectedPriceRange: priceRange,
+  currentPage,
+  limit,
 }: {
   sortValue: SortValues;
   searchValue: string;
   petType: string[];
   selectedPriceRange: number[];
+  currentPage: number;
+  limit: number;
 }) {
   const {
     isLoading: isCategoryLoading,
@@ -35,6 +39,8 @@ export default function ProductList({
     searchOption: searchValue,
     petType: petType,
     selectedPriceRange: priceRange,
+    offset: (currentPage - 1) * limit,
+    limit: limit,
   });
   if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;

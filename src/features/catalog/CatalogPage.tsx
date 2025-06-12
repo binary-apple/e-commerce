@@ -87,6 +87,8 @@ export default function CatalogPage() {
                 searchValue={searchValue}
                 petType={petType}
                 selectedPriceRange={priceRange}
+                currentPage={page}
+                limit={PRODUCTS_LIMIT}
               />
             </Box>
           </Box>

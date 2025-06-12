@@ -11,6 +11,7 @@ import Pagination from '@mui/material/Pagination';
 import Box from '@mui/material/Box';
 import { type ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
+import OopsBox from '../../../notFound/components/OopsBox.tsx';
 
 const PRODUCTS_LIMIT = 9;
 
@@ -75,7 +76,7 @@ export default function ProductList({
   return (
     <>
       <Box display={'flex'} flexDirection={'column'} gap={2}>
-        {data?.results.length === 0 && <Typography>Nothing was found...</Typography>}
+        {data?.results.length === 0 && <OopsBox text={'Nothing was found'} />}
         {data?.results.length !== 0 && (
           <>
             <Pagination count={totalPages} page={page} onChange={handleChange} color="primary" />

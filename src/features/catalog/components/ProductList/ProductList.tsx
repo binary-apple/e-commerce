@@ -54,7 +54,7 @@ export default function ProductList({
   });
 
   const totalProducts = data?.total ?? 0;
-  const totalPages = totalProducts / PRODUCTS_LIMIT;
+  const totalPages = Math.ceil(totalProducts / PRODUCTS_LIMIT);
 
   useEffect(() => {
     setPage(getInitialPage());

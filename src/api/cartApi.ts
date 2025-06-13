@@ -1,27 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { projectKey, apiUrl } from './constants';
 import type { Cart, LineItemDraft } from '../types/cartApi';
-import type { Response } from '../types/productsApi';
-
-function isCartListResponse(data: unknown): data is Response<Cart> {
-  return (
-    typeof data === 'object' && data !== null && 'results' in data && Array.isArray(data.results)
-  );
-}
-
-function isCart(data: unknown): data is Cart {
-  if (typeof data !== 'object' || data === null) return false;
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    typeof data.id === 'string' &&
-    'version' in data &&
-    typeof data.version === 'number' &&
-    'lineItems' in data &&
-    Array.isArray(data.lineItems)
-  );
-}
+import { isCartListResponse, isCart } from '../types/cartApiGuards';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',

@@ -7,7 +7,7 @@ import { useCategory } from '../../../../contexts/CategoryContext.tsx';
 import type { SortValues } from '../../types/sort.ts';
 import formatDataForSticker from '../../../../utils/formatDataForSticker/formatDataForSticker.ts';
 import { Typography } from '@mui/material';
-import { useAddLineItemMutation, useGetMyCartsQuery } from '../../../../api/cartApi.ts';
+import { useAddLineItemMutation, useGetMyActiveCartQuery } from '../../../../api/cartApi.ts';
 
 export default function ProductList({
   sortValue,
@@ -39,12 +39,11 @@ export default function ProductList({
   });
 
   const addItem = useAddLineItemMutation()[0];
-  const { data: carts } = useGetMyCartsQuery();
+  const { data: cart } = useGetMyActiveCartQuery();
   const handleAddToCart = (id: string) => {
-    if (!carts) return;
-    const cartId = carts[0].id;
-    addItem({ cartId, version: carts[0].version, draft: { productId: id } });
-    // console.log(carts[0].version, carts[0].lineItems);
+    if (!cart) return;
+    addItem({ cartId: cart.id, version: cart.version, draft: { productId: id } });
+    // console.log(cart);
   };
 
   if (isCategoryLoading || isProductLoading) {

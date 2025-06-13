@@ -1,6 +1,6 @@
 import { formatPrice } from '../formatPrice/formatPrice.ts';
 import type { Product } from '../../types/productsApi.ts';
-import type { ProductCardConfig } from '../../types/product.ts';
+import type { ProductCardConfig } from '../../types/preparedProductData.ts';
 
 export default function formatDataForSticker(data: Product): ProductCardConfig {
   const priceObject = data.masterVariant.prices[0];

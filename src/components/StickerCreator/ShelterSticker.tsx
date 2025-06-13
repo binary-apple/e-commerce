@@ -1,4 +1,4 @@
-import type { ProductCardConfig } from '../../types/product.ts';
+import type { ProductCardConfig } from '../../types/preparedProductData.ts';
 import { theme } from '../../theme.ts';
 import { stickerBackgroundColor } from './stickerBackgroundColors.ts';
 

@@ -9,6 +9,20 @@ function isCartListResponse(data: unknown): data is Response<Cart> {
   );
 }
 
+function isCart(data: unknown): data is Cart {
+  if (typeof data !== 'object' || data === null) return false;
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'id' in data &&
+    typeof data.id === 'string' &&
+    'version' in data &&
+    typeof data.version === 'number' &&
+    'lineItems' in data &&
+    Array.isArray(data.lineItems)
+  );
+}
+
 export const cartApi = createApi({
   reducerPath: 'cartApi',
   baseQuery: fetchBaseQuery({
@@ -22,15 +36,7 @@ export const cartApi = createApi({
   }),
   tagTypes: ['Cart'],
   endpoints: (build) => ({
-    getMyCarts: build.query<Cart[], void>({
-      query: () => 'me/carts',
-      async transformResponse(response: Response<Cart>) {
-        return response.results;
-      },
-      providesTags: ['Cart'],
-    }),
-
-    getMyActiveCart: build.query({
+    getMyActiveCart: build.query<Cart, void>({
       async queryFn(_arguments, _api, _extraOptions, fetchWithBQ) {
         const carts = await fetchWithBQ('me/carts');
         if (carts.error) return { error: carts.error };
@@ -45,7 +51,12 @@ export const cartApi = createApi({
         }
         const activeCart = await fetchWithBQ('me/active-cart');
         if (activeCart.error) return { error: activeCart.error };
-        return { data: activeCart };
+        if (!isCart(activeCart.data)) {
+          return {
+            error: { status: 500, data: 'Invalid cart data structure' },
+          };
+        }
+        return { data: activeCart.data };
       },
       providesTags: ['Cart'],
     }),
@@ -74,9 +85,5 @@ export const cartApi = createApi({
   }),
 });
 
-export const {
-  useGetMyCartsQuery,
-  useGetMyActiveCartQuery,
-  useAddLineItemMutation,
-  useRemoveLineItemMutation,
-} = cartApi;
+export const { useGetMyActiveCartQuery, useAddLineItemMutation, useRemoveLineItemMutation } =
+  cartApi;

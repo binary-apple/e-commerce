@@ -14,6 +14,7 @@ import { Paths } from '../../../types/paths';
 import type { LoginData } from '../../../types/form';
 import { AuthViews } from '../../../types/authViews';
 import { useAuth } from '../../../hooks/useAuth';
+import { cartApi } from './../../../api/cartApi';
 
 const defaultValues = {
   email: '',
@@ -55,6 +56,9 @@ export default function LoginForm() {
           email: meResp.email,
         }),
       );
+
+      //Todo: update when we can get anonymous token or write new workflow
+      dispatch(cartApi.util.invalidateTags(['Cart']));
 
       enqueueSnackbar('Login successful!', { variant: 'success' });
       navigate(Paths.HOME);

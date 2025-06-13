@@ -8,7 +8,10 @@ type OopsProps = { text?: string };
 
 export default function OopsBox(oopsProps: OopsProps) {
   return (
-    <Box className={styles.animated__wrapper}>
+    <Box
+      className={styles.animated__wrapper}
+      sx={{ justifyContent: { md: 'space-between', xs: 'center' }, gap: { sm: 0, xs: 2 } }}
+    >
       <Box className={styles.animated__wrapper_image}>
         <img src={errorImage} alt={NotFoundConstants.errorText} />
       </Box>

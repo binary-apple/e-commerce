@@ -7,6 +7,7 @@ import { useCategory } from '../../../../contexts/CategoryContext.tsx';
 import type { SortValues } from '../../types/sort.ts';
 import formatDataForSticker from '../../../../utils/formatDataForSticker/formatDataForSticker.ts';
 import { Typography } from '@mui/material';
+import { useAddLineItemMutation, useGetMyCartsQuery } from '../../../../api/cartApi.ts';
 
 export default function ProductList({
   sortValue,
@@ -36,6 +37,16 @@ export default function ProductList({
     petType: petType,
     selectedPriceRange: priceRange,
   });
+
+  const addItem = useAddLineItemMutation()[0];
+  const { data: carts } = useGetMyCartsQuery();
+  const handleAddToCart = (id: string) => {
+    if (!carts) return;
+    const cartId = carts[0].id;
+    addItem({ cartId, version: carts[0].version, draft: { productId: id } });
+    // console.log(carts[0].version, carts[0].lineItems);
+  };
+
   if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;
   }
@@ -46,7 +57,13 @@ export default function ProductList({
     <Grid container spacing={1}>
       {data?.results.length === 0 && <Typography>Nothing was found...</Typography>}
       {data?.results.map((product: Product) => {
-        return <ProductCard key={product.id} product={formatDataForSticker(product)} />;
+        return (
+          <ProductCard
+            key={product.id}
+            product={formatDataForSticker(product)}
+            handleAddToCart={() => handleAddToCart(product.id)}
+          />
+        );
       })}
     </Grid>
   );

@@ -1,3 +1,4 @@
+import type { Cart } from './cartApi';
 import type { Response } from './productsApi';
 
 export function isCartListResponse(data: unknown): data is Response<Cart> {

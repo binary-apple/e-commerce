@@ -1,13 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { projectKey, apiUrl } from './constants';
 import type { Cart, LineItemDraft } from '../types/cartApi';
-import type { Response } from '../types/productsApi';
-
-function isCartListResponse(data: unknown): data is Response<Cart> {
-  return (
-    typeof data === 'object' && data !== null && 'results' in data && Array.isArray(data.results)
-  );
-}
+import { isCartListResponse, isCart } from '../types/cartApiGuards';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
@@ -22,15 +16,7 @@ export const cartApi = createApi({
   }),
   tagTypes: ['Cart'],
   endpoints: (build) => ({
-    getMyCarts: build.query<Cart[], void>({
-      query: () => 'me/carts',
-      async transformResponse(response: Response<Cart>) {
-        return response.results;
-      },
-      providesTags: ['Cart'],
-    }),
-
-    getMyActiveCart: build.query({
+    getMyActiveCart: build.query<Cart, void>({
       async queryFn(_arguments, _api, _extraOptions, fetchWithBQ) {
         const carts = await fetchWithBQ('me/carts');
         if (carts.error) return { error: carts.error };
@@ -45,7 +31,12 @@ export const cartApi = createApi({
         }
         const activeCart = await fetchWithBQ('me/active-cart');
         if (activeCart.error) return { error: activeCart.error };
-        return { data: activeCart };
+        if (!isCart(activeCart.data)) {
+          return {
+            error: { status: 500, data: 'Invalid cart data structure' },
+          };
+        }
+        return { data: activeCart.data };
       },
       providesTags: ['Cart'],
     }),
@@ -74,9 +65,5 @@ export const cartApi = createApi({
   }),
 });
 
-export const {
-  useGetMyCartsQuery,
-  useGetMyActiveCartQuery,
-  useAddLineItemMutation,
-  useRemoveLineItemMutation,
-} = cartApi;
+export const { useGetMyActiveCartQuery, useAddLineItemMutation, useRemoveLineItemMutation } =
+  cartApi;

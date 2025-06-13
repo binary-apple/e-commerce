@@ -12,8 +12,7 @@ export const productsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `https://api.europe-west1.gcp.commercetools.com/${projectKey}`,
     prepareHeaders: async (headers) => {
-      // TODO: get token only once in main
-      const accessToken = await getClientToken('view_products');
+      const accessToken = await getClientToken();
       headers.set('Authorization', `Bearer ${accessToken}`);
       return headers;
     },

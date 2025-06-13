@@ -1,7 +1,17 @@
-export async function getClientToken(scope: string): Promise<string> {
+export async function getClientToken(): Promise<string> {
   const body = new URLSearchParams();
   body.append('grant_type', 'client_credentials');
-  body.append('scope', `${scope}:${import.meta.env.VITE_CTP_PROJECT_KEY}`);
+  // Apply all required scopes
+  // Scopes are not required!
+  // https://docs.commercetools.com/api/scopes
+  // const scopes = ['view_products'];
+  // body.append('scope', scopes.map((s) => `${s}:${import.meta.env.VITE_CTP_PROJECT_KEY}`).join(' '));
+
+  const clientTokenLs = localStorage.getItem('client_token');
+
+  if (clientTokenLs) {
+    return clientTokenLs;
+  }
 
   const result = await fetch(`${import.meta.env.VITE_CTP_AUTH_URL}/oauth/token`, {
     method: 'POST',
@@ -16,5 +26,9 @@ export async function getClientToken(scope: string): Promise<string> {
 
   if (!result.ok) throw new Error('Cannot get service token');
   const data = await result.json();
-  return data.access_token;
+
+  const clientToken = data.access_token;
+
+  localStorage.setItem('client_token', clientToken);
+  return clientToken;
 }

@@ -22,7 +22,6 @@ export const authApi = createApi({
                 grant_type: 'password',
                 username: email,
                 password,
-                scope: `manage_my_profile:${projectKey}`,
               }),
             },
           );
@@ -59,7 +58,7 @@ export const authApi = createApi({
     register: builder.mutation<unknown, RegistrationDataApi>({
       async queryFn(data) {
         try {
-          const token = await getClientToken('manage_customers');
+          const token = await getClientToken();
 
           const response = await fetch(`${apiUrl}/${projectKey}/customers`, {
             method: 'POST',

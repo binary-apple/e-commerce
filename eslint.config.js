@@ -26,7 +26,7 @@ export default tslint.config(
       prettier: eslintPluginPrettier,
     },
     linterOptions: {
-      noInlineConfig: true,
+      noInlineConfig: false,
       reportUnusedDisableDirectives: 'error',
     },
     rules: {

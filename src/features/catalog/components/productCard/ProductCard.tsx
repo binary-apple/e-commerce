@@ -14,9 +14,11 @@ import { theme } from '../../../../theme.ts';
 
 export default function ProductCard({
   product,
+  isInCart,
   handleAddToCart,
 }: {
   product: ProductCardConfig;
+  isInCart: boolean;
   handleAddToCart: () => void;
 }) {
   return (
@@ -87,6 +89,7 @@ export default function ProductCard({
                 event.preventDefault();
                 handleAddToCart();
               }}
+              disabled={isInCart}
             >
               <AddShoppingCartRoundedIcon />
             </IconButton>

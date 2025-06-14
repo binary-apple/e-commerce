@@ -8,6 +8,12 @@ import type { SortValues } from '../../types/sort.ts';
 import formatDataForSticker from '../../../../utils/formatDataForSticker/formatDataForSticker.ts';
 import { Typography } from '@mui/material';
 import { useAddLineItemMutation, useGetMyActiveCartQuery } from '../../../../api/cartApi.ts';
+import type { Cart } from '../../../../types/cartApi.ts';
+import { useSnackbar } from 'notistack';
+
+function isProductInCart(productId: string, cart?: Cart): boolean {
+  return cart ? cart.lineItems.some((item) => item.productId === productId) : false;
+}
 
 export default function ProductList({
   sortValue,
@@ -26,6 +32,8 @@ export default function ProductList({
     selectedCategory,
   } = useCategory();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const {
     data,
     isLoading: isProductLoading,
@@ -40,10 +48,17 @@ export default function ProductList({
 
   const addItem = useAddLineItemMutation()[0];
   const { data: cart } = useGetMyActiveCartQuery();
-  const handleAddToCart = (id: string) => {
+
+  const handleAddToCart = async (id: string) => {
     if (!cart) return;
-    addItem({ cartId: cart.id, version: cart.version, draft: { productId: id } });
-    // console.log(cart);
+    const { data: updatedCart } = await addItem({
+      cartId: cart.id,
+      version: cart.version,
+      draft: { productId: id },
+    });
+    if (isProductInCart(id, updatedCart)) {
+      enqueueSnackbar('Product is added to your cart', { variant: 'success' });
+    }
   };
 
   if (isCategoryLoading || isProductLoading) {
@@ -60,6 +75,7 @@ export default function ProductList({
           <ProductCard
             key={product.id}
             product={formatDataForSticker(product)}
+            isInCart={isProductInCart(product.id, cart)}
             handleAddToCart={() => handleAddToCart(product.id)}
           />
         );

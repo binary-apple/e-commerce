@@ -81,7 +81,7 @@ export default function CartPage() {
           </Box>
           <Box>
             {cart.lineItems.map((item) => (
-              <CartItem item={item} key={item.id} />
+              <CartItem item={item} key={item.id} cartId={cart.id} cartVersion={cart.version} />
             ))}
           </Box>
         </Grid>

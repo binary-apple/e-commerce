@@ -48,6 +48,7 @@ describe('formatDate', () => {
   it('formatDataForSticker should correct format data:', () => {
     const result = formatDataForSticker(product);
     expect(result).toEqual({
+      id: '123',
       key: 'product-123',
       name: 'product',
       price: '12.34',

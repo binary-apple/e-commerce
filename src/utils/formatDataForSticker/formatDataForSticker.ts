@@ -7,6 +7,7 @@ export default function formatDataForSticker(data: Product): ProductCardConfig {
   const hasDiscount = Boolean(priceObject.discounted);
 
   return {
+    id: data.id,
     key: data.key,
     name: data.name['en-GB'] || '',
     price: formatPrice(data.masterVariant.prices[0].value),

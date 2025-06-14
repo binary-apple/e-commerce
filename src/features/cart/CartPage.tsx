@@ -53,13 +53,9 @@ export default function CartPage() {
   }
 
   return (
-    <Container
-      maxWidth="lg"
+    <Box
       sx={{
-        paddingX: {
-          xs: '16px',
-          md: '60px',
-        },
+        maxWidth: { lg: '1108px', md: '850px', xs: '90%' },
         paddingY: {
           xs: '30px',
           sm: '60px',
@@ -96,6 +92,6 @@ export default function CartPage() {
           {/* <CartSummary cart={cart} /> */}
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 }

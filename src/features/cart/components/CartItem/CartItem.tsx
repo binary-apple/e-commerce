@@ -3,6 +3,7 @@ import type { CartLineItem } from '../../../../types/cartApi';
 import { formatPrice } from '../../../../utils/formatPrice/formatPrice';
 import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker';
 import { NavLink } from 'react-router';
+import { Paths } from '../../../../types/paths';
 
 type CartItemProps = {
   item: CartLineItem;
@@ -30,12 +31,12 @@ export default function CartItem({ item }: CartItemProps) {
 
   return (
     <>
-      <ListItem sx={{ gap: 3 }}>
+      <ListItem sx={{ gap: 3, backgroundColor: '#FBF2DA' }}>
         <ListItemAvatar>
           <Box sx={{ width: 100, height: 100 }}>
             <Box
               component={NavLink}
-              to={`/product/${item.productKey}`}
+              to={`${Paths.PRODUCT}/${item.productKey}`}
               sx={{
                 width: 100,
                 height: 100,

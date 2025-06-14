@@ -15,3 +15,6 @@ export const ADDRESS_FIELDS: AddressFieldProps[] = [
   },
   { id: 'postalCode', label: 'Postal code' },
 ];
+
+export const HEIGHT_HEADER = 118;
+export const HEIGHT_FOOTER = 259;

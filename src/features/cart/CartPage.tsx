@@ -58,16 +58,31 @@ export default function CartPage() {
       sx={{
         paddingX: {
           xs: '16px',
-          sm: '24px',
+          md: '60px',
         },
         paddingY: {
           xs: '30px',
           sm: '60px',
         },
       }}
+      className={styles.cart}
     >
-      <Grid container spacing={4}>
+      <Grid
+        container
+        sx={{ minWidth: '100%', gap: { xs: 1, md: 4 }, flexWrap: { xs: 'wrap', md: 'nowrap' } }}
+        className={styles['cart-wrapper']}
+      >
         <Grid size={{ xs: 12, md: 8 }}>
+          <Box
+            sx={{
+              marginBottom: {
+                xs: '0.5rem',
+                md: '1rem',
+              },
+            }}
+          >
+            <Title title="Your Cart" variant="h3" />
+          </Box>
           <Box>
             {cart.lineItems.map((item) => (
               <CartItem item={item} key={item.id} />
@@ -75,10 +90,11 @@ export default function CartPage() {
           </Box>
         </Grid>
 
-        {/* TODO Total cart info */}
-        {/* <Grid item xs={12} md={4}>
-          <CartSummary cart={cart} />
-        </Grid> */}
+        <Grid size={{ xs: 12, md: 4 }} className={styles.summary}>
+          <Title title="Order Summary" variant="h3" />
+          {/* TODO Total cart info */}
+          {/* <CartSummary cart={cart} /> */}
+        </Grid>
       </Grid>
     </Container>
   );

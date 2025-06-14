@@ -1,4 +1,4 @@
-import type { LocalizedString, MasterVariant, PriceValue } from './productsApi';
+import type { LocalizedString, MasterVariant, PriceValue, Price } from './productsApi';
 
 export type Cart = {
   id: string;
@@ -27,11 +27,12 @@ export type CartLineItem = {
   name: LocalizedString;
   productType: Reference;
   variant: MasterVariant;
-  price: PriceValue;
+  price: Price;
   quantity: number;
   totalPrice: PriceValue;
   discountedPricePerQuantity?: DiscountedLineItemPrice[];
   customFields?: CustomFields;
+  productKey: string;
 };
 
 export type CartCustomLineItem = {

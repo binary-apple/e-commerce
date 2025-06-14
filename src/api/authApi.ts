@@ -22,7 +22,7 @@ export const authApi = createApi({
                 grant_type: 'password',
                 username: email,
                 password,
-                scope: `manage_my_profile:${projectKey}`,
+                scope: `manage_my_profile:${projectKey} manage_my_orders:${projectKey}`,
               }),
             },
           );

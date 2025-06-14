@@ -1,14 +1,20 @@
-import type { ProductCardConfig } from '../../types/product.ts';
 import { theme } from '../../theme.ts';
 import { stickerBackgroundColor } from './stickerBackgroundColors.ts';
 
 const DEFAULT_IMAGE_SIZE = 300;
+
+type StickerInfo = {
+  name: string;
+  image: string;
+  color: string;
+};
+
 //todo: if response of image request starts with 4** - fix with static image for this element, maybe use OopsBox
-export default function ShelterSticker({
+export default function ShelterSticker<T extends StickerInfo>({
   product,
   size = DEFAULT_IMAGE_SIZE,
 }: {
-  product: ProductCardConfig;
+  product: T;
   size?: number;
 }) {
   const TWO = 2;

@@ -2,6 +2,7 @@ import { Typography, ListItem, ListItemAvatar, ListItemText, Divider, Box } from
 import type { CartLineItem } from '../../../../types/cartApi';
 import { formatPrice } from '../../../../utils/formatPrice/formatPrice';
 import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker';
+import { NavLink } from 'react-router';
 
 type CartItemProps = {
   item: CartLineItem;
@@ -32,7 +33,20 @@ export default function CartItem({ item }: CartItemProps) {
       <ListItem sx={{ gap: 3 }}>
         <ListItemAvatar>
           <Box sx={{ width: 100, height: 100 }}>
-            <ShelterSticker product={stickerInfo} />
+            <Box
+              component={NavLink}
+              to={`/product/${item.productKey}`}
+              sx={{
+                width: 100,
+                height: 100,
+                transition: 'opacity 0.3s ease',
+                '&:hover': {
+                  opacity: 0.8,
+                },
+              }}
+            >
+              <ShelterSticker product={stickerInfo} />
+            </Box>
           </Box>
         </ListItemAvatar>
         <ListItemText

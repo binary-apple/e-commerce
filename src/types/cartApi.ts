@@ -32,6 +32,7 @@ export type CartLineItem = {
   totalPrice: PriceValue;
   discountedPricePerQuantity?: DiscountedLineItemPrice[];
   customFields?: CustomFields;
+  productKey: string;
 };
 
 export type CartCustomLineItem = {

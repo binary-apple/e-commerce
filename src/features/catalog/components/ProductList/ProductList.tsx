@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import { type ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import OopsBox from '../../../notFound/components/OopsBox.tsx';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const PRODUCTS_LIMIT = 9;
 
@@ -54,6 +55,8 @@ export default function ProductList({
     limit: PRODUCTS_LIMIT,
   });
 
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
+
   const totalProducts = data?.total ?? 0;
   const totalPages = Math.ceil(totalProducts / PRODUCTS_LIMIT);
 
@@ -79,13 +82,29 @@ export default function ProductList({
         {data?.results.length === 0 && <OopsBox text={'Nothing was found'} />}
         {data?.results.length !== 0 && (
           <>
-            <Pagination count={totalPages} page={page} onChange={handleChange} color="primary" />
+            <Pagination
+              count={totalPages}
+              size={matches ? 'medium' : 'small'}
+              page={page}
+              onChange={handleChange}
+              siblingCount={matches ? 1 : 0}
+              boundaryCount={1}
+              color="primary"
+            />
             <Grid container spacing={1}>
               {data?.results.map((product: Product) => {
                 return <ProductCard key={product.id} product={formatDataForSticker(product)} />;
               })}
             </Grid>
-            <Pagination count={totalPages} page={page} onChange={handleChange} color="primary" />
+            <Pagination
+              count={totalPages}
+              size={matches ? 'medium' : 'small'}
+              page={page}
+              onChange={handleChange}
+              siblingCount={matches ? 1 : 0}
+              boundaryCount={1}
+              color="primary"
+            />
           </>
         )}
       </Box>

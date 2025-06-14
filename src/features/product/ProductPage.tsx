@@ -6,6 +6,9 @@ import { Paths } from '../../types/paths.ts';
 import styles from './ProductPage.module.scss';
 import { formatPrice } from '../../utils/formatPrice/formatPrice';
 import ImageSlider from './components/ImageSlider/ImageSlider';
+import { useAddToCart } from '../../hooks/useAddToCart.ts';
+import { useGetMyActiveCartQuery } from '../../api/cartApi.ts';
+import { isProductInCart } from '../../utils/isProductInCart.ts';
 
 export default function ProductPage() {
   const { key } = useParams();
@@ -13,6 +16,8 @@ export default function ProductPage() {
     { key: key! },
     { skip: !key },
   );
+  const { data: cart } = useGetMyActiveCartQuery();
+  const handleAddToCart = useAddToCart(cart);
   if (isLoading) {
     return <CircularProgress size="3rem" />;
   }
@@ -91,7 +96,12 @@ export default function ProductPage() {
               )}
             </Box>
             {/*todo: add event listeners on this button*/}
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleAddToCart(data.id)}
+              disabled={isProductInCart(data.id, cart)}
+            >
               Add to Cart
             </Button>
           </Box>

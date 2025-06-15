@@ -14,8 +14,13 @@ import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker
 import { NavLink } from 'react-router';
 import { Paths } from '../../../../types/paths';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
-import { useRemoveLineItemMutation } from '../../../../api/cartApi';
+import {
+  useChangeLineItemQuantityMutation,
+  useRemoveLineItemMutation,
+} from '../../../../api/cartApi';
 import { useSnackbar } from 'notistack';
+import { QuantitySelector } from '../QuantitySelector/QuantitySelector';
+import { useState } from 'react';
 
 type CartItemProps = {
   item: CartLineItem;
@@ -25,7 +30,9 @@ type CartItemProps = {
 
 export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
   const [removeLineItem, { isLoading: isRemoving }] = useRemoveLineItemMutation();
+  const [changeQuantity, { isLoading: isChangingQuantity }] = useChangeLineItemQuantityMutation();
   const { enqueueSnackbar } = useSnackbar();
+  const [localQuantity, setLocalQuantity] = useState(item.quantity);
 
   const handleRemoveItem = async () => {
     try {
@@ -34,9 +41,34 @@ export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
         version: cartVersion,
         lineItemId: item.id,
       }).unwrap();
-      enqueueSnackbar('Item removed from cart', { variant: 'success' });
+      enqueueSnackbar('Sticker removed from cart', { variant: 'success' });
     } catch {
-      enqueueSnackbar('Failed to remove item', { variant: 'error' });
+      enqueueSnackbar('Failed to remove sticker', { variant: 'error' });
+    }
+  };
+
+  const handleQuantityChange = async (newQuantity: number) => {
+    if (newQuantity < 1) {
+      handleRemoveItem();
+      return;
+    }
+
+    if (newQuantity === item.quantity) {
+      return;
+    }
+
+    try {
+      await changeQuantity({
+        cartId,
+        version: cartVersion,
+        lineItemId: item.id,
+        quantity: newQuantity,
+      }).unwrap();
+      setLocalQuantity(newQuantity);
+      enqueueSnackbar('Quantity updated', { variant: 'success' });
+    } catch {
+      enqueueSnackbar('Failed to update quantity', { variant: 'error' });
+      setLocalQuantity(item.quantity);
     }
   };
 
@@ -56,6 +88,8 @@ export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
       'color-cheap',
   };
 
+  const isLoading = isRemoving || isChangingQuantity;
+
   return (
     <>
       <ListItem sx={{ gap: 3, backgroundColor: '#FBF2DA' }}>
@@ -67,7 +101,7 @@ export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
               sx={{
                 width: 100,
                 height: 100,
-                transition: 'opacity 0.3s ease',
+                transition: 'opacity 0.4s ease',
                 '&:hover': {
                   opacity: 0.8,
                 },
@@ -81,8 +115,14 @@ export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
           primary={item.name['en-GB'] || 'Product Name'}
           secondary={`${individualPrice} €`}
         />
-        <Typography variant="body1">{item.quantity} item</Typography>
-        <Typography variant="body1">{totalPrice} €</Typography>
+        <QuantitySelector
+          quantity={localQuantity}
+          onQuantityChange={handleQuantityChange}
+          disabled={isLoading}
+        />
+        <Typography variant="body1" sx={{ minWidth: 100 }}>
+          {totalPrice} €
+        </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Tooltip title="Remove from Cart" arrow>
             <IconButton
@@ -91,7 +131,7 @@ export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
               disabled={isRemoving}
               color="error"
               sx={{
-                transition: 'all 0.3s ease',
+                transition: 'all 0.4s ease',
                 '&:hover': {
                   backgroundColor: 'error.light',
                   color: 'error.contrastText',

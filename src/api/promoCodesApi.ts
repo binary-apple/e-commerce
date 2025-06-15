@@ -23,6 +23,7 @@ export const promoCodesApi = createApi({
           sort: 'createdAt desc',
         },
       }),
+      transformResponse: (response: { results: PromoCode[] }) => response.results,
       providesTags: ['PromoCodes'],
     }),
   }),

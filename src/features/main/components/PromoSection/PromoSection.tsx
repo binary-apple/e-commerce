@@ -6,10 +6,14 @@ import PromoCard from '../PromoCard/PromoCard';
 import { CircularProgress } from '@mui/material';
 
 export default function PromoSection() {
-  const { data: promoCodes, isLoading } = useGetActivePromoCodesQuery();
+  const { data: promoCodes, isLoading, error } = useGetActivePromoCodesQuery();
 
   if (isLoading) {
     return <CircularProgress size="3rem" />;
+  }
+
+  if (error) {
+    return <div>Error loading promo codes</div>;
   }
 
   return (

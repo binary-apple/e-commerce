@@ -9,7 +9,7 @@ import ImageSlider from './components/ImageSlider/ImageSlider';
 import { useAddToCart } from '../../hooks/useAddToCart.ts';
 import { useGetMyActiveCartQuery } from '../../api/cartApi.ts';
 import { isProductInCart } from '../../utils/isProductInCart.ts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ProductPage() {
   const { key } = useParams();
@@ -20,10 +20,13 @@ export default function ProductPage() {
     error,
   } = useGetProductByKeyQuery({ key: key! }, { skip: !key });
   const { data: cart } = useGetMyActiveCartQuery();
-  const { addToCart, isLoading: isAddingToCart } = useAddToCart(cart);
+  const { addToCart } = useAddToCart(cart);
   const [isAddToCartDisabled, setIsAddToCartDisabled] = useState(
-    isProductInCart(data?.id ?? '', cart) || isAddingToCart,
+    isProductInCart(data?.id ?? '', cart),
   );
+  useEffect(() => {
+    setIsAddToCartDisabled(isProductInCart(data?.id ?? '', cart));
+  }, [cart, data?.id]);
   if (isProductLoading) {
     return <CircularProgress size="3rem" />;
   }
@@ -32,10 +35,10 @@ export default function ProductPage() {
   }
   if (!data) return <Navigate to={Paths.NOT_FOUND} replace />;
 
-  const handleAddToCart = (id: string) => {
+  const handleAddToCart = async (id: string) => {
     setIsAddToCartDisabled(true);
     try {
-      addToCart(id);
+      await addToCart(id);
     } catch {
       setIsAddToCartDisabled(false);
     }

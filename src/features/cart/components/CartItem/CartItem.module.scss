@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+
+  &:last-of-type {
+    justify-content: space-between;
+  }
+}

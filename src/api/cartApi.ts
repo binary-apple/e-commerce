@@ -62,8 +62,37 @@ export const cartApi = createApi({
       }),
       invalidatesTags: ['Cart'],
     }),
+    changeLineItemQuantity: build.mutation<
+      Cart,
+      {
+        cartId: string;
+        version: number;
+        lineItemId: string;
+        quantity: number;
+      }
+    >({
+      query: ({ cartId, version, lineItemId, quantity }) => ({
+        url: `me/carts/${cartId}`,
+        method: 'POST',
+        body: {
+          version,
+          actions: [
+            {
+              action: 'changeLineItemQuantity',
+              lineItemId,
+              quantity,
+            },
+          ],
+        },
+      }),
+      invalidatesTags: ['Cart'],
+    }),
   }),
 });
 
-export const { useGetMyActiveCartQuery, useAddLineItemMutation, useRemoveLineItemMutation } =
-  cartApi;
+export const {
+  useGetMyActiveCartQuery,
+  useAddLineItemMutation,
+  useRemoveLineItemMutation,
+  useChangeLineItemQuantityMutation,
+} = cartApi;

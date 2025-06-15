@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  min-width: 100px;
+  height: 32px;
+  border: 1px solid #062d3e;
+  border-radius: 6px;
+
+  background-color: #fff8eb;
+}

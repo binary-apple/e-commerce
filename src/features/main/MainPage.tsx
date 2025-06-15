@@ -1,12 +1,12 @@
 import HeroSection from './components/HeroSection/HeroSection';
-import SheltersSection from './components/SheltersSection/SheltersSection';
+import PromoSection from './components/PromoSection/PromoSection';
 import WhyWeCareSection from './components/WhyWeCareSection/WhyWeCareSection';
 
 export default function MainPage() {
   return (
     <>
       <HeroSection />
-      <SheltersSection />
+      <PromoSection />
       <WhyWeCareSection />
     </>
   );

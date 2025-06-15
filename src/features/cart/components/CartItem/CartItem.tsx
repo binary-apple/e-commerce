@@ -20,7 +20,7 @@ import {
 } from '../../../../api/cartApi';
 import { useSnackbar } from 'notistack';
 import { QuantitySelector } from '../QuantitySelector/QuantitySelector';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './CartItem.module.scss';
 
 type CartItemProps = {
@@ -34,6 +34,12 @@ export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
   const [changeQuantity, { isLoading: isChangingQuantity }] = useChangeLineItemQuantityMutation();
   const { enqueueSnackbar } = useSnackbar();
   const [localQuantity, setLocalQuantity] = useState(item.quantity);
+  const [currentVersion, setCurrentVersion] = useState(cartVersion);
+  const pendingRequestsReference = useRef(0);
+
+  useEffect(() => {
+    setCurrentVersion(cartVersion);
+  }, [cartVersion]);
 
   const handleRemoveItem = async () => {
     try {
@@ -58,18 +64,27 @@ export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
       return;
     }
 
+    if (pendingRequestsReference.current > 0) {
+      return;
+    }
+
     try {
-      await changeQuantity({
+      pendingRequestsReference.current += 1;
+      setLocalQuantity(newQuantity);
+
+      const result = await changeQuantity({
         cartId,
-        version: cartVersion,
+        version: currentVersion,
         lineItemId: item.id,
         quantity: newQuantity,
       }).unwrap();
-      setLocalQuantity(newQuantity);
+      setCurrentVersion(result.version);
       enqueueSnackbar('Quantity updated', { variant: 'success' });
     } catch {
       enqueueSnackbar('Failed to update quantity', { variant: 'error' });
       setLocalQuantity(item.quantity);
+    } finally {
+      pendingRequestsReference.current -= 1;
     }
   };
 
@@ -128,7 +143,7 @@ export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
           <QuantitySelector
             quantity={localQuantity}
             onQuantityChange={handleQuantityChange}
-            disabled={isLoading}
+            disabled={isLoading || pendingRequestsReference.current > 0}
           />
           <Typography variant="body1" sx={{ minWidth: 100 }}>
             {totalPrice} €

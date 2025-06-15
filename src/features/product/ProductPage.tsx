@@ -9,22 +9,37 @@ import ImageSlider from './components/ImageSlider/ImageSlider';
 import { useAddToCart } from '../../hooks/useAddToCart.ts';
 import { useGetMyActiveCartQuery } from '../../api/cartApi.ts';
 import { isProductInCart } from '../../utils/isProductInCart.ts';
+import { useState } from 'react';
 
 export default function ProductPage() {
   const { key } = useParams();
-  const { data, isLoading, isError, error } = useGetProductByKeyQuery(
-    { key: key! },
-    { skip: !key },
-  );
+  const {
+    data,
+    isLoading: isProductLoading,
+    isError,
+    error,
+  } = useGetProductByKeyQuery({ key: key! }, { skip: !key });
   const { data: cart } = useGetMyActiveCartQuery();
-  const handleAddToCart = useAddToCart(cart);
-  if (isLoading) {
+  const { addToCart, isLoading: isAddingToCart } = useAddToCart(cart);
+  const [isAddToCartDisabled, setIsAddToCartDisabled] = useState(
+    isProductInCart(data?.id ?? '', cart) || isAddingToCart,
+  );
+  if (isProductLoading) {
     return <CircularProgress size="3rem" />;
   }
   if (isError) {
     return <Box className={styles['card']}>Error {JSON.stringify(error)}</Box>;
   }
   if (!data) return <Navigate to={Paths.NOT_FOUND} replace />;
+
+  const handleAddToCart = (id: string) => {
+    setIsAddToCartDisabled(true);
+    try {
+      addToCart(id);
+    } catch {
+      setIsAddToCartDisabled(false);
+    }
+  };
 
   const priceObject = data.masterVariant.prices[0];
 
@@ -95,12 +110,11 @@ export default function ProductPage() {
                 </Typography>
               )}
             </Box>
-            {/*todo: add event listeners on this button*/}
             <Button
               variant="contained"
               color="primary"
               onClick={() => handleAddToCart(data.id)}
-              disabled={isProductInCart(data.id, cart)}
+              disabled={isAddToCartDisabled}
             >
               Add to Cart
             </Button>

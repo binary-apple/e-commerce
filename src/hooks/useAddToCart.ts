@@ -4,18 +4,22 @@ import { isProductInCart } from '../utils/isProductInCart';
 import type { Cart } from '../types/cartApi';
 
 export const useAddToCart = (cart?: Cart) => {
-  const addItem = useAddLineItemMutation()[0];
+  const [addItem, { isLoading }] = useAddLineItemMutation();
 
   const handleAddToCart = async (id: string) => {
-    if (!cart) return;
-    const { data: updatedCart } = await addItem({
-      cartId: cart.id,
-      version: cart.version,
-      draft: { productId: id },
-    });
-    if (isProductInCart(id, updatedCart)) {
-      enqueueSnackbar('Product is added to your cart', { variant: 'success' });
+    try {
+      if (!cart) return;
+      const { data: updatedCart } = await addItem({
+        cartId: cart.id,
+        version: cart.version,
+        draft: { productId: id },
+      });
+      if (isProductInCart(id, updatedCart)) {
+        enqueueSnackbar('Sticker is added to your cart', { variant: 'success' });
+      }
+    } catch {
+      enqueueSnackbar('Failed to add sticker to cart', { variant: 'error' });
     }
   };
-  return handleAddToCart;
+  return { addToCart: handleAddToCart, isLoading };
 };

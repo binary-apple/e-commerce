@@ -21,6 +21,7 @@ import {
 import { useSnackbar } from 'notistack';
 import { QuantitySelector } from '../QuantitySelector/QuantitySelector';
 import { useState } from 'react';
+import styles from './CartItem.module.scss';
 
 type CartItemProps = {
   item: CartLineItem;
@@ -92,55 +93,65 @@ export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
 
   return (
     <>
-      <ListItem sx={{ gap: 3, backgroundColor: '#FBF2DA' }}>
-        <ListItemAvatar>
-          <Box sx={{ width: 100, height: 100 }}>
-            <Box
-              component={NavLink}
-              to={`${Paths.PRODUCT}/${item.productKey}`}
-              sx={{
-                width: 100,
-                height: 100,
-                transition: 'opacity 0.4s ease',
-                '&:hover': {
-                  opacity: 0.8,
-                },
-              }}
-            >
-              <ShelterSticker product={stickerInfo} />
+      <ListItem
+        sx={{
+          flexDirection: { xs: 'column', sm: 'row' },
+          gap: { xs: 2, sm: 3 },
+          backgroundColor: '#FBF2DA',
+        }}
+      >
+        <Box className={styles.container}>
+          <ListItemAvatar>
+            <Box sx={{ width: 100, height: 100 }}>
+              <Box
+                component={NavLink}
+                to={`${Paths.PRODUCT}/${item.productKey}`}
+                sx={{
+                  width: 100,
+                  height: 100,
+                  transition: 'opacity 0.4s ease',
+                  '&:hover': {
+                    opacity: 0.8,
+                  },
+                }}
+              >
+                <ShelterSticker product={stickerInfo} />
+              </Box>
             </Box>
+          </ListItemAvatar>
+          <ListItemText
+            primary={item.name['en-GB'] || 'Product Name'}
+            secondary={`${individualPrice} €`}
+          />
+        </Box>
+        <Box className={styles.container}>
+          <QuantitySelector
+            quantity={localQuantity}
+            onQuantityChange={handleQuantityChange}
+            disabled={isLoading}
+          />
+          <Typography variant="body1" sx={{ minWidth: 100 }}>
+            {totalPrice} €
+          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Tooltip title="Remove from Cart" arrow>
+              <IconButton
+                aria-label="remove item"
+                onClick={handleRemoveItem}
+                disabled={isRemoving}
+                color="error"
+                sx={{
+                  transition: 'all 0.4s ease',
+                  '&:hover': {
+                    backgroundColor: 'error.light',
+                    color: 'error.contrastText',
+                  },
+                }}
+              >
+                <DeleteForeverOutlinedIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
-        </ListItemAvatar>
-        <ListItemText
-          primary={item.name['en-GB'] || 'Product Name'}
-          secondary={`${individualPrice} €`}
-        />
-        <QuantitySelector
-          quantity={localQuantity}
-          onQuantityChange={handleQuantityChange}
-          disabled={isLoading}
-        />
-        <Typography variant="body1" sx={{ minWidth: 100 }}>
-          {totalPrice} €
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Tooltip title="Remove from Cart" arrow>
-            <IconButton
-              aria-label="remove item"
-              onClick={handleRemoveItem}
-              disabled={isRemoving}
-              color="error"
-              sx={{
-                transition: 'all 0.4s ease',
-                '&:hover': {
-                  backgroundColor: 'error.light',
-                  color: 'error.contrastText',
-                },
-              }}
-            >
-              <DeleteForeverOutlinedIcon />
-            </IconButton>
-          </Tooltip>
         </Box>
       </ListItem>
       <Divider sx={{ mb: 2 }} />

@@ -1,18 +1,45 @@
-import { Typography, ListItem, ListItemAvatar, ListItemText, Divider, Box } from '@mui/material';
+import {
+  Typography,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Divider,
+  Box,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
 import type { CartLineItem } from '../../../../types/cartApi';
 import { formatPrice } from '../../../../utils/formatPrice/formatPrice';
 import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker';
 import { NavLink } from 'react-router';
 import { Paths } from '../../../../types/paths';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { useRemoveLineItemMutation } from '../../../../api/cartApi';
+import { useSnackbar } from 'notistack';
 
 type CartItemProps = {
   item: CartLineItem;
-  // TODO when update cart
-  // cartId: string;
-  // cartVersion: number;
+  cartId: string;
+  cartVersion: number;
 };
 
-export default function CartItem({ item }: CartItemProps) {
+export default function CartItem({ item, cartId, cartVersion }: CartItemProps) {
+  const [removeLineItem, { isLoading: isRemoving }] = useRemoveLineItemMutation();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleRemoveItem = async () => {
+    try {
+      await removeLineItem({
+        cartId,
+        version: cartVersion,
+        lineItemId: item.id,
+      }).unwrap();
+      enqueueSnackbar('Item removed from cart', { variant: 'success' });
+    } catch {
+      enqueueSnackbar('Failed to remove item', { variant: 'error' });
+    }
+  };
+
   const getProductImage = () => {
     return item.variant?.images?.[0]?.url || '/placeholder-image.png';
   };
@@ -56,6 +83,25 @@ export default function CartItem({ item }: CartItemProps) {
         />
         <Typography variant="body1">{item.quantity} item</Typography>
         <Typography variant="body1">{totalPrice} €</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Tooltip title="Remove from Cart" arrow>
+            <IconButton
+              aria-label="remove item"
+              onClick={handleRemoveItem}
+              disabled={isRemoving}
+              color="error"
+              sx={{
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  backgroundColor: 'error.light',
+                  color: 'error.contrastText',
+                },
+              }}
+            >
+              <DeleteForeverOutlinedIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </ListItem>
       <Divider sx={{ mb: 2 }} />
     </>

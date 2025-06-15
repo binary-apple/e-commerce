@@ -42,7 +42,16 @@ export default function ProductList({
 
   const { data: cart } = useGetMyActiveCartQuery();
 
-  const handleAddToCart = useAddToCart(cart);
+  // TODO: implement correct button disabling
+  const { addToCart } = useAddToCart(cart);
+  const handleAddToCart = (id: string) => {
+    // setIsAddToCartDisabled(true);
+    try {
+      addToCart(id);
+    } catch {
+      // setIsAddToCartDisabled(false);
+    }
+  };
 
   if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;

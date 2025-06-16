@@ -4,24 +4,16 @@ import CategoryList from './components/CategoryList/CategoryList';
 import { CategoryProvider } from '../../providers/CategoriesProvider';
 import CustomBreadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 import Sort from './components/Sort/Sort';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { SortValues } from './types/sort';
 import Search from './components/Search/Search';
 import Filters from './components/Filters/Filters';
-import { useSearchParams } from 'react-router';
 
 export default function CatalogPage() {
-  const [searchParameters, setSearchParameters] = useSearchParams();
   const [sortValue, setSortValue] = useState<SortValues>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [petType, setPetType] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([0, 0]);
-
-  useEffect(() => {
-    const newParameters = new URLSearchParams(searchParameters);
-    newParameters.delete('page');
-    setSearchParameters(newParameters);
-  }, [searchValue, petType, priceRange]);
 
   return (
     <CategoryProvider>

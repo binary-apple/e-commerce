@@ -85,9 +85,6 @@ export const cartApi = createApi({
       query: ({ cartId, version, lineItemId, quantity }) => ({
         url: `me/carts/${cartId}`,
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${getAuthTokenFromLS()}`,
-        },
         body: {
           version,
           actions: [
@@ -97,6 +94,9 @@ export const cartApi = createApi({
               quantity,
             },
           ],
+        },
+        headers: {
+          Authorization: `Bearer ${getAuthTokenFromLS()}`,
         },
       }),
       invalidatesTags: ['Cart'],

@@ -11,6 +11,13 @@ import { getAuthTokenFromLS, getRefreshTokenFromLS } from '../../hooks/useAuth';
 
 const baseFetch = fetchBaseQuery({
   baseUrl: `${apiUrl}/${projectKey}`,
+  prepareHeaders: (headers) => {
+    const token = getAuthTokenFromLS();
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers;
+  },
 });
 
 let isRefreshing = false;

@@ -1,31 +1,34 @@
 import { useState } from 'react';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Divider from '@mui/material/Divider';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import IconButton from '@mui/material/IconButton';
+import { NavLink, useNavigate } from 'react-router';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  Box,
+  Badge,
+  Stack,
+  Typography,
+  Link,
+  Button,
+  List,
+  ListItem,
+  Tooltip,
+  Divider,
+  ListItemButton,
+  ListItemText,
+  SwipeableDrawer,
+  IconButton,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-
+import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
 import { navItems, customIconHoverOpacity } from './constants';
 import classes from './Header.module.scss';
 import { Paths } from '../../../types/paths';
-import { NavLink, useNavigate } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../../../store/store';
 import { logout } from '../../../store/slices/authSlice';
 import { useSnackbar } from 'notistack';
 import { useAuth } from '../../../hooks/useAuth';
 import { theme } from '../../../theme';
 import { UserAvatar } from '../../../components/UserAvatar/UserAvatar';
-import { Tooltip } from '@mui/material';
-import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
+import { useGetMyActiveCartQuery } from '../../../api/cartApi';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -34,6 +37,12 @@ export default function Header() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const { clearAuthTokenLS } = useAuth();
+  const { data: cart } = useGetMyActiveCartQuery();
+
+  let cartCount: number = 0;
+  if (cart) {
+    cartCount = cart?.lineItems.reduce((total, item) => total + item.quantity, 0);
+  }
 
   const handleLogout = () => {
     clearAuthTokenLS();
@@ -141,7 +150,9 @@ export default function Header() {
                 },
               }}
             >
-              <ShoppingCartRoundedIcon fontSize="medium" />
+              <Badge badgeContent={cartCount} color="primary">
+                <ShoppingCartRoundedIcon fontSize="medium" />
+              </Badge>
             </IconButton>
             <IconButton
               aria-label="open drawer"
@@ -219,7 +230,9 @@ export default function Header() {
                     },
                   }}
                 >
-                  <ShoppingCartRoundedIcon fontSize="large" />
+                  <Badge badgeContent={cartCount} color="primary">
+                    <ShoppingCartRoundedIcon fontSize="large" />
+                  </Badge>
                 </IconButton>
                 {isAuthenticated ? (
                   <>

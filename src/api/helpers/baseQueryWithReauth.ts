@@ -75,12 +75,9 @@ export const baseQueryForRefreshFlow: BaseQueryFn<
 
     if ('error' in refreshResult) {
       //Todo: handle error
-      console.error('Error refreshing token:', refreshResult.error);
       isRefreshing = false;
       return refreshResult;
     } else {
-      // обработать результат
-
       const requestRespData = refreshResult.data;
 
       if (isAccessTokenResponse(requestRespData)) {

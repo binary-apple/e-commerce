@@ -61,6 +61,7 @@ export const baseQueryForRefreshFlow: BaseQueryFn<
         url: `${authApiUrl}/oauth/token`,
         method: 'POST',
         headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
           Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
         },
         body: body.toString(),

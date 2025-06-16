@@ -34,7 +34,7 @@ export function CartSummary({ cart }: { cart: Cart }) {
         <Typography variant="h6">
           {totalItems} sticker{totalItems === 1 ? '' : 's'}
         </Typography>
-        <Typography variant="h6" color="primary">
+        <Typography variant="h6" fontWeight="bold">
           {getSubtotal()} €
         </Typography>
       </Box>
@@ -45,7 +45,7 @@ export function CartSummary({ cart }: { cart: Cart }) {
         <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
           Total
         </Typography>
-        <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h4" color="primary" sx={{ fontWeight: 'bold' }}>
           {formatPrice(totalCost)} €
         </Typography>
       </Box>

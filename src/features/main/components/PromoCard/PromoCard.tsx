@@ -27,6 +27,9 @@ export default function PromoCard({ promoCode }: Props) {
         backgroundColor: theme.palette.primary.main,
         color: theme.palette.primary.contrastText,
         borderRadius: '32px',
+        width: {
+          md: '50%',
+        },
       }}
     >
       <CardContent sx={{ p: 3 }}>

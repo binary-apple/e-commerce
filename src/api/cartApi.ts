@@ -1,26 +1,22 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { projectKey, apiUrl } from './constants';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import type { Cart, LineItemDraft } from '../types/cartApi';
 import { isCartListResponse, isCart } from '../types/cartApiGuards';
+import { baseQueryForRefreshFlow } from './helpers/baseQueryWithReauth';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${apiUrl}/${projectKey}`,
-    prepareHeaders: async (headers) => {
-      //todo: handle token of anonymous or customer user when this will implemented
-      const accessToken = localStorage.getItem('auth_token');
-      headers.set('Authorization', `Bearer ${accessToken}`);
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryForRefreshFlow,
   tagTypes: ['Cart'],
   endpoints: (build) => ({
     getMyActiveCart: build.query<Cart, void>({
       async queryFn(_arguments, _api, _extraOptions, fetchWithBQ) {
+        console.log('Fetching active cart');
         const carts = await fetchWithBQ('me/carts');
+        console.log('Carts response:', carts);
         if (carts.error) return { error: carts.error };
         if (isCartListResponse(carts.data) && carts.data.results.length === 0) {
+          console.log('Creating active cart');
+
           await fetchWithBQ({
             url: 'me/carts',
             method: 'POST',

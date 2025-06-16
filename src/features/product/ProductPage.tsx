@@ -10,6 +10,7 @@ import { useAddToCart } from '../../hooks/useAddToCart.ts';
 import { useGetMyActiveCartQuery } from '../../api/cartApi.ts';
 import { isProductInCart } from '../../utils/isProductInCart.ts';
 import { useEffect, useState } from 'react';
+import { useRemoveFromCart } from '../../hooks/useRemoveFromCart.ts';
 
 export default function ProductPage() {
   const { key } = useParams();
@@ -21,11 +22,14 @@ export default function ProductPage() {
   } = useGetProductByKeyQuery({ key: key! }, { skip: !key });
   const { data: cart } = useGetMyActiveCartQuery();
   const { addToCart } = useAddToCart(cart);
-  const [isAddToCartDisabled, setIsAddToCartDisabled] = useState(
-    isProductInCart(data?.id ?? '', cart),
+  const { removeFromCart } = useRemoveFromCart(cart);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [buttonLabel, setButtonLabel] = useState<string>(
+    isProductInCart(data?.id ?? '', cart) ? 'Remove' : 'Add to cart',
   );
   useEffect(() => {
-    setIsAddToCartDisabled(isProductInCart(data?.id ?? '', cart));
+    setIsButtonDisabled(false);
+    setButtonLabel(isProductInCart(data?.id ?? '', cart) ? 'Remove' : 'Add to cart');
   }, [cart, data?.id]);
   if (isProductLoading) {
     return <CircularProgress size="3rem" />;
@@ -35,12 +39,20 @@ export default function ProductPage() {
   }
   if (!data) return <Navigate to={Paths.NOT_FOUND} replace />;
 
-  const handleAddToCart = async (id: string) => {
-    setIsAddToCartDisabled(true);
-    try {
-      await addToCart(id);
-    } catch {
-      setIsAddToCartDisabled(false);
+  const handleClick = async (id: string) => {
+    setIsButtonDisabled(true);
+    if (isProductInCart(id, cart)) {
+      try {
+        await removeFromCart(id);
+      } catch {
+        setIsButtonDisabled(false);
+      }
+    } else {
+      try {
+        await addToCart(id);
+      } catch {
+        setIsButtonDisabled(false);
+      }
     }
   };
 
@@ -116,10 +128,11 @@ export default function ProductPage() {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleAddToCart(data.id)}
-              disabled={isAddToCartDisabled}
+              onClick={() => handleClick(data.id)}
+              disabled={isButtonDisabled}
+              sx={{ minWidth: '190px' }}
             >
-              Add to Cart
+              {buttonLabel}
             </Button>
           </Box>
         </CardContent>

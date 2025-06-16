@@ -10,6 +10,7 @@ import { Typography } from '@mui/material';
 import { useGetMyActiveCartQuery } from '../../../../api/cartApi.ts';
 import { isProductInCart } from '../../../../utils/isProductInCart.ts';
 import { useAddToCart } from '../../../../hooks/useAddToCart.ts';
+import { useEffect, useState } from 'react';
 
 export default function ProductList({
   sortValue,
@@ -42,14 +43,21 @@ export default function ProductList({
 
   const { data: cart } = useGetMyActiveCartQuery();
 
-  // TODO: implement correct button disabling
+  const [currentIds, setCurrentIds] = useState<string[]>([]);
   const { addToCart } = useAddToCart(cart);
-  const handleAddToCart = (id: string) => {
-    // setIsAddToCartDisabled(true);
+  useEffect(() => {
+    setCurrentIds(
+      currentIds.filter((currentId) =>
+        cart?.lineItems.some((lineItem) => lineItem.productId === currentId),
+      ),
+    );
+  }, [cart]);
+  const handleAddToCart = async (id: string) => {
+    setCurrentIds([id, ...currentIds]);
     try {
-      addToCart(id);
+      await addToCart(id);
     } catch {
-      // setIsAddToCartDisabled(false);
+      setCurrentIds(currentIds.filter((currentId) => currentId !== id));
     }
   };
 
@@ -67,8 +75,8 @@ export default function ProductList({
           <ProductCard
             key={product.id}
             product={formatDataForSticker(product)}
-            isInCart={isProductInCart(product.id, cart)}
-            handleAddToCart={() => handleAddToCart(product.id)}
+            isButtonDisabled={isProductInCart(product.id, cart) || currentIds.includes(product.id)}
+            handleAddToCart={async () => await handleAddToCart(product.id)}
           />
         );
       })}

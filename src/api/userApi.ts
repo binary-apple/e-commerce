@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { apiUrl, projectKey } from './constants';
+import { apiUrl, projectKey } from './helpers/constants';
 import type { UpdateUserRequest, UpdateUserResponse } from '../types/userApi';
 
 export const userApi = createApi({

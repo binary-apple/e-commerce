@@ -11,7 +11,7 @@ import { SelectInput } from '../../../../components/SelectInput/SelectInput';
 import { useEffect, useRef, useState } from 'react';
 import type { RegistrationData } from '../../../../types/form';
 import { useSnackbar } from 'notistack';
-import { ResponseCodes } from '../../../../api/constants';
+import { ResponseCodes } from '../../../../api/helpers/constants';
 import { useNavigate } from 'react-router';
 import { Paths } from '../../../../types/paths';
 import { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } from '../../../../api/authApi';

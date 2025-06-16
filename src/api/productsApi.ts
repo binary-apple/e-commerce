@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { projectKey } from './constants';
+import { projectKey } from './helpers/constants';
 import { getClientToken } from '../services/serviceToken';
 import type { Response, Product, Category, ProductType } from '../types/productsApi';
 import { CENTS_IN_EURO } from '../utils/formatPrice/formatPrice';

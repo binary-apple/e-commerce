@@ -13,6 +13,9 @@ import { type ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import OopsBox from '../../../notFound/components/OopsBox.tsx';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useGetMyActiveCartQuery } from '../../../../api/cartApi.ts';
+import { isProductInCart } from '../../../../utils/isProductInCart.ts';
+import { useAddToCart } from '../../../../hooks/useAddToCart.ts';
 
 const PRODUCTS_LIMIT = 9;
 
@@ -69,6 +72,25 @@ export default function ProductList({
     newParameters.set('page', String(page));
     setSearchParameters(newParameters);
   };
+  const { data: cart } = useGetMyActiveCartQuery();
+
+  const [currentIds, setCurrentIds] = useState<string[]>([]);
+  const { addToCart } = useAddToCart(cart);
+  useEffect(() => {
+    setCurrentIds(
+      currentIds.filter((currentId) =>
+        cart?.lineItems.some((lineItem) => lineItem.productId === currentId),
+      ),
+    );
+  }, [cart]);
+  const handleAddToCart = async (id: string) => {
+    setCurrentIds([id, ...currentIds]);
+    try {
+      await addToCart(id);
+    } catch {
+      setCurrentIds(currentIds.filter((currentId) => currentId !== id));
+    }
+  };
 
   if (isCategoryLoading || isProductLoading) {
     return <CircularProgress size="3rem" />;
@@ -93,7 +115,16 @@ export default function ProductList({
             />
             <Grid container spacing={1}>
               {data?.results.map((product: Product) => {
-                return <ProductCard key={product.id} product={formatDataForSticker(product)} />;
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={formatDataForSticker(product)}
+                    isButtonDisabled={
+                      isProductInCart(product.id, cart) || currentIds.includes(product.id)
+                    }
+                    handleAddToCart={async () => await handleAddToCart(product.id)}
+                  />
+                );
               })}
             </Grid>
             <Pagination

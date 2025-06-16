@@ -6,20 +6,55 @@ import { Paths } from '../../types/paths.ts';
 import styles from './ProductPage.module.scss';
 import { formatPrice } from '../../utils/formatPrice/formatPrice';
 import ImageSlider from './components/ImageSlider/ImageSlider';
+import { useAddToCart } from '../../hooks/useAddToCart.ts';
+import { useGetMyActiveCartQuery } from '../../api/cartApi.ts';
+import { isProductInCart } from '../../utils/isProductInCart.ts';
+import { useEffect, useState } from 'react';
+import { useRemoveFromCart } from '../../hooks/useRemoveFromCart.ts';
 
 export default function ProductPage() {
   const { key } = useParams();
-  const { data, isLoading, isError, error } = useGetProductByKeyQuery(
-    { key: key! },
-    { skip: !key },
+  const {
+    data,
+    isLoading: isProductLoading,
+    isError,
+    error,
+  } = useGetProductByKeyQuery({ key: key! }, { skip: !key });
+  const { data: cart } = useGetMyActiveCartQuery();
+  const { addToCart } = useAddToCart(cart);
+  const { removeFromCart } = useRemoveFromCart(cart);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [buttonLabel, setButtonLabel] = useState<string>(
+    isProductInCart(data?.id ?? '', cart) ? 'Remove' : 'Add to cart',
   );
-  if (isLoading) {
+  useEffect(() => {
+    setIsButtonDisabled(false);
+    setButtonLabel(isProductInCart(data?.id ?? '', cart) ? 'Remove' : 'Add to cart');
+  }, [cart, data?.id]);
+  if (isProductLoading) {
     return <CircularProgress size="3rem" />;
   }
   if (isError) {
     return <Box className={styles['card']}>Error {JSON.stringify(error)}</Box>;
   }
   if (!data) return <Navigate to={Paths.NOT_FOUND} replace />;
+
+  const handleClick = async (id: string) => {
+    setIsButtonDisabled(true);
+    if (isProductInCart(id, cart)) {
+      try {
+        await removeFromCart(id);
+      } catch {
+        setIsButtonDisabled(false);
+      }
+    } else {
+      try {
+        await addToCart(id);
+      } catch {
+        setIsButtonDisabled(false);
+      }
+    }
+  };
 
   const priceObject = data.masterVariant.prices[0];
 
@@ -90,9 +125,14 @@ export default function ProductPage() {
                 </Typography>
               )}
             </Box>
-            {/*todo: add event listeners on this button*/}
-            <Button variant="contained" color="primary">
-              Add to Cart
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleClick(data.id)}
+              disabled={isButtonDisabled}
+              sx={{ minWidth: '190px' }}
+            >
+              {buttonLabel}
             </Button>
           </Box>
         </CardContent>

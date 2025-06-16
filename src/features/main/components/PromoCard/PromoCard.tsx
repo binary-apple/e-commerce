@@ -3,6 +3,7 @@ import type { PromoCode } from '../../../../types/promoCodesApi';
 import { useSnackbar } from 'notistack';
 import { ContentCopy as CopyIcon } from '@mui/icons-material';
 import { theme } from '../../../../theme';
+import styles from './PromoCard.module.scss';
 
 type Props = {
   promoCode: PromoCode;
@@ -32,12 +33,12 @@ export default function PromoCard({ promoCode }: Props) {
         },
       }}
     >
-      <CardContent sx={{ p: 3 }}>
+      <CardContent sx={{ p: 3 }} className={styles['card-content']}>
         <Typography variant="h3" sx={{ mb: 2 }}>
           {promoCode.name['en-GB'] || promoCode.name.en}
         </Typography>
 
-        <Typography variant="h6" component="div" sx={{ mb: 3 }}>
+        <Typography variant="h6" component="div" sx={{ mb: 3, flexGrow: 1 }}>
           {promoCode.description?.['en-GB']}
         </Typography>
 

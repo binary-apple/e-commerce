@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import type { Cart, LineItemDraft } from '../types/cartApi';
 import { isCartListResponse, isCart } from '../types/cartApiGuards';
 import { baseQueryForRefreshFlow } from './helpers/baseQueryWithReauth';
+import { getAuthTokenFromLS } from '../hooks/useAuth';
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
@@ -11,7 +12,12 @@ export const cartApi = createApi({
     getMyActiveCart: build.query<Cart, void>({
       async queryFn(_arguments, _api, _extraOptions, fetchWithBQ) {
         console.log('Fetching active cart');
-        const carts = await fetchWithBQ('me/carts');
+        const carts = await fetchWithBQ({
+          url: 'me/carts',
+          headers: {
+            Authorization: `Bearer ${getAuthTokenFromLS()}`,
+          },
+        });
         console.log('Carts response:', carts);
         if (carts.error) return { error: carts.error };
         if (isCartListResponse(carts.data) && carts.data.results.length === 0) {
@@ -22,6 +28,9 @@ export const cartApi = createApi({
             method: 'POST',
             body: {
               currency: 'EUR',
+            },
+            headers: {
+              Authorization: `Bearer ${getAuthTokenFromLS()}`,
             },
           });
         }
@@ -44,6 +53,9 @@ export const cartApi = createApi({
           version,
           actions: [{ action: 'addLineItem', ...draft }],
         },
+        headers: {
+          Authorization: `Bearer ${getAuthTokenFromLS()}`,
+        },
       }),
       invalidatesTags: ['Cart'],
     }),
@@ -54,6 +66,9 @@ export const cartApi = createApi({
         body: {
           version,
           actions: [{ action: 'removeLineItem', lineItemId }],
+        },
+        headers: {
+          Authorization: `Bearer ${getAuthTokenFromLS()}`,
         },
       }),
       invalidatesTags: ['Cart'],
@@ -70,6 +85,9 @@ export const cartApi = createApi({
       query: ({ cartId, version, lineItemId, quantity }) => ({
         url: `me/carts/${cartId}`,
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${getAuthTokenFromLS()}`,
+        },
         body: {
           version,
           actions: [

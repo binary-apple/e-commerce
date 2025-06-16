@@ -16,9 +16,10 @@ export type Cart = {
   billingAddress?: Address;
   country: string;
   currency: string;
-  discountCodes?: DiscountCode[];
+  discountCodes?: DiscountCodeInfo[];
   paymentInfo?: PaymentInfo;
   customFields?: CustomFields;
+  discountOnTotalPrice: { discountedAmount: PriceValue };
 };
 
 export type CartLineItem = {
@@ -75,9 +76,13 @@ export type Address = {
   region?: string;
 };
 
-export type DiscountCode = {
-  code: string;
-  discount: Reference;
+export type DiscountCodeInfo = {
+  discountCode: ExtendedDiscountCode;
+  state: 'MatchesCart' | 'DoesNotMatchCart' | 'MaxApplicationReached';
+};
+
+export type ExtendedDiscountCode = Reference & {
+  obj: { key: string; code: string };
 };
 
 export type Reference = {

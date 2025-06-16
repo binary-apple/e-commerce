@@ -1,7 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
-import { formatPrice } from '../../../../utils/formatPrice/formatPrice';
+import { formatPrice, sumFormatPrice } from '../../../../utils/formatPrice/formatPrice';
 import type { Cart } from '../../../../types/cartApi';
 import { useSnackbar } from 'notistack';
+import PromoCodeInput from '../PromoCodeInput/PromoCodeInput';
 
 export function CartSummary({ cart }: { cart: Cart }) {
   const { enqueueSnackbar } = useSnackbar();
@@ -19,13 +20,32 @@ export function CartSummary({ cart }: { cart: Cart }) {
     });
   };
 
+  const getSubtotal = () => {
+    const discountPrice = cart.discountOnTotalPrice?.discountedAmount || '';
+    if (discountPrice) {
+      return sumFormatPrice(totalCost, discountPrice);
+    }
+    return formatPrice(totalCost);
+  };
+
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', my: 2 }}>
         <Typography variant="h6">
           {totalItems} sticker{totalItems === 1 ? '' : 's'}
         </Typography>
-        <Typography variant="h6" color="primary">
+        <Typography variant="h6" fontWeight="bold">
+          {getSubtotal()} €
+        </Typography>
+      </Box>
+
+      <PromoCodeInput cart={cart} />
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+          Total
+        </Typography>
+        <Typography variant="h4" color="primary" sx={{ fontWeight: 'bold' }}>
           {formatPrice(totalCost)} €
         </Typography>
       </Box>

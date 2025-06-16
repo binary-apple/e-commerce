@@ -5,6 +5,7 @@ import { productsApi } from '../api/productsApi';
 import { userApi } from '../api/userApi';
 import { cartApi } from '../api/cartApi';
 import imageModalReducer from './slices/imageModalSlice';
+import { promoCodesApi } from '../api/promoCodesApi';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     [productsApi.reducerPath]: productsApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [cartApi.reducerPath]: cartApi.reducer,
+    [promoCodesApi.reducerPath]: promoCodesApi.reducer,
     imageModal: imageModalReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -21,6 +23,7 @@ export const store = configureStore({
       productsApi.middleware,
       userApi.middleware,
       cartApi.middleware,
+      promoCodesApi.middleware,
     ),
 });
 

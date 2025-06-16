@@ -29,7 +29,14 @@ export const cartApi = createApi({
             },
           });
         }
-        const activeCart = await fetchWithBQ('me/active-cart');
+        // const activeCart = await fetchWithBQ('me/active-cart');
+        const activeCart = await fetchWithBQ({
+          url: 'me/active-cart',
+          params: {
+            expand: 'discountCodes[*].discountCode',
+          },
+        });
+
         if (activeCart.error) return { error: activeCart.error };
         if (!isCart(activeCart.data)) {
           return {
@@ -62,8 +69,89 @@ export const cartApi = createApi({
       }),
       invalidatesTags: ['Cart'],
     }),
+    changeLineItemQuantity: build.mutation<
+      Cart,
+      {
+        cartId: string;
+        version: number;
+        lineItemId: string;
+        quantity: number;
+      }
+    >({
+      query: ({ cartId, version, lineItemId, quantity }) => ({
+        url: `me/carts/${cartId}`,
+        method: 'POST',
+        body: {
+          version,
+          actions: [
+            {
+              action: 'changeLineItemQuantity',
+              lineItemId,
+              quantity,
+            },
+          ],
+        },
+      }),
+      invalidatesTags: ['Cart'],
+    }),
+    addDiscountCode: build.mutation<
+      Cart,
+      {
+        cartId: string;
+        version: number;
+        code: string;
+      }
+    >({
+      query: ({ cartId, version, code }) => ({
+        url: `me/carts/${cartId}`,
+        method: 'POST',
+        body: {
+          version,
+          actions: [
+            {
+              action: 'addDiscountCode',
+              code: code.trim().toUpperCase(),
+            },
+          ],
+        },
+      }),
+      invalidatesTags: ['Cart'],
+    }),
+
+    removeDiscountCode: build.mutation<
+      Cart,
+      {
+        cartId: string;
+        version: number;
+        discountCodeId: string;
+      }
+    >({
+      query: ({ cartId, version, discountCodeId }) => ({
+        url: `me/carts/${cartId}`,
+        method: 'POST',
+        body: {
+          version,
+          actions: [
+            {
+              action: 'removeDiscountCode',
+              discountCode: {
+                typeId: 'discount-code',
+                id: discountCodeId,
+              },
+            },
+          ],
+        },
+      }),
+      invalidatesTags: ['Cart'],
+    }),
   }),
 });
 
-export const { useGetMyActiveCartQuery, useAddLineItemMutation, useRemoveLineItemMutation } =
-  cartApi;
+export const {
+  useGetMyActiveCartQuery,
+  useAddLineItemMutation,
+  useRemoveLineItemMutation,
+  useChangeLineItemQuantityMutation,
+  useAddDiscountCodeMutation,
+  useRemoveDiscountCodeMutation,
+} = cartApi;

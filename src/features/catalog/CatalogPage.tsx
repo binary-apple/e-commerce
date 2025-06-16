@@ -14,6 +14,7 @@ export default function CatalogPage() {
   const [searchValue, setSearchValue] = useState<string>('');
   const [petType, setPetType] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([0, 0]);
+
   return (
     <CategoryProvider>
       <Box

@@ -16,6 +16,7 @@ export default function CategoryList() {
     } else {
       newParameters.delete('category');
     }
+    newParameters.delete('page');
     setSearchParameters(newParameters);
   };
   if (isLoading || isError) {

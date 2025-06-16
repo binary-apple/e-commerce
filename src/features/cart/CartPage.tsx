@@ -6,6 +6,7 @@ import { Link as RouterLink } from 'react-router';
 import { Paths } from '../../types/paths';
 import { useGetMyActiveCartQuery } from '../../api/cartApi';
 import CartItem from './components/CartItem/CartItem';
+import { CartSummary } from './components/CartSummary/CartSummary';
 
 export default function CartPage() {
   const { data: cart, isLoading } = useGetMyActiveCartQuery();
@@ -81,15 +82,14 @@ export default function CartPage() {
           </Box>
           <Box>
             {cart.lineItems.map((item) => (
-              <CartItem item={item} key={item.id} />
+              <CartItem item={item} key={item.id} cartId={cart.id} cartVersion={cart.version} />
             ))}
           </Box>
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }} className={styles.summary}>
           <Title title="Order Summary" variant="h3" />
-          {/* TODO Total cart info */}
-          {/* <CartSummary cart={cart} /> */}
+          <CartSummary cart={cart} />
         </Grid>
       </Grid>
     </Box>

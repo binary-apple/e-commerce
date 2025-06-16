@@ -12,6 +12,7 @@ import { type ChangeEvent, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Slider from '@mui/material/Slider';
 import { CENTS_IN_EURO } from '../../../../utils/formatPrice/formatPrice';
+import { useSearchParams } from 'react-router';
 
 type FilterProps = {
   petType: string[];
@@ -38,6 +39,8 @@ export default function Filters({
   }, [onPriceRangeChange, rangeMax, rangeMin]);
   const { data } = useGetProductTypesQuery();
 
+  const [searchParameters, setSearchParameters] = useSearchParams();
+
   const attributes = data?.results[0].attributes;
   if (!attributes) return;
   const petTypesAttribute = attributes.find(
@@ -47,6 +50,9 @@ export default function Filters({
     const {
       target: { value },
     } = event;
+    const newParameters = new URLSearchParams(searchParameters);
+    newParameters.delete('page');
+    setSearchParameters(newParameters);
     onPetTypeChange(typeof value === 'string' ? value.split(',') : value);
   };
   const resetPetType = () => {
@@ -54,6 +60,9 @@ export default function Filters({
   };
 
   const handlePriceRangeChange = (_event: Event, newValue: number[]) => {
+    const newParameters = new URLSearchParams(searchParameters);
+    newParameters.delete('page');
+    setSearchParameters(newParameters);
     onPriceRangeChange(newValue);
   };
   const handleMinPriceChange = (event: ChangeEvent<HTMLInputElement>) => {

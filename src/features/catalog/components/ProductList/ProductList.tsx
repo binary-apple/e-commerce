@@ -44,10 +44,10 @@ export default function ProductList({
 
   // TODO: implement correct button disabling
   const { addToCart } = useAddToCart(cart);
-  const handleAddToCart = (id: string) => {
+  const handleAddToCart = async (id: string) => {
     // setIsAddToCartDisabled(true);
     try {
-      addToCart(id);
+      await addToCart(id);
     } catch {
       // setIsAddToCartDisabled(false);
     }

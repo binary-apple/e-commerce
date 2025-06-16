@@ -1,11 +1,15 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { apiUrl, projectKey } from './helpers/constants';
 import type { UpdateUserRequest, UpdateUserResponse } from '../types/userApi';
+import { baseQueryForRefreshFlow } from './helpers/baseQueryWithReauth';
 
 export const userApi = createApi({
   reducerPath: 'userApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+  baseQuery: baseQueryForRefreshFlow,
   endpoints: (builder) => ({
+    getProfile: builder.query<null, void>({
+      query: () => '/me',
+    }),
     update: builder.mutation<UpdateUserResponse, UpdateUserRequest>({
       async queryFn({ version, actions, accessToken }) {
         try {
@@ -82,4 +86,4 @@ export const userApi = createApi({
   }),
 });
 
-export const { useUpdateMutation, useChangePasswordMutation } = userApi;
+export const { useGetProfileQuery, useUpdateMutation, useChangePasswordMutation } = userApi;

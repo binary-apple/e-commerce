@@ -1,6 +1,13 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import type { CustomerFromApi, LoginResponse, RegistrationDataApi } from '../types/auth';
-import { apiUrl, clientId, clientSecret, projectKey, ResponseCodes } from './helpers/constants';
+import {
+  authApiUrl,
+  apiUrl,
+  clientId,
+  clientSecret,
+  projectKey,
+  ResponseCodes,
+} from './helpers/constants';
 import { getClientToken } from '../services/serviceToken';
 import { baseQueryForRefreshFlow } from './helpers/baseQueryWithReauth';
 
@@ -15,7 +22,7 @@ export const authApi = createApi({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, { email: string; password: string }>({
       query: ({ email, password }) => ({
-        url: `${apiUrl}/${projectKey}/customers/token`,
+        url: `${authApiUrl}/oauth/${projectKey}/customers/token`,
         method: 'POST',
         headers: {
           Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
@@ -39,7 +46,7 @@ export const authApi = createApi({
     }),
     getAnonymousSession: builder.query<LoginResponse, void>({
       query: () => ({
-        url: `${apiUrl}/${projectKey}/anonymous/token`,
+        url: `${authApiUrl}/oauth/${projectKey}/anonymous/token`,
         method: 'POST',
         headers: {
           Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,

@@ -1,31 +1,74 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { CustomerFromApi, LoginResponse, RegistrationDataApi } from '../types/auth';
-import { apiUrl, clientId, clientSecret, projectKey, ResponseCodes } from './constants';
+import { apiUrl, authApiUrl, clientId, clientSecret, projectKey, ResponseCodes } from './constants';
 import { getClientToken } from '../services/serviceToken';
+import {
+  saveUserToken,
+  saveAnonymousToken,
+  clearUserToken,
+  type AnonymousTokenData,
+} from '../utils/tokenManager';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/' }),
   endpoints: (builder) => ({
+    getAnonymousToken: builder.mutation<AnonymousTokenData, void>({
+      async queryFn() {
+        try {
+          const response = await fetch(`${authApiUrl}/oauth/${projectKey}/anonymous/token`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              grant_type: 'client_credentials',
+              scope: `manage_project:${projectKey} view_products:${projectKey} create_anonymous_token:${projectKey}`,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            return {
+              error: {
+                status: response.status,
+                data: data.error_description || 'Failed to get anonymous token',
+              },
+            };
+          }
+
+          saveAnonymousToken(data);
+
+          return { data };
+        } catch (error: unknown) {
+          return {
+            error: {
+              status: 500,
+              data: error instanceof Error ? error.message : 'Network error',
+            },
+          };
+        }
+      },
+    }),
+
     login: builder.mutation<LoginResponse, { email: string; password: string }>({
       async queryFn({ email, password }) {
         try {
-          const response = await fetch(
-            `https://auth.europe-west1.gcp.commercetools.com/oauth/${projectKey}/customers/token`,
-            {
-              method: 'POST',
-              headers: {
-                Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: new URLSearchParams({
-                grant_type: 'password',
-                username: email,
-                password,
-                scope: `manage_my_profile:${projectKey} manage_my_orders:${projectKey} view_discount_codes:${projectKey}`,
-              }),
+          const response = await fetch(`${authApiUrl}/oauth/${projectKey}/customers/token`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+              'Content-Type': 'application/x-www-form-urlencoded',
             },
-          );
+            body: new URLSearchParams({
+              grant_type: 'password',
+              username: email,
+              password,
+              scope: `manage_my_profile:${projectKey} manage_my_orders:${projectKey} view_discount_codes:${projectKey}`,
+            }),
+          });
 
           const data = await response.json();
 
@@ -35,10 +78,19 @@ export const authApi = createApi({
             };
           }
 
+          saveUserToken(data);
+
           return { data };
         } catch (error: unknown) {
           return { error: error instanceof Error ? error : new Error('Unknown error') };
         }
+      },
+    }),
+
+    logout: builder.mutation<void, void>({
+      queryFn: async () => {
+        clearUserToken();
+        return { data: undefined };
       },
     }),
 
@@ -107,4 +159,10 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } = authApi;
+export const {
+  useLoginMutation,
+  useLazyGetMeQuery,
+  useRegisterMutation,
+  useGetAnonymousTokenMutation,
+  useLogoutMutation,
+} = authApi;

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { logout, setAuth } from '../store/slices/authSlice';
+import { clearAuth, setAuth } from '../store/slices/authSlice';
 import { useLazyGetMeQuery } from '../api/authApi';
 
 const AUTH_TOKEN_KEY = 'auth_token';
@@ -27,7 +27,7 @@ export const useAuth = () => {
         const token = getAuthTokenFromLS();
 
         if (!token) {
-          dispatch(logout());
+          dispatch(clearAuth());
           return;
         }
 
@@ -35,7 +35,7 @@ export const useAuth = () => {
         dispatch(setAuth({ accessToken: token, email: meResp.email }));
       } catch {
         clearAuthTokenLS();
-        dispatch(logout());
+        dispatch(clearAuth());
       }
     }
 

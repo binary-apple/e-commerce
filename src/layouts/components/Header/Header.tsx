@@ -23,7 +23,7 @@ import { navItems, customIconHoverOpacity } from './constants';
 import classes from './Header.module.scss';
 import { Paths } from '../../../types/paths';
 import type { RootState } from '../../../store/store';
-import { logout } from '../../../store/slices/authSlice';
+import { clearAuth } from '../../../store/slices/authSlice';
 import { useSnackbar } from 'notistack';
 import { useAuth } from '../../../hooks/useAuth';
 import { theme } from '../../../theme';
@@ -47,7 +47,7 @@ export default function Header() {
   const handleLogout = () => {
     clearAuthTokenLS();
 
-    dispatch(logout());
+    dispatch(clearAuth());
 
     enqueueSnackbar('Logged out successfully', { variant: 'success' });
 

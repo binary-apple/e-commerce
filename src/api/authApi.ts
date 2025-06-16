@@ -1,45 +1,61 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import type { CustomerFromApi, LoginResponse, RegistrationDataApi } from '../types/auth';
-import { apiUrl, clientId, clientSecret, projectKey, ResponseCodes } from './constants';
+import { apiUrl, clientId, clientSecret, projectKey, ResponseCodes } from './helpers/constants';
 import { getClientToken } from '../services/serviceToken';
+import { baseQueryForRefreshFlow } from './helpers/baseQueryWithReauth';
+
+type OAuthError = {
+  error?: string;
+  error_description?: string;
+};
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+  baseQuery: baseQueryForRefreshFlow,
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, { email: string; password: string }>({
-      async queryFn({ email, password }) {
-        try {
-          const response = await fetch(
-            `https://auth.europe-west1.gcp.commercetools.com/oauth/${projectKey}/customers/token`,
-            {
-              method: 'POST',
-              headers: {
-                Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: new URLSearchParams({
-                grant_type: 'password',
-                username: email,
-                password,
-                scope: `manage_my_profile:${projectKey} manage_my_orders:${projectKey}`,
-              }),
-            },
-          );
-
-          const data = await response.json();
-
-          if (!response.ok) {
-            return {
-              error: data.error_description || 'Login failed',
-            };
-          }
-
-          return { data };
-        } catch (error: unknown) {
-          return { error: error instanceof Error ? error : new Error('Unknown error') };
-        }
+      query: ({ email, password }) => ({
+        url: `${apiUrl}/${projectKey}/customers/token`,
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          grant_type: 'password',
+          username: email,
+          password,
+        }).toString(),
+      }),
+      transformErrorResponse: (error: { status: number; data: OAuthError }) => {
+        return {
+          status: error.status,
+          data:
+            typeof error.data === 'string'
+              ? error.data
+              : error.data?.error_description || 'Login failed',
+        };
       },
+    }),
+    getAnonymousSession: builder.query<LoginResponse, void>({
+      query: () => ({
+        url: `${apiUrl}/${projectKey}/anonymous/token`,
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          grant_type: 'client_credentials',
+        }).toString(),
+      }),
+      transformErrorResponse: (error: { status: number; data: OAuthError }) => ({
+        status: error.status,
+        data:
+          typeof error.data === 'string'
+            ? error.data
+            : error.data?.error_description || 'Anonymous session failed',
+      }),
     }),
 
     getMe: builder.query<CustomerFromApi, string>({
@@ -59,7 +75,7 @@ export const authApi = createApi({
     register: builder.mutation<unknown, RegistrationDataApi>({
       async queryFn(data) {
         try {
-          const token = await getClientToken('manage_customers');
+          const token = await getClientToken();
 
           const response = await fetch(`${apiUrl}/${projectKey}/customers`, {
             method: 'POST',
@@ -107,4 +123,9 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useLazyGetMeQuery, useRegisterMutation } = authApi;
+export const {
+  useLoginMutation,
+  useGetAnonymousSessionQuery,
+  useLazyGetMeQuery,
+  useRegisterMutation,
+} = authApi;

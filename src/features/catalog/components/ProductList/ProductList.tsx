@@ -43,17 +43,21 @@ export default function ProductList({
 
   const { data: cart } = useGetMyActiveCartQuery();
 
-  const [currentId, setCurrentId] = useState<string | undefined>();
+  const [currentIds, setCurrentIds] = useState<string[]>([]);
   const { addToCart } = useAddToCart(cart);
   useEffect(() => {
-    setCurrentId(undefined);
+    setCurrentIds(
+      currentIds.filter((currentId) =>
+        cart?.lineItems.some((lineItem) => lineItem.productId === currentId),
+      ),
+    );
   }, [cart]);
   const handleAddToCart = async (id: string) => {
-    setCurrentId(id);
+    setCurrentIds([id, ...currentIds]);
     try {
       await addToCart(id);
     } catch {
-      setCurrentId(undefined);
+      setCurrentIds(currentIds.filter((currentId) => currentId !== id));
     }
   };
 
@@ -71,7 +75,7 @@ export default function ProductList({
           <ProductCard
             key={product.id}
             product={formatDataForSticker(product)}
-            isButtonDisabled={isProductInCart(product.id, cart) || product.id === currentId}
+            isButtonDisabled={isProductInCart(product.id, cart) || currentIds.includes(product.id)}
             handleAddToCart={async () => await handleAddToCart(product.id)}
           />
         );

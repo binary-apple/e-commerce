@@ -8,10 +8,12 @@ import {
   InputAdornment,
   CircularProgress,
 } from '@mui/material';
-import { LocalOffer as OfferIcon, Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
 import type { Cart, DiscountCodeInfo } from '../../../../types/cartApi';
 import { useAddDiscountCodeMutation, useRemoveDiscountCodeMutation } from '../../../../api/cartApi';
+import LocalOffer from '@mui/icons-material/LocalOffer';
+import Add from '@mui/icons-material/Add';
+import Close from '@mui/icons-material/Close';
 
 type Props = {
   cart: Cart;
@@ -144,7 +146,7 @@ export default function PromoCodeInput({ cart }: Props) {
             input: {
               startAdornment: (
                 <InputAdornment position="start">
-                  <OfferIcon color="action" fontSize="small" />
+                  <LocalOffer color="action" fontSize="small" />
                 </InputAdornment>
               ),
             },
@@ -164,7 +166,7 @@ export default function PromoCodeInput({ cart }: Props) {
           size="small"
           onClick={handleApplyPromoCode}
           disabled={!promoCode.trim() || isLoading}
-          startIcon={isAdding ? <CircularProgress size={16} color="inherit" /> : <AddIcon />}
+          startIcon={isAdding ? <CircularProgress size={16} color="inherit" /> : <Add />}
           sx={{ minWidth: 100 }}
         >
           Apply
@@ -183,7 +185,7 @@ export default function PromoCodeInput({ cart }: Props) {
                 label={discountCodeInfo.discountCode.obj.code}
                 variant="outlined"
                 onDelete={() => handleRemovePromoCode(discountCodeInfo)}
-                deleteIcon={isRemoving ? <CircularProgress size={16} /> : <CloseIcon />}
+                deleteIcon={isRemoving ? <CircularProgress size={16} /> : <Close />}
                 disabled={isLoading}
                 sx={{
                   fontFamily: 'monospace',

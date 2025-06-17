@@ -40,6 +40,12 @@ export default function AboutUsPage() {
         {AboutUsConstants.description}
       </Typography>
 
+      <Grid size={12} justifyContent="center" bgcolor={'background.paper'} borderRadius={8} p={2}>
+        <Typography component="p" variant="body1" textAlign="center">
+          {AboutUsConstants.teamCollaboration}
+        </Typography>
+      </Grid>
+
       <Grid container spacing={3} justifyContent="center">
         {AboutUsConstants.members.map((member) => (
           <Grid
@@ -98,12 +104,6 @@ export default function AboutUsPage() {
             </Box>
           </Grid>
         ))}
-      </Grid>
-
-      <Grid size={12} justifyContent="center" bgcolor={'background.paper'} borderRadius={8} p={2}>
-        <Typography component="p" variant="body1" textAlign="center">
-          {AboutUsConstants.teamCollaboration}
-        </Typography>
       </Grid>
 
       <Box sx={{ textAlign: 'center' }}>

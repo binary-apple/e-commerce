@@ -206,6 +206,14 @@ export const cartApi = createApi({
       }),
       invalidatesTags: ['Cart'],
     }),
+
+    clearCart: build.mutation<void, { cartId: string; version: number }>({
+      query: ({ cartId, version }) => ({
+        url: `me/carts/${cartId}?version=${version}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Cart'],
+    }),
   }),
 });
 
@@ -216,4 +224,5 @@ export const {
   useChangeLineItemQuantityMutation,
   useAddDiscountCodeMutation,
   useRemoveDiscountCodeMutation,
+  useClearCartMutation,
 } = cartApi;

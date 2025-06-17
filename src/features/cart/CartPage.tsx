@@ -4,12 +4,44 @@ import styles from './CartPage.module.scss';
 import bowlImage from '/bowl.png';
 import { Link as RouterLink } from 'react-router';
 import { Paths } from '../../types/paths';
-import { useGetMyActiveCartQuery } from '../../api/cartApi';
+import { useClearCartMutation, useGetMyActiveCartQuery } from '../../api/cartApi';
 import CartItem from './components/CartItem/CartItem';
 import { CartSummary } from './components/CartSummary/CartSummary';
+import { enqueueSnackbar } from 'notistack';
+import Button from '@mui/material/Button';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { useState } from 'react';
+import ClearCartDialog from './components/ClearCartDialog/ClearCartDialog';
 
 export default function CartPage() {
   const { data: cart, isLoading } = useGetMyActiveCartQuery();
+  const [clearCart, { isLoading: isClearingCart }] = useClearCartMutation();
+  const [isClearDisabled, setIsClearDisabled] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  const handleClearCartClick = () => {
+    setShowConfirmDialog(true);
+  };
+
+  const handleConfirmClear = async () => {
+    if (!cart) return;
+
+    setIsClearDisabled(true);
+
+    try {
+      await clearCart({ cartId: cart.id, version: cart.version }).unwrap();
+      enqueueSnackbar('Your cart cleared successfully!', { variant: 'success' });
+      setShowConfirmDialog(false);
+    } catch {
+      enqueueSnackbar('Failed to clear the cart', { variant: 'error' });
+      setIsClearDisabled(false);
+      setShowConfirmDialog(false);
+    }
+  };
+
+  const handleCancelClear = () => {
+    setShowConfirmDialog(false);
+  };
 
   if (isLoading) {
     return <CircularProgress size="3rem" />;
@@ -77,13 +109,23 @@ export default function CartPage() {
                 md: '1rem',
               },
             }}
+            className={styles['cart-header']}
           >
             <Title title="Your Cart" variant="h3" />
+            <Button
+              color="error"
+              startIcon={<DeleteForeverOutlinedIcon />}
+              onClick={handleClearCartClick}
+              disabled={isClearDisabled}
+            >
+              {isClearingCart ? 'Clearing...' : 'Clear Cart'}
+            </Button>
           </Box>
           <Box>
-            {cart.lineItems.map((item) => (
-              <CartItem item={item} key={item.id} cartId={cart.id} cartVersion={cart.version} />
-            ))}
+            {!isClearDisabled &&
+              cart.lineItems.map((item) => (
+                <CartItem item={item} key={item.id} cartId={cart.id} cartVersion={cart.version} />
+              ))}
           </Box>
         </Grid>
 
@@ -92,6 +134,13 @@ export default function CartPage() {
           <CartSummary cart={cart} />
         </Grid>
       </Grid>
+
+      <ClearCartDialog
+        open={showConfirmDialog}
+        onClose={handleCancelClear}
+        onConfirm={handleConfirmClear}
+        isLoading={isClearingCart}
+      />
     </Box>
   );
 }

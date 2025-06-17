@@ -23,12 +23,12 @@ import { navItems, customIconHoverOpacity } from './constants';
 import classes from './Header.module.scss';
 import { Paths } from '../../../types/paths';
 import type { RootState } from '../../../store/store';
-import { logout } from '../../../store/slices/authSlice';
+import { clearAuth } from '../../../store/slices/authSlice';
 import { useSnackbar } from 'notistack';
 import { useAuth } from '../../../hooks/useAuth';
 import { theme } from '../../../theme';
 import { UserAvatar } from '../../../components/UserAvatar/UserAvatar';
-import { useGetMyActiveCartQuery } from '../../../api/cartApi';
+import { cartApi, useGetMyActiveCartQuery } from '../../../api/cartApi';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -47,7 +47,8 @@ export default function Header() {
   const handleLogout = () => {
     clearAuthTokenLS();
 
-    dispatch(logout());
+    dispatch(clearAuth());
+    dispatch(cartApi.util.resetApiState());
 
     enqueueSnackbar('Logged out successfully', { variant: 'success' });
 

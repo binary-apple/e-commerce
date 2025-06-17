@@ -18,7 +18,7 @@ async function getAnonymousTokenDirect(): Promise<string | null> {
       },
       body: new URLSearchParams({
         grant_type: 'client_credentials',
-        // scope: `manage_project:${projectKey} view_products:${projectKey} create_anonymous_token:${projectKey}`,
+        // scope: `manage_project:${projectKey} view_products:${projectKey} create_anonymous_token:${projectKey} manage_my_orders:${projectKey}`,
       }),
     });
 

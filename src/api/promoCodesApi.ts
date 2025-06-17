@@ -1,43 +1,36 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { projectKey, apiUrl, clientId, clientSecret, authApiUrl } from './constants';
 import type { PromoCode } from '../types/promoCodesApi';
+import { getCurrentToken, saveAnonymousToken } from '../utils/tokenManager';
 
 export const promoCodesApi = createApi({
   reducerPath: 'promoCodesApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${apiUrl}/${projectKey}/`,
     prepareHeaders: async (headers) => {
-      let accessToken = localStorage.getItem('auth_token');
+      let accessToken = getCurrentToken();
 
       if (!accessToken) {
-        const anonymousTokenData = localStorage.getItem('anonymousToken');
-        if (anonymousTokenData) {
-          const parsed = JSON.parse(anonymousTokenData);
-          accessToken = parsed.access_token;
-        }
+        try {
+          const response = await fetch(`${authApiUrl}/oauth/${projectKey}/anonymous/token`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              grant_type: 'client_credentials',
+              scope: `view_products:${projectKey} view_discount_codes:${projectKey} manage_my_orders:${projectKey}`,
+            }),
+          });
 
-        if (!accessToken) {
-          try {
-            const response = await fetch(`${authApiUrl}/oauth/${projectKey}/anonymous/token`, {
-              method: 'POST',
-              headers: {
-                Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              body: new URLSearchParams({
-                grant_type: 'client_credentials',
-                scope: `view_products:${projectKey} view_discount_codes:${projectKey}`,
-              }),
-            });
-
-            if (response.ok) {
-              const tokenData = await response.json();
-              localStorage.setItem('anonymousToken', JSON.stringify(tokenData));
-              accessToken = tokenData.access_token;
-            }
-          } catch {
-            throw new Error('Failed to get anonymous token');
+          if (response.ok) {
+            const tokenData = await response.json();
+            saveAnonymousToken(tokenData);
+            accessToken = tokenData.access_token;
           }
+        } catch {
+          throw new Error('Failed to get anonymous token');
         }
       }
 

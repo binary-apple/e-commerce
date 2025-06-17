@@ -90,7 +90,7 @@ export default function ProductPage() {
             <Typography variant="body1" color="text.primary" gutterBottom>
               {data.description['en-GB']}
             </Typography>
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" gap={1} paddingTop={2} flexWrap={'wrap'}>
               {petLabels.map((label, index) => (
                 <Chip
                   key={index}

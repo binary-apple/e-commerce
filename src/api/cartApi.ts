@@ -1,52 +1,112 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { projectKey, apiUrl } from './constants';
+import { projectKey, apiUrl, clientId, clientSecret, authApiUrl } from './constants';
 import type { Cart, LineItemDraft } from '../types/cartApi';
 import { isCartListResponse, isCart } from '../types/cartApiGuards';
+import {
+  getCurrentToken,
+  saveAnonymousToken,
+  type AnonymousTokenData,
+} from '../utils/tokenManager';
+
+async function getAnonymousTokenDirect(): Promise<string | null> {
+  try {
+    const response = await fetch(`${authApiUrl}/oauth/${projectKey}/anonymous/token`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${btoa(`${clientId}:${clientSecret}`)}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        grant_type: 'client_credentials',
+        // scope: `manage_project:${projectKey} view_products:${projectKey} create_anonymous_token:${projectKey} manage_my_orders:${projectKey}`,
+      }),
+    });
+
+    const data: AnonymousTokenData = await response.json();
+
+    saveAnonymousToken(data);
+
+    return data.access_token;
+  } catch {
+    return null;
+  }
+}
+
+const baseQueryWithAuth = fetchBaseQuery({
+  baseUrl: `${apiUrl}/${projectKey}`,
+  prepareHeaders: async (headers) => {
+    let token = getCurrentToken();
+
+    if (!token) {
+      token = await getAnonymousTokenDirect();
+    }
+
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return headers;
+  },
+});
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${apiUrl}/${projectKey}`,
-    prepareHeaders: async (headers) => {
-      //todo: handle token of anonymous or customer user when this will implemented
-      const accessToken = localStorage.getItem('auth_token');
-      headers.set('Authorization', `Bearer ${accessToken}`);
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithAuth,
   tagTypes: ['Cart'],
   endpoints: (build) => ({
     getMyActiveCart: build.query<Cart, void>({
       async queryFn(_arguments, _api, _extraOptions, fetchWithBQ) {
-        const carts = await fetchWithBQ('me/carts');
-        if (carts.error) return { error: carts.error };
-        if (isCartListResponse(carts.data) && carts.data.results.length === 0) {
-          await fetchWithBQ({
-            url: 'me/carts',
-            method: 'POST',
-            body: {
-              currency: 'EUR',
+        try {
+          const carts = await fetchWithBQ('me/carts');
+          if (carts.error) {
+            return { error: carts.error };
+          }
+
+          if (isCartListResponse(carts.data) && carts.data.results.length === 0) {
+            const createResult = await fetchWithBQ({
+              url: 'me/carts',
+              method: 'POST',
+              body: {
+                currency: 'EUR',
+              },
+            });
+
+            if (createResult.error) {
+              return { error: createResult.error };
+            }
+          }
+
+          // const activeCart = await fetchWithBQ('me/active-cart');
+          const activeCart = await fetchWithBQ({
+            url: 'me/active-cart',
+            params: {
+              expand: 'discountCodes[*].discountCode',
             },
           });
-        }
-        // const activeCart = await fetchWithBQ('me/active-cart');
-        const activeCart = await fetchWithBQ({
-          url: 'me/active-cart',
-          params: {
-            expand: 'discountCodes[*].discountCode',
-          },
-        });
 
-        if (activeCart.error) return { error: activeCart.error };
-        if (!isCart(activeCart.data)) {
+          if (activeCart.error) {
+            return { error: activeCart.error };
+          }
+
+          if (!isCart(activeCart.data)) {
+            return {
+              error: { status: 500, data: 'Invalid cart data structure' },
+            };
+          }
+
+          return { data: activeCart.data };
+        } catch (error) {
           return {
-            error: { status: 500, data: 'Invalid cart data structure' },
+            error: {
+              status: 500,
+              data: error instanceof Error ? error.message : 'Unexpected error',
+            },
           };
         }
-        return { data: activeCart.data };
       },
       providesTags: ['Cart'],
     }),
+
     addLineItem: build.mutation<Cart, { cartId: string; version: number; draft: LineItemDraft }>({
       query: ({ cartId, version, draft }) => ({
         url: `me/carts/${cartId}`,
@@ -58,6 +118,7 @@ export const cartApi = createApi({
       }),
       invalidatesTags: ['Cart'],
     }),
+
     removeLineItem: build.mutation<Cart, { cartId: string; version: number; lineItemId: string }>({
       query: ({ cartId, version, lineItemId }) => ({
         url: `me/carts/${cartId}`,
@@ -69,6 +130,7 @@ export const cartApi = createApi({
       }),
       invalidatesTags: ['Cart'],
     }),
+
     changeLineItemQuantity: build.mutation<
       Cart,
       {

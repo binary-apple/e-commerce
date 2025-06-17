@@ -7,12 +7,22 @@
     padding: 1rem;
     border-radius: 2rem;
 
-    background: #fbf2da;
-
     &-image {
       width: 100%;
       border-radius: 1rem;
       object-fit: cover;
+    }
+
+    &-bio {
+      min-height: 120px;
+
+      @media (width <= 1199px) {
+        min-height: 160px;
+      }
+
+      @media (width <= 899px) {
+        min-height: unset;
+      }
     }
 
     &-text {
@@ -24,14 +34,29 @@
       justify-content: space-between;
 
       &-contributions {
-        overflow: scroll;
         flex-grow: 1;
-        height: 120px;
+        height: 340px;
+
+        @media (width <= 1199px) {
+          height: 400px;
+        }
+
+        @media (width <= 899px) {
+          height: unset;
+        }
       }
 
       &-list {
         margin: 0;
         padding: 0;
+
+        & > div:nth-child(1) {
+          min-width: 30px;
+        }
+
+        & > div > span {
+          font-size: 14px;
+        }
       }
     }
   }

@@ -1,4 +1,16 @@
-import { Box, Typography, Link, Grid, CardContent, Button, List, ListItem } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Link,
+  Grid,
+  CardContent,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+} from '@mui/material';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import { NavLink } from 'react-router';
 import { AboutUsConstants } from './constants';
 import styles from './AboutUsPage.module.scss';
@@ -20,10 +32,10 @@ export default function AboutUsPage() {
         py: { lg: 13, md: 8, xs: 4 },
       }}
     >
-      <Typography component="h1" variant="h3" textAlign="center">
+      <Typography component="h2" variant="h3" textAlign="center">
         {AboutUsConstants.title}
       </Typography>
-      <Typography component="p" variant="body1" textAlign="center">
+      <Typography component="h3" variant="h5" textAlign="center">
         {AboutUsConstants.description}
       </Typography>
 
@@ -32,6 +44,7 @@ export default function AboutUsPage() {
           <Grid
             key={member.name}
             className={styles['about_member']}
+            bgcolor={'background.paper'}
             size={{ xs: 12, sm: 10, md: 4 }}
           >
             <Box
@@ -51,9 +64,13 @@ export default function AboutUsPage() {
               <Typography variant="subtitle2" color="text.secondary">
                 {member.role}
               </Typography>
-              <Typography variant="body2">{member.bio}</Typography>
+              <Typography variant="body1" className={styles['about_member-bio']}>
+                {member.bio}
+              </Typography>
               <Box className={styles['about_member-text-contributions']}>
-                <Typography variant="subtitle2">Key project missions:</Typography>
+                <Typography variant="subtitle2" color="text.secondary">
+                  {AboutUsConstants.constibutionsTitle}
+                </Typography>
                 <List>
                   {member.contributions.map((item, index) => (
                     <ListItem
@@ -61,7 +78,13 @@ export default function AboutUsPage() {
                       sx={{ m: 0, p: 0 }}
                       className={styles['about_member-text-list']}
                     >
-                      {item}
+                      <ListItemIcon>
+                        <TaskAltIcon fontSize="small" color="success" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item}
+                        className={styles['about_member-text-list-item']}
+                      />
                     </ListItem>
                   ))}
                 </List>
@@ -74,6 +97,12 @@ export default function AboutUsPage() {
             </Box>
           </Grid>
         ))}
+      </Grid>
+
+      <Grid size={12} justifyContent="center" bgcolor={'background.paper'} borderRadius={8} p={2}>
+        <Typography component="p" variant="body1" textAlign="center">
+          {AboutUsConstants.teamCollaboration}
+        </Typography>
       </Grid>
 
       <Box sx={{ textAlign: 'center' }}>

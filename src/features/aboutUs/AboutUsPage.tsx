@@ -15,6 +15,7 @@ import { NavLink } from 'react-router';
 import { AboutUsConstants } from './constants';
 import styles from './AboutUsPage.module.scss';
 import { Paths } from '../../types/paths';
+import SchoolIcon from '../../layouts/components/RSScoolLogoIcon/SchoolLogoIcon';
 
 export default function AboutUsPage() {
   return (
@@ -38,6 +39,12 @@ export default function AboutUsPage() {
       <Typography component="h3" variant="h5" textAlign="center">
         {AboutUsConstants.description}
       </Typography>
+
+      <Grid size={12} justifyContent="center" bgcolor={'background.paper'} borderRadius={8} p={2}>
+        <Typography component="p" variant="body1" textAlign="center">
+          {AboutUsConstants.teamCollaboration}
+        </Typography>
+      </Grid>
 
       <Grid container spacing={3} justifyContent="center">
         {AboutUsConstants.members.map((member) => (
@@ -99,17 +106,42 @@ export default function AboutUsPage() {
         ))}
       </Grid>
 
-      <Grid size={12} justifyContent="center" bgcolor={'background.paper'} borderRadius={8} p={2}>
-        <Typography component="p" variant="body1" textAlign="center">
-          {AboutUsConstants.teamCollaboration}
-        </Typography>
-      </Grid>
-
       <Box sx={{ textAlign: 'center' }}>
         <Button variant="contained" component={NavLink} to={Paths.CATALOG}>
           {AboutUsConstants.buttonTitle}
         </Button>
       </Box>
+
+      <Grid
+        container
+        spacing={3}
+        alignItems="center"
+        justifyContent="space-between"
+        borderRadius={8}
+        p={2}
+        bgcolor={'background.paper'}
+      >
+        <Grid size={{ xs: 12, md: 1 }} textAlign="center">
+          <Link href="https://rs.school/" target="_blank" rel="noopener noreferrer">
+            <SchoolIcon fontSize="large" sx={{ width: 80, height: 80 }} />
+          </Link>
+        </Grid>
+        <Grid size={{ xs: 12, md: 8 }}>
+          <Typography variant="body1" textAlign="center">
+            {AboutUsConstants.rssDescription}
+          </Typography>
+        </Grid>
+        <Grid size={{ xs: 12, md: 3 }} textAlign="center">
+          <Button
+            variant="contained"
+            href="https://rs.school/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {AboutUsConstants.rssButtonTitle}
+          </Button>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

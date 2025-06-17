@@ -28,7 +28,7 @@ import { useSnackbar } from 'notistack';
 import { useAuth } from '../../../hooks/useAuth';
 import { theme } from '../../../theme';
 import { UserAvatar } from '../../../components/UserAvatar/UserAvatar';
-import { useGetMyActiveCartQuery } from '../../../api/cartApi';
+import { cartApi, useGetMyActiveCartQuery } from '../../../api/cartApi';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,6 +48,7 @@ export default function Header() {
     clearAuthTokenLS();
 
     dispatch(clearAuth());
+    dispatch(cartApi.util.resetApiState());
 
     enqueueSnackbar('Logged out successfully', { variant: 'success' });
 

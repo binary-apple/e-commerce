@@ -11,24 +11,36 @@ import { enqueueSnackbar } from 'notistack';
 import Button from '@mui/material/Button';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import { useState } from 'react';
+import ClearCartDialog from './components/ClearCartDialog/ClearCartDialog';
 
 export default function CartPage() {
   const { data: cart, isLoading } = useGetMyActiveCartQuery();
   const [clearCart, { isLoading: isClearingCart }] = useClearCartMutation();
   const [isClearDisabled, setIsClearDisabled] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-  const handleClearCart = async () => {
-    setIsClearDisabled(true);
+  const handleClearCartClick = () => {
+    setShowConfirmDialog(true);
+  };
 
+  const handleConfirmClear = async () => {
     if (!cart) return;
+
+    setIsClearDisabled(true);
 
     try {
       await clearCart({ cartId: cart.id, version: cart.version }).unwrap();
       enqueueSnackbar('Your cart cleared successfully!', { variant: 'success' });
+      setShowConfirmDialog(false);
     } catch {
       enqueueSnackbar('Failed to clear the cart', { variant: 'error' });
       setIsClearDisabled(false);
+      setShowConfirmDialog(false);
     }
+  };
+
+  const handleCancelClear = () => {
+    setShowConfirmDialog(false);
   };
 
   if (isLoading) {
@@ -103,7 +115,7 @@ export default function CartPage() {
             <Button
               color="error"
               startIcon={<DeleteForeverOutlinedIcon />}
-              onClick={handleClearCart}
+              onClick={handleClearCartClick}
               disabled={isClearDisabled}
             >
               {isClearingCart ? 'Clearing...' : 'Clear Cart'}
@@ -122,6 +134,13 @@ export default function CartPage() {
           <CartSummary cart={cart} />
         </Grid>
       </Grid>
+
+      <ClearCartDialog
+        open={showConfirmDialog}
+        onClose={handleCancelClear}
+        onConfirm={handleConfirmClear}
+        isLoading={isClearingCart}
+      />
     </Box>
   );
 }

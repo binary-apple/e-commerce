@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, Chip, IconButton, Typography } from '@mui/material';
 import type { PromoCode } from '../../../../types/promoCodesApi';
 import { useSnackbar } from 'notistack';
-import { ContentCopy as CopyIcon } from '@mui/icons-material';
+import ContentCopy from '@mui/icons-material/ContentCopy';
 import { theme } from '../../../../theme';
 import styles from './PromoCard.module.scss';
 
@@ -57,7 +57,7 @@ export default function PromoCard({ promoCode }: Props) {
             }}
           />
           <IconButton size="small" onClick={handleCopyCode} sx={{ color: 'white' }}>
-            <CopyIcon fontSize="small" />
+            <ContentCopy fontSize="small" />
           </IconButton>
         </Box>
       </CardContent>

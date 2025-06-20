@@ -23,6 +23,8 @@ Key pages in the application include:
 
 - 📘 TypeScript
 - ⚛️ React
+- 🧭 React Router
+- 🔄 RTK Query
 - ⚡ Vite
 - 🛒 CommerceTools
 - 🔍 ESLint

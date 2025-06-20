@@ -6,20 +6,21 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import { CardActions } from '@mui/material';
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
-import type { ProductCardConfig } from '../../../../types/product';
+import type { ProductCardConfig } from '../../../../types/preparedProductData.ts';
 import ShelterSticker from '../../../../components/StickerCreator/ShelterSticker';
 import { formatPrice } from '../../../../utils/formatPrice/formatPrice';
 import styles from './ProductCard.module.scss';
 import { theme } from '../../../../theme.ts';
 
-const handleAddToCart = (event: React.MouseEvent, product: ProductCardConfig) => {
-  event.preventDefault();
-  //todo: implement logic of adding sticker to cart
-  event.stopPropagation();
-  if (product) return;
-};
-
-export default function ProductCard({ product }: { product: ProductCardConfig }) {
+export default function ProductCard({
+  product,
+  isButtonDisabled,
+  handleAddToCart,
+}: {
+  product: ProductCardConfig;
+  isButtonDisabled: boolean;
+  handleAddToCart: () => void;
+}) {
   return (
     <Card
       className={styles.card}
@@ -85,8 +86,10 @@ export default function ProductCard({ product }: { product: ProductCardConfig })
                 },
               }}
               onClick={(event: React.MouseEvent) => {
-                handleAddToCart(event, product);
+                event.preventDefault();
+                handleAddToCart();
               }}
+              disabled={isButtonDisabled}
             >
               <AddShoppingCartRoundedIcon />
             </IconButton>

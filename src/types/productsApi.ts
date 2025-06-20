@@ -67,8 +67,10 @@ export type AttributeForProduct = {
 };
 
 export enum AttributeName {
+  Name = 'Name',
   Color = 'color',
   PetType = 'pet-type',
+  ShelterPets = 'shelter-pets',
 }
 
 export type AttributeValue = {

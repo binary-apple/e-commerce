@@ -5,6 +5,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useCallback, type ChangeEvent } from 'react';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { useSearchParams } from 'react-router';
 
 type SearchProps = {
   searchValue: string;
@@ -12,10 +13,14 @@ type SearchProps = {
 };
 
 export default function Search({ searchValue, onChange }: SearchProps) {
+  const [searchParameters, setSearchParameters] = useSearchParams();
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target?.value;
       onChange(value);
+      const newParameters = new URLSearchParams(searchParameters);
+      newParameters.delete('page');
+      setSearchParameters(newParameters);
     },
     [onChange],
   );

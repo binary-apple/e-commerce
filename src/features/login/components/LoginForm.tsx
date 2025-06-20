@@ -13,7 +13,8 @@ import { useNavigate } from 'react-router';
 import { Paths } from '../../../types/paths';
 import type { LoginData } from '../../../types/form';
 import { AuthViews } from '../../../types/authViews';
-import { useAuth } from '../../../hooks/useAuth';
+import { cartApi } from './../../../api/cartApi';
+import { clearAnonymousToken } from '../../../utils/tokenManager';
 
 const defaultValues = {
   email: '',
@@ -33,10 +34,10 @@ export default function LoginForm() {
 
   const [login, { isLoading }] = useLoginMutation();
   const [getMe] = useLazyGetMeQuery();
+  // const [getAnonymousToken] = useGetAnonymousTokenMutation();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const { saveAuthTokenToLS } = useAuth();
 
   const onSubmit = async (data: LoginData) => {
     try {
@@ -44,8 +45,6 @@ export default function LoginForm() {
         email: data.email,
         password: data.password,
       }).unwrap();
-
-      saveAuthTokenToLS(loginResult.access_token);
 
       const meResp = await getMe(loginResult.access_token).unwrap();
 
@@ -55,6 +54,10 @@ export default function LoginForm() {
           email: meResp.email,
         }),
       );
+
+      clearAnonymousToken();
+
+      dispatch(cartApi.util.invalidateTags(['Cart']));
 
       enqueueSnackbar('Login successful!', { variant: 'success' });
       navigate(Paths.HOME);

@@ -4,7 +4,7 @@ import { getClientToken } from '../services/serviceToken';
 import type { Response, Product, Category, ProductType } from '../types/productsApi';
 import { CENTS_IN_EURO } from '../utils/formatPrice/formatPrice';
 
-const PRODUCTS_LIMIT = 100;
+const PRODUCTS_LIMIT = 9;
 const OFFSET = 0;
 
 export const productsApi = createApi({

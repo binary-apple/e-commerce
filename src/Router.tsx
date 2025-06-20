@@ -12,6 +12,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ProfilePage from './features/profile/ProfilePage';
 import CatalogPage from './features/catalog/CatalogPage';
 import ProductPage from './features/product/ProductPage';
+import CartPage from './features/cart/CartPage';
+import AboutUsPage from './features/aboutUs/AboutUsPage';
 
 type AuthGuardProps = {
   children: ReactNode;
@@ -44,8 +46,9 @@ export default function Router() {
           <Route element={<Layout />}>
             <Route path={Paths.HOME} element={<MainPage />} />
             <Route path={Paths.CATALOG} element={<CatalogPage />} />
-            <Route path={Paths.PRODUCT} element={<ProductPage />} />
-            <Route path={Paths.ABOUT} element={<div>About Page</div>} />
+            <Route path={`${Paths.PRODUCT}/:key`} element={<ProductPage />} />
+            <Route path={Paths.ABOUT} element={<AboutUsPage />} />
+            <Route path={Paths.CART} element={<CartPage />} />
 
             <Route
               path={Paths.REGISTRATION}

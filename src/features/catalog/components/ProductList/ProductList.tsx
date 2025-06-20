@@ -1,0 +1,144 @@
+import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
+import { useGetProductsQuery } from '../../../../api/productsApi';
+import type { Product } from '../../../../types/productsApi';
+import ProductCard from '../productCard/ProductCard.tsx';
+import { useCategory } from '../../../../contexts/CategoryContext.tsx';
+import type { SortValues } from '../../types/sort.ts';
+import formatDataForSticker from '../../../../utils/formatDataForSticker/formatDataForSticker.ts';
+import { Typography } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
+import Box from '@mui/material/Box';
+import { type ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router';
+import OopsBox from '../../../notFound/components/OopsBox.tsx';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useGetMyActiveCartQuery } from '../../../../api/cartApi.ts';
+import { isProductInCart } from '../../../../utils/isProductInCart.ts';
+import { useAddToCart } from '../../../../hooks/useAddToCart.ts';
+
+const PRODUCTS_LIMIT = 9;
+
+export default function ProductList({
+  sortValue,
+  searchValue,
+  petType,
+  selectedPriceRange: priceRange,
+}: {
+  sortValue: SortValues;
+  searchValue: string;
+  petType: string[];
+  selectedPriceRange: number[];
+}) {
+  const {
+    isLoading: isCategoryLoading,
+    isError: isCategoryError,
+    selectedCategory,
+  } = useCategory();
+
+  const [searchParameters, setSearchParameters] = useSearchParams();
+
+  const getInitialPage = useCallback(() => {
+    return +(searchParameters.get('page') ?? 1);
+  }, [searchParameters]);
+
+  const [page, setPage] = useState(getInitialPage());
+
+  const {
+    data,
+    isLoading: isProductLoading,
+    isError: isProductError,
+  } = useGetProductsQuery({
+    categoryId: selectedCategory?.id,
+    sortOption: sortValue,
+    searchOption: searchValue,
+    petType: petType,
+    selectedPriceRange: priceRange,
+    offset: (page - 1) * PRODUCTS_LIMIT,
+    limit: PRODUCTS_LIMIT,
+  });
+
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
+
+  const totalProducts = data?.total ?? 0;
+  const totalPages = Math.ceil(totalProducts / PRODUCTS_LIMIT);
+
+  useEffect(() => {
+    setPage(getInitialPage());
+  }, [getInitialPage]);
+  const handleChange = (_event: ChangeEvent<unknown>, page: number) => {
+    setPage(page);
+    const newParameters = new URLSearchParams(searchParameters);
+    newParameters.set('page', String(page));
+    setSearchParameters(newParameters);
+  };
+  const { data: cart } = useGetMyActiveCartQuery();
+
+  const [currentIds, setCurrentIds] = useState<string[]>([]);
+  const { addToCart } = useAddToCart(cart);
+  useEffect(() => {
+    setCurrentIds(
+      currentIds.filter((currentId) =>
+        cart?.lineItems.some((lineItem) => lineItem.productId === currentId),
+      ),
+    );
+  }, [cart]);
+  const handleAddToCart = async (id: string) => {
+    setCurrentIds([id, ...currentIds]);
+    try {
+      await addToCart(id);
+    } catch {
+      setCurrentIds(currentIds.filter((currentId) => currentId !== id));
+    }
+  };
+
+  if (isCategoryLoading || isProductLoading) {
+    return <CircularProgress size="3rem" />;
+  }
+  if (isProductError || isCategoryError) {
+    return <Typography>Something went wrong, please try again</Typography>;
+  }
+  return (
+    <>
+      <Box display={'flex'} flexDirection={'column'} gap={2}>
+        {data?.results.length === 0 && <OopsBox text={'Nothing was found'} />}
+        {data?.results.length !== 0 && (
+          <>
+            <Pagination
+              count={totalPages}
+              size={matches ? 'medium' : 'small'}
+              page={page}
+              onChange={handleChange}
+              siblingCount={matches ? 1 : 0}
+              boundaryCount={1}
+              color="primary"
+            />
+            <Grid container spacing={1}>
+              {data?.results.map((product: Product) => {
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={formatDataForSticker(product)}
+                    isButtonDisabled={
+                      isProductInCart(product.id, cart) || currentIds.includes(product.id)
+                    }
+                    handleAddToCart={async () => await handleAddToCart(product.id)}
+                  />
+                );
+              })}
+            </Grid>
+            <Pagination
+              count={totalPages}
+              size={matches ? 'medium' : 'small'}
+              page={page}
+              onChange={handleChange}
+              siblingCount={matches ? 1 : 0}
+              boundaryCount={1}
+              color="primary"
+            />
+          </>
+        )}
+      </Box>
+    </>
+  );
+}

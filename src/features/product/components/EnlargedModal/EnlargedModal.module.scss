@@ -1,0 +1,52 @@
+.slider-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 90dvw;
+  height: 90dvh;
+  border-radius: 1.5rem;
+
+  background-color: #fbf2da;
+  outline: none;
+
+  &-close {
+    position: absolute;
+    z-index: 100;
+    top: 0.5rem;
+    left: 0.5rem;
+
+    width: 2rem;
+    height: 2rem;
+  }
+
+  &-swiper {
+    display: flex;
+    justify-content: center;
+    height: 80dvh;
+
+    &-item {
+      height: 100%;
+
+      &-sticker {
+        height: 100%;
+        padding: 0 3rem;
+      }
+
+      &-image {
+        display: block;
+
+        max-width: 80%;
+        height: 100%;
+        margin: 0 auto;
+
+        object-fit: contain;
+      }
+    }
+  }
+}

@@ -1,0 +1,85 @@
+import type { ReactNode } from 'react';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router';
+import { Layout } from './layouts/Layout';
+import { Paths } from './types/paths';
+import RegistrationPage from './features/registration/RegistrationPage';
+import NotFoundPage from './features/notFound/NotFoundPage';
+import LoginPage from './features/login/LoginPage';
+import MainPage from './features/main/MainPage';
+import { useSelector } from 'react-redux';
+import type { RootState } from './store/store';
+import CircularProgress from '@mui/material/CircularProgress';
+import ProfilePage from './features/profile/ProfilePage';
+import CatalogPage from './features/catalog/CatalogPage';
+import ProductPage from './features/product/ProductPage';
+import CartPage from './features/cart/CartPage';
+import AboutUsPage from './features/aboutUs/AboutUsPage';
+
+type AuthGuardProps = {
+  children: ReactNode;
+  isPrivateRoute: boolean;
+};
+
+function AuthGuard({ children, isPrivateRoute }: AuthGuardProps) {
+  const { isAuthenticated, isInitialized } = useSelector((state: RootState) => state.auth);
+
+  if (!isInitialized) {
+    return <CircularProgress size="3rem" />;
+  }
+
+  if (isPrivateRoute && !isAuthenticated) {
+    return <Navigate to={Paths.AUTH} replace />;
+  }
+
+  if (!isPrivateRoute && isAuthenticated) {
+    return <Navigate to={Paths.HOME} replace />;
+  }
+
+  return children;
+}
+
+export default function Router() {
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path={Paths.HOME} element={<MainPage />} />
+            <Route path={Paths.CATALOG} element={<CatalogPage />} />
+            <Route path={`${Paths.PRODUCT}/:key`} element={<ProductPage />} />
+            <Route path={Paths.ABOUT} element={<AboutUsPage />} />
+            <Route path={Paths.CART} element={<CartPage />} />
+
+            <Route
+              path={Paths.REGISTRATION}
+              element={
+                <AuthGuard isPrivateRoute={false}>
+                  <RegistrationPage />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path={Paths.AUTH}
+              element={
+                <AuthGuard isPrivateRoute={false}>
+                  <LoginPage />
+                </AuthGuard>
+              }
+            />
+
+            <Route
+              path={Paths.PROFILE}
+              element={
+                <AuthGuard isPrivateRoute={true}>
+                  <ProfilePage />
+                </AuthGuard>
+              }
+            />
+
+            <Route path={Paths.NOT_FOUND} element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
+}

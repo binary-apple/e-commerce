@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.image {
+  max-width: 200px;
+  margin-top: 1rem;
+}
+
+.cart {
+  display: flex;
+  flex-grow: 1;
+  width: 100%;
+}
+
+@media (width >=900px) {
+  .summary {
+    padding-left: 2rem;
+    border-left: 2px solid #062d3e;
+  }
+}
+
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

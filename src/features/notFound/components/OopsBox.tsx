@@ -1,0 +1,40 @@
+import { Box, Typography } from '@mui/material';
+import { NotFoundConstants } from '../constants';
+import errorImage from '/404_dog.png';
+
+import styles from './OopsBox.module.scss';
+
+type OopsProps = { text?: string };
+
+export default function OopsBox(oopsProps: OopsProps) {
+  return (
+    <Box
+      className={styles.animated__wrapper}
+      sx={{ justifyContent: { md: 'space-between', xs: 'center' }, gap: { sm: 0, xs: 2 } }}
+    >
+      <Box className={styles.animated__wrapper_image}>
+        <img src={errorImage} alt={NotFoundConstants.errorText} />
+      </Box>
+
+      <Typography variant="h2" component="h4" sx={{ fontWeight: 900, textAlign: 'center' }}>
+        {oopsProps.text ?? NotFoundConstants.errorText}
+      </Typography>
+
+      {!oopsProps.text && (
+        <Box className={styles.animated__wrapper_status}>
+          {[...NotFoundConstants.errorCode.toString()].map((char, index) => (
+            <Typography
+              variant="h1"
+              component="h4"
+              key={index}
+              className={styles.animated__wrapper_status_text}
+              sx={{ fontWeight: 900 }}
+            >
+              {char}
+            </Typography>
+          ))}
+        </Box>
+      )}
+    </Box>
+  );
+}
